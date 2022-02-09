@@ -6,13 +6,13 @@
     </LoginHeader>
     <!-- 主体区域 -->
     <div class="phone__main">
-      <el-form :model="phoneFrom" :rules="phoneFromRules" ref="phoneFromRef">
+      <el-form :model="phoneForm" :rules="phoneFromRules" ref="phoneFromRef">
         <!-- 手机号表单 -->
         <el-form-item prop="phone">
           <el-input
             size="small"
             placeholder="请输入手机号"
-            v-model="phoneFrom.phone"
+            v-model="phoneForm.phone"
           >
             <template #prepend>
               <el-select v-model="select">
@@ -35,8 +35,9 @@
             <el-col :span="14">
               <el-input
                 size="small"
-                v-model="phoneFrom.captcha"
+                v-model="phoneForm.captcha"
                 placeholder="请输入验证码"
+                @keyup.enter.native="login"
               ></el-input>
             </el-col>
             <el-col :span="10">
@@ -52,7 +53,8 @@
             type="password"
             placeholder="请输入密码"
             size="small"
-            v-model="phoneFrom.password"
+            v-model="phoneForm.password"
+            @keyup.enter.native="login"
           >
             <template #suffix>
               <a
@@ -68,7 +70,10 @@
           <a
             href="javascript:;"
             v-if="isverificationCode"
-            @click="isverificationCode = false"
+            @click="
+              isverificationCode = false
+              phoneForm.captcha = ''
+            "
             >密码登录</a
           >
           <a href="javascript:;" v-else @click="isverificationCode = true"
@@ -95,13 +100,14 @@
 <script>
 import LoginHeader from '@/components/login/LoginHeader'
 // 导入loginAPI
-import { getCodeListAPI, getCodeAPI, loginAPI } from '@/api/loginAPI'
+import { getCodeListAPI, getCodeAPI, phoneLoginAPI } from '@/api/loginAPI'
 // 导入 eventBus
 import Bus from '@/plugin/eventBus'
 // 导入 LoginBtn
 import LoginBtn from '@/components/login/LoginBtn'
 export default {
   data() {
+    // 正则表达式验证
     const mobile =
       /^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$/
     const isMobile = (rule, value, callback) => {
@@ -115,7 +121,7 @@ export default {
       select: '86',
       codeList: [],
       // 表单对象
-      phoneFrom: {
+      phoneForm: {
         phone: '',
         password: '',
         captcha: ''
@@ -165,7 +171,7 @@ export default {
       this.$refs.phoneFromRef.validateField('phone', async (valid) => {
         if (!valid) {
           const { data: result } = await getCodeAPI(
-            this.phoneFrom.phone,
+            this.phoneForm.phone,
             this.select
           )
           if (result.code !== 200) return this.$message.error(result.message)
@@ -178,17 +184,18 @@ export default {
       this.$refs.phoneFromRef.validate(async (valid) => {
         if (!valid) return
         const loginFrom = {
-          phone: this.phoneFrom.phone,
-          password: this.phoneFrom.password,
+          phone: this.phoneForm.phone,
+          password: this.phoneForm.password,
           countrycode: this.select
         }
-        if (this.phoneFrom.captcha) {
-          loginFrom.captcha = this.phoneFrom.captcha
+        if (this.phoneForm.captcha) {
+          loginFrom.captcha = this.phoneForm.captcha
           delete loginFrom.password
         }
-        const { data: result } = await loginAPI(loginFrom)
+        const { data: result } = await phoneLoginAPI(loginFrom)
         if (result.code !== 200) return this.$message.error(result.message)
-        console.log(result)
+        this.$message.success('登录成功')
+        Bus.$emit('Visible', false)
       })
     }
   },
@@ -212,29 +219,14 @@ export default {
     }
   }
 }
-/deep/ .el-select__caret {
-  width: 20px;
-  font-size: 12px;
-}
-.el-select-dropdown__item {
-  padding: 0 10px;
-}
-/deep/ .el-input__suffix {
-  right: 2px;
-}
-/deep/ .el-input__inner {
-  padding-right: 0 !important;
-  padding-left: 5px;
-}
+
 .option__left {
   float: left;
 }
 .option__right {
   float: right;
 }
-.el-form-item {
-  margin-bottom: 15px;
-}
+
 .verification {
   display: inline-block;
   background: url('../../assets/uploads/button2.png') no-repeat right -100px;
