@@ -192,8 +192,15 @@ export default {
           loginFrom.captcha = this.phoneForm.captcha
           delete loginFrom.password
         }
-        const { data: result } = await phoneLoginAPI(loginFrom)
+        const { data: result } = await phoneLoginAPI(loginFrom).catch(() => {
+          if (this.isverificationCode) {
+            return this.$message.error('验证码错误')
+          } else {
+            return this.$message.error('账号不存在')
+          }
+        })
         if (result.code !== 200) return this.$message.error(result.message)
+
         this.$message.success('登录成功')
         Bus.$emit('Visible', false)
       })

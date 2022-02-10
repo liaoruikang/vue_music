@@ -1,6 +1,7 @@
 <template>
   <div>
     <el-button @click="loginDialogVisible = true">登录</el-button>
+    <el-button type="primary" @click="loginState">检测登录状态</el-button>
 
     <!-- 登录对话框 -->
     <el-dialog
@@ -26,6 +27,8 @@ import ResetPassword from '@/components/login/ResetPassword.vue'
 
 // 导入 eventBus
 import Bus from '@/plugin/eventBus'
+// 导入 API 接口
+import { loginStateAPI } from '@/api/loginAPI'
 export default {
   data() {
     return {
@@ -38,7 +41,8 @@ export default {
       // loginQrCode 二维码登录
       // register 注册
       // resetPassword 重置密码
-      loginMode: 'login'
+      loginMode: 'login',
+      dialogDOM: null
     }
   },
   created() {
@@ -48,6 +52,22 @@ export default {
     })
     Bus.$on('mode', (val) => {
       this.loginMode = val
+    })
+    Bus.$on('headerPosition', (e) => {
+      const domWidth = document.documentElement.clientWidth
+      const domHeight = document.documentElement.clientHeight
+      if (e.x + this.dialogDOM.offsetWidth >= domWidth) {
+        e.x = domWidth - this.dialogDOM.offsetWidth
+      } else if (e.x <= 0) {
+        e.x = 0
+      }
+      if (e.y + this.dialogDOM.offsetHeight >= domHeight) {
+        e.y = domHeight - this.dialogDOM.offsetHeight
+      } else if (e.y <= 0) {
+        e.y = 0
+      }
+      this.dialogDOM.style.top = e.y + this.dialogDOM.offsetHeight / 2 + 'px'
+      this.dialogDOM.style.left = e.x + this.dialogDOM.offsetWidth / 2 + 'px'
     })
   },
   components: {
@@ -65,6 +85,14 @@ export default {
           this.loginMode = 'login'
         }, 300)
       }
+      this.dialogDOM = document.querySelector('.el-dialog')
+    }
+  },
+  methods: {
+    // 检测登录状态
+    async loginState() {
+      const { data: result } = await loginStateAPI()
+      console.log(result)
     }
   }
 }
@@ -78,5 +106,12 @@ export default {
 /deep/ .el-dialog__body,
 /deep/ .el-dialog__header {
   padding: 0;
+}
+/deep/ .el-dialog {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0 !important;
 }
 </style>
