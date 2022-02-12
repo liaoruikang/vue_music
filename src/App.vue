@@ -92,7 +92,8 @@ export default {
     // 检测登录状态
     async loginState() {
       const { data: result } = await loginStateAPI()
-      console.log(result)
+      if (result.data.profile == null) return this.$message.error('未登录')
+      this.$message.success('已登录')
     }
   }
 }

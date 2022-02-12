@@ -24,7 +24,7 @@
         </el-form-item>
         <el-row class="email__row">
           <el-col :span="8">
-            <input type="checkbox" checked /> 自动登录
+            <input type="checkbox" v-model="isSelect" /> 自动登录
           </el-col>
           <el-col :span="7" :offset="9">
             <a href="javascript:;" @click="mode('resetPassword')">忘记密码？</a>
@@ -76,7 +76,9 @@ export default {
           { validator: isEmail, trigger: 'blur' }
         ],
         password: [{ required: true, message: '请填写密码', trigger: 'blur' }]
-      }
+      },
+      // 是否记住账号
+      isSelect: true
     }
   },
   created() {},
@@ -96,6 +98,10 @@ export default {
         if (result.code !== 200) return this.$message.error(result.message)
         this.$message.success('登录成功')
         Bus.$emit('Visible', false)
+        // 当用户取消自动登录复选框 将cookie有效期设置为浏览器退出则过期
+        if (!this.isSelect) {
+          this.$delCookie(result.cookie)
+        }
       })
     }
   },

@@ -59,3 +59,23 @@ export const qrStateAPI = (key) => {
     }
   })
 }
+
+// 验证验证码是否正确
+export const verifyAPI = (phone, captcha, ctcode) => {
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('captcha/verify', { params: { phone, captcha, timestamp, ctcode } })
+}
+
+// 检测手机号是否注册
+export const existenceAPI = (phone, countrycode) => {
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('cellphone/existence/check', { params: { phone, countrycode, timestamp } })
+}
+// 注册账号
+export const registerAPI = (captcha, phone, password, nickname, countrycode) => {
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.post('register/cellphone?timestamp=' + timestamp, { captcha, phone, password, nickname, countrycode })
+}

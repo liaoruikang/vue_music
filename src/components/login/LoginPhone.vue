@@ -80,7 +80,7 @@
             >短信登录</a
           >
           <span class="phone__auto">
-            <input type="checkbox" checked /> 自动登录
+            <input type="checkbox" v-model="isSelect" /> 自动登录
           </span>
         </el-row>
         <LoginBtn color="#fff" @btnClick="login">登录</LoginBtn>
@@ -139,7 +139,9 @@ export default {
         captcha: [{ required: true, message: '请填写验证码', trigger: 'blur' }]
       },
       // 是否验证码登录
-      isverificationCode: true
+      isverificationCode: true,
+      // 是否记住账号
+      isSelect: true
     }
   },
   created() {
@@ -203,6 +205,9 @@ export default {
 
         this.$message.success('登录成功')
         Bus.$emit('Visible', false)
+        if (!this.isSelect) {
+          this.$delCookie(result.cookie)
+        }
       })
     }
   },

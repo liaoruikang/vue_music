@@ -1,7 +1,13 @@
 <template>
   <div class="header_container">
     <!-- 登录对话框头部标题 -->
-    <div ref="headerRef" class="dialog__header" @mousedown="down">
+    <div
+      ref="headerRef"
+      class="dialog__header"
+      @mousedown="down"
+      @mousemove="move"
+      @mouseup="up"
+    >
       <h3>
         <slot></slot>
       </h3>
@@ -28,14 +34,8 @@ export default {
       pageX: 0,
       pageY: 0,
       x: 0,
-      y: 0,
-      boxWidth: 0,
-      boxHeight: 0
+      y: 0
     }
-  },
-  created() {
-    document.onmousemove = this.move
-    document.onmouseup = this.up
   },
   methods: {
     Visible() {
@@ -77,6 +77,9 @@ export default {
   padding: 0 18px 0 18px;
   color: #fff;
   cursor: move;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
   i,
   h3 {
     display: flex;
