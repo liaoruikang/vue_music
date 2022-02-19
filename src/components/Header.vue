@@ -1,7 +1,7 @@
 <template>
   <div class="header__container">
     <!-- 头部区域 -->
-    <header :style="{ marginBottom: isfind == 1 ? '34px' : '5px' }">
+    <header :style="{ marginBottom: isfind == 1 ? '36px' : '5px' }">
       <div class="menu">
         <!-- logo -->
         <h1 class="logo">
@@ -200,7 +200,6 @@ export default {
         }
       },
       set(value) {
-        console.log(value)
         return value
       }
     }
