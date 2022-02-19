@@ -265,7 +265,7 @@ header {
             position: absolute;
             top: 64px;
             left: -54px;
-            z-index: 1;
+            z-index: 3;
             width: 158px;
             background: #2b2b2b;
             border-radius: 4px;

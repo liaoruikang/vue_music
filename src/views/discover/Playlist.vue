@@ -6,7 +6,9 @@ export default {
   data() {
     return {}
   },
-  created() {},
+  created() {
+    console.log(this.$route)
+  },
   methods: {}
 }
 </script>
