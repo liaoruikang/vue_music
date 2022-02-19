@@ -250,15 +250,16 @@ export default {
           this.regForm.captcha = val
           this.regForm.nickname =
             '重置用户' + Math.ceil(Math.random() * 1000000000000000000)
-          const { data: res } = await registerAPI(
+          const { data: result } = await registerAPI(
             this.regForm.captcha,
             this.regForm.phone,
             this.regForm.password,
             this.regForm.nickname,
             this.regForm.countrycode
           )
-          if (res.code !== 200) return this.$message.error(res.message)
+          if (result.code !== 200) return this.$message.error(result.message)
           this.$message.success('重置密码成功')
+          Bus.$emit('loginData', result.profile)
           Bus.$emit('Visible', false)
         })
         .catch(() => {

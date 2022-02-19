@@ -79,3 +79,10 @@ export const registerAPI = (captcha, phone, password, nickname, countrycode) => 
   const timestamp = new Date().getTime()
   return request.post('register/cellphone?timestamp=' + timestamp, { captcha, phone, password, nickname, countrycode })
 }
+
+// 退出登录
+export const logoutAPI = () => {
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('logout?timestamp=' + timestamp)
+}

@@ -204,6 +204,7 @@ export default {
         if (result.code !== 200) return this.$message.error(result.message)
 
         this.$message.success('登录成功')
+        Bus.$emit('loginData', result.profile)
         Bus.$emit('Visible', false)
         if (!this.isSelect) {
           this.$delCookie(result.cookie)

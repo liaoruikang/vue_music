@@ -8,6 +8,9 @@ import 'element-ui/lib/theme-chalk/index.css'
 import '@/assets/css/global.less'
 // 导入Cookie.js
 import { delCookie } from '@/plugin/Cookie'
+// 导入 vuex
+import store from './store'
+
 Vue.prototype.$delCookie = delCookie
 
 // 将 ElementUI 注册为全局插件
@@ -16,6 +19,7 @@ Vue.use(ElementUI)
 Vue.config.productionTip = false
 
 new Vue({
+  store,
   router,
   render: (h) => h(App)
 }).$mount('#app')

@@ -34,7 +34,7 @@
 import Bus from '@/plugin/eventBus'
 import LoginHeader from '@/components/login/LoginHeader'
 // 导入 loginAPI 接口
-import { qrKeyAPI, qrCodeAPI, qrStateAPI } from '@/api/loginAPI'
+import { qrKeyAPI, qrCodeAPI, qrStateAPI, loginStateAPI } from '@/api/loginAPI'
 export default {
   data() {
     return {
@@ -76,6 +76,7 @@ export default {
     // 获取二维码状态
     async getQrState() {
       const { data: result } = await qrStateAPI(this.key)
+      const { data: res } = await loginStateAPI()
       this.qrState = result.code
       switch (this.qrState) {
         case 800:
@@ -83,6 +84,7 @@ export default {
           break
         case 803:
           this.$message.success('登录成功')
+          Bus.$emit('loginData', res.data.profile)
           Bus.$emit('Visible', false)
           break
       }

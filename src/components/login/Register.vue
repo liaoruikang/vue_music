@@ -288,6 +288,7 @@ export default {
           this.$message.error('该昵称已被占用')
         })
         if (result.code !== 200) return this.$message.error(result.message)
+        Bus.$emit('loginData', result.profile)
         this.$message.success('注册成功')
         Bus.$emit('Visible', false)
       })

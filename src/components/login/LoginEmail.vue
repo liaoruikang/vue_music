@@ -97,6 +97,7 @@ export default {
         )
         if (result.code !== 200) return this.$message.error(result.message)
         this.$message.success('登录成功')
+        Bus.$emit('loginData', result.profile)
         Bus.$emit('Visible', false)
         // 当用户取消自动登录复选框 将cookie有效期设置为浏览器退出则过期
         if (!this.isSelect) {
