@@ -7,6 +7,8 @@
       <div class="main__left">
         <!-- 热门推荐 -->
         <Hot :hotList="hotPlaylist"></Hot>
+        <!-- 个性化推荐 -->
+        <Individuation v-if="isLogin"></Individuation>
       </div>
       <div class="main__right"></div>
     </div>
@@ -17,6 +19,8 @@ import Banner from '@/components/discover/Banner'
 import Hot from '@/components/discover/Hot'
 // 导入 discoverAPI
 import { bannerListAPI, hotPlaylistAPI } from '@/api/discoverAPI'
+import Individuation from '@/components/discover/Individuation.vue'
+import { mapState } from 'vuex'
 export default {
   name: 'discover',
   data() {
@@ -47,7 +51,11 @@ export default {
   },
   components: {
     Banner,
-    Hot
+    Hot,
+    Individuation
+  },
+  computed: {
+    ...mapState(['isLogin'])
   }
 }
 </script>

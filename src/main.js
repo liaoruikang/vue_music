@@ -10,7 +10,10 @@ import '@/assets/css/global.less'
 import { delCookie } from '@/plugin/Cookie'
 // 导入 vuex
 import store from './store'
+// 导入 dayjs
+import dayjs from 'dayjs'
 
+Vue.prototype.dayjs = dayjs
 Vue.prototype.$delCookie = delCookie
 
 // 将 ElementUI 注册为全局插件

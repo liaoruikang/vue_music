@@ -35,8 +35,9 @@
 </template>
 <script>
 import FloorHeader from '@/components/discover/FloorHeader'
-import SongList from '@/components/discover/SongList'
+import SongList from '@/components/common/SongList'
 import { mapState } from 'vuex'
+
 export default {
   name: 'hot',
   props: {
@@ -64,7 +65,6 @@ export default {
   display: flex;
   flex-wrap: wrap;
   flex: 1;
-  padding-top: 20px;
   justify-content: space-between;
 }
 </style>

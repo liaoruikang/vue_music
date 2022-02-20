@@ -108,6 +108,9 @@ export default {
       handler() {
         this.userData !== null ? (this.isLogin = true) : (this.isLogin = false)
       }
+    },
+    isLogin() {
+      this.$store.commit('setIsLogin', this.isLogin)
     }
   },
   methods: {

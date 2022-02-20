@@ -14,6 +14,7 @@
     </div>
     <div class="title">
       <router-link :to="`/playlist?id=${id}`"> {{ title }}</router-link>
+      <p>{{ tips }}</p>
     </div>
   </div>
 </template>
@@ -34,6 +35,10 @@ export default {
       required: true
     },
     title: {
+      type: String,
+      default: ''
+    },
+    tips: {
       type: String,
       default: ''
     }
@@ -112,6 +117,10 @@ export default {
     }
     a:hover {
       text-decoration: underline;
+    }
+    p {
+      font-size: 12px;
+      color: #999;
     }
   }
 }

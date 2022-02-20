@@ -7,7 +7,7 @@
         </router-link>
       </h3>
       <slot name="list"> </slot>
-      <router-link :to="hash" class="more">更多</router-link>
+      <router-link v-if="isMore" :to="hash" class="more">更多</router-link>
     </div>
   </div>
 </template>
@@ -18,6 +18,10 @@ export default {
     hash: {
       type: String,
       default: '/'
+    },
+    isMore: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -35,6 +39,7 @@ export default {
   background-position: -225px -154px;
   padding: 0 10px 0 34px;
   line-height: 35px;
+  margin-bottom: 20px;
   h3 {
     float: left;
     font-size: 18px;
