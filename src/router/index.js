@@ -1,19 +1,22 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-
 // 引入discover中的组件
-import Discover from '@/views/discover/Discover'
-import Album from '@/views/discover/Album'
-import Artist from '@/views/discover/Artist'
-import Playlist from '@/views/discover/Playlist'
-import Djradio from '@/views/discover/Djradio'
-import Toplist from '@/views/discover/Toplist'
-
-import My from '@/views/my/My'
-import Friend from '@/views/friend/Friend'
-import Download from '@/views/download/Download'
-import Home from '@/views/user/Home'
-import Update from '@/views/user/Update'
+const Discover = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Discover')
+const Album = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
+const Artist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Artist')
+const Playlist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Playlist')
+const Djradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Djradio')
+const Toplist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Toplist')
+// 引入My中的组件
+const My = () => import(/* webpackChunkName: "My" */ '@/views/my/My')
+// 引入Friend中的组件
+const Friend = () => import(/* webpackChunkName: "Friend" */ '@/views/friend/Friend')
+// 引入Download中的组件
+const Download = () => import(/* webpackChunkName: "Download" */ '@/views/download/Download')
+// 引入Home中的组件
+const Home = () => import(/* webpackChunkName: "Home" */ '@/views/user/Home')
+// 引入Update中的组件
+const Update = () => import(/* webpackChunkName: "Update" */ '@/views/user/Update')
 
 Vue.use(VueRouter)
 
