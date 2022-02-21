@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { reSongListAPI, everydaySongListAPI, everydaySongsAPI } from '@/api/discoverAPI'
+import { reSongListAPI, everydaySongListAPI, everydaySongsAPI, newDiscAPI } from '@/api/discoverAPI'
 
 Vue.use(Vuex)
 
@@ -13,7 +13,9 @@ export default new Vuex.Store({
     // 每日推荐歌单列表
     everyDayList: [],
     // 每日推荐歌曲列表
-    everydaySongs: []
+    everydaySongs: [],
+    // 新碟上架列表
+    newDiscList: []
   },
   mutations: {
     setreSongList(state, songList) {
@@ -27,7 +29,9 @@ export default new Vuex.Store({
     },
     setSongs(state, songs) {
       state.everydaySongs = songs
-      console.log(state.everydaySongs)
+    },
+    setNewDiscList(state, newDiscList) {
+      state.newDiscList = newDiscList
     }
   },
   actions: {
@@ -45,6 +49,16 @@ export default new Vuex.Store({
     async getSongs({ commit }) {
       const { data: result } = await everydaySongsAPI()
       commit('setSongs', result.data.dailySongs)
+    },
+    // 获取新碟上架列表
+    async getNewDiscList({ commit }) {
+      const { data: result } = await newDiscAPI()
+      result.albums.forEach(item => {
+        if (item.name.length > 15) {
+          item.name = item.name.substr(0, 15) + '...'
+        }
+      })
+      commit('setNewDiscList', result.albums)
     }
   },
   getters: {
@@ -65,6 +79,12 @@ export default new Vuex.Store({
       })
       if (newSongList[0] === undefined) return false
       return newSongList
+    },
+    oneNewDisc(state) {
+      return state.newDiscList.slice(0, 5)
+    },
+    twoNewDisc(state) {
+      return state.newDiscList.slice(5, 10)
     }
   }
 })

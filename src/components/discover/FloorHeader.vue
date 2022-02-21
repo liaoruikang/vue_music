@@ -39,7 +39,7 @@ export default {
   background-position: -225px -154px;
   padding: 0 10px 0 34px;
   line-height: 35px;
-  margin-bottom: 20px;
+  margin: 20px 0;
   h3 {
     float: left;
     font-size: 18px;

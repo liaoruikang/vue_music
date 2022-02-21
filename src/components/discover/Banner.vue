@@ -119,9 +119,9 @@ export default {
   line-height: 60px;
 }
 /deep/ .el-carousel__arrow--right {
-  right: 200px;
+  right: 148px;
 }
 /deep/ .el-carousel__arrow--left {
-  left: 200px;
+  left: 150px;
 }
 </style>

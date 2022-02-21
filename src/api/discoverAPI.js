@@ -24,3 +24,8 @@ export const everydaySongListAPI = () => {
 export const everydaySongsAPI = () => {
   return request.get('recommend/songs')
 }
+
+// 获取新碟上架
+export const newDiscAPI = () => {
+  return request.get('album/newest')
+}
