@@ -1,7 +1,7 @@
 <template>
   <div class="disc__container">
     <router-link class="disc__link" :to="`/album?id=${id}`">
-      <el-image :src="picUrl" alt=""></el-image>
+      <el-image :src="picUrl" :lazy="lazy"></el-image>
       <a href="javascript:;" @click.prevent class="play"></a>
     </router-link>
     <p class="disc__name">
@@ -35,6 +35,10 @@ export default {
     name: {
       type: String,
       default: ''
+    },
+    lazy: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -57,6 +61,7 @@ export default {
     background: url('../../assets/uploads/coverall.png') no-repeat 0 -570px;
     margin-bottom: 7px;
     .el-image {
+      display: block;
       width: 100px;
       height: 100px;
     }

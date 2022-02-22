@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { reSongListAPI, everydaySongListAPI, everydaySongsAPI, newDiscAPI } from '@/api/discoverAPI'
+import { reSongListAPI, everydaySongListAPI, everydaySongsAPI, newDiscAPI, topListAPI, songDetailsAPI } from '@/api/discoverAPI'
 
 Vue.use(Vuex)
 
@@ -15,7 +15,11 @@ export default new Vuex.Store({
     // 每日推荐歌曲列表
     everydaySongs: [],
     // 新碟上架列表
-    newDiscList: []
+    newDiscList: [],
+    // 榜单列表
+    topList: [],
+    // 前三榜单的榜单详情
+    topThreeListdetail: []
   },
   mutations: {
     setreSongList(state, songList) {
@@ -32,6 +36,15 @@ export default new Vuex.Store({
     },
     setNewDiscList(state, newDiscList) {
       state.newDiscList = newDiscList
+    },
+    setTopList(state, topList) {
+      state.topList = topList
+    },
+    setTopThreeListdetail(state, Listdetail) {
+      state.topThreeListdetail.push(Listdetail)
+    },
+    removeTopThreeListdetail(state) {
+      state.topThreeListdetail = []
     }
   },
   actions: {
@@ -59,7 +72,22 @@ export default new Vuex.Store({
         }
       })
       commit('setNewDiscList', result.albums)
+    },
+    // 获取榜单列表
+    async getTopList({ commit, dispatch }) {
+      const { data: result } = await topListAPI()
+      commit('setTopList', result.list)
+      // 调用获取歌单详情API
+      const three = result.list.filter((item, index) => index < 3)
+      three.forEach(item => dispatch('getSongsdetails', item.id))
+    },
+    // 获取歌单详情
+    async getSongsdetails({ commit }, id) {
+      const { data: result } = await songDetailsAPI(id)
+      result.playlist.tracks = result.playlist.tracks.slice(0, 10)
+      commit('setTopThreeListdetail', result.playlist)
     }
+
   },
   getters: {
     daySongList(state) {

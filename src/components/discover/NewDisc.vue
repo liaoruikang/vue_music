@@ -72,8 +72,6 @@ export default {
   },
   created() {
     this.$store.dispatch('getNewDiscList')
-    console.log(this.oneNewDisc)
-    console.log(this.twoNewDisc)
   },
   methods: {},
   components: { FloorHeader, Disc },
@@ -83,6 +81,9 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+.newDisc__container {
+  margin-bottom: 30px;
+}
 .newDisc__body {
   height: 186px;
   border: 1px solid #d3d3d3;

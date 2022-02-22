@@ -6,7 +6,7 @@
       arrow="always"
       indicator-position="none"
     >
-      <el-carousel-item v-for="item in bannerData" :key="item.encodeId">
+      <el-carousel-item v-for="(item, index) in bannerData" :key="index">
         <div
           class="banner__box"
           :style="`background: url('${item.imageUrl}') no-repeat center`"
@@ -33,7 +33,8 @@ export default {
   },
   data() {
     return {}
-  }
+  },
+  created() {}
 }
 </script>
 <style lang="less" scoped>

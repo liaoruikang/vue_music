@@ -3,7 +3,7 @@
     <!-- 轮播图 -->
     <Banner :bannerData="bannerList"></Banner>
     <!-- 主体区域 -->
-    <div class="main w clearfix">
+    <div class="main w clearfix" ref="mainRef">
       <div class="main__left">
         <!-- 热门推荐 -->
         <Hot :hotList="hotPlaylist"></Hot>
@@ -11,6 +11,8 @@
         <Individuation v-if="isLogin"></Individuation>
         <!-- 新碟上架 -->
         <NewDisc></NewDisc>
+        <!-- 榜单 -->
+        <List></List>
       </div>
       <div class="main__right"></div>
     </div>
@@ -21,6 +23,7 @@ import Banner from '@/components/discover/Banner'
 import Hot from '@/components/discover/Hot'
 import Individuation from '@/components/discover/Individuation'
 import NewDisc from '@/components/discover/NewDisc'
+import List from '@/components/discover/List'
 
 // 导入 discoverAPI
 import { bannerListAPI, hotPlaylistAPI } from '@/api/discoverAPI'
@@ -57,7 +60,8 @@ export default {
     Banner,
     Hot,
     Individuation,
-    NewDisc
+    NewDisc,
+    List
   },
   computed: {
     ...mapState(['isLogin'])
@@ -67,22 +71,23 @@ export default {
 <style lang="less" scoped>
 .discover__contianer {
   .main {
+    position: relative;
     background-color: #fff;
     border-style: solid;
     border-color: #d3d3d3;
     border-width: 0 1px;
     .main__left {
-      float: left;
       width: 689px;
-      height: 5000px;
       padding: 20px 20px 40px;
     }
     .main__right {
-      float: right;
+      position: absolute;
+      top: 0;
+      right: 0;
       width: 251px;
-      height: 5000px;
+      height: 100%;
       border: 1px solid #d3d3d3;
-      border-width: 0 1px;
+      border-width: 0 0 0 1px;
     }
   }
 }

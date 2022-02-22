@@ -29,3 +29,13 @@ export const everydaySongsAPI = () => {
 export const newDiscAPI = () => {
   return request.get('album/newest')
 }
+
+// 获取所有榜单
+export const topListAPI = () => {
+  return request.get('toplist')
+}
+
+// 获取歌单详情
+export const songDetailsAPI = (id) => {
+  return request.get('playlist/detail', { params: { id } })
+}
