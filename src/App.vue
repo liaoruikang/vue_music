@@ -83,6 +83,7 @@ export default {
     })
     Bus.$on('loginData', (data) => {
       this.userData = data
+      this.$store.commit('setUserId', data.userId)
     })
     this.loginState()
   },
@@ -106,7 +107,11 @@ export default {
     },
     userData: {
       handler() {
-        this.userData !== null ? (this.isLogin = true) : (this.isLogin = false)
+        if (this.userData !== null) {
+          this.isLogin = true
+        } else {
+          this.isLogin = false
+        }
       }
     },
     isLogin() {
@@ -119,6 +124,7 @@ export default {
       const { data: result } = await loginStateAPI()
       if (result.data.profile === null) return (this.isLogin = false)
       this.userData = result.data.profile
+      this.$store.commit('setUserId', result.data.profile.userId)
     },
     // 退出登录
     async logout() {
@@ -126,9 +132,13 @@ export default {
       if (result.code === 200) {
         this.$message.success('退出成功')
         this.userData = null
+        this.$store.commit('setUserId', null)
+        this.$store.commit('setUserData', {})
+        this.$store.commit('setUserLevel', null)
       }
     }
-  }
+  },
+  computed: {}
 }
 </script>
 <style lang="less" scoped>

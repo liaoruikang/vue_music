@@ -175,8 +175,12 @@ export default {
           const { data: result } = await getCodeAPI(
             this.phoneForm.phone,
             this.select
-          )
-          if (result.code !== 200) return this.$message.error(result.message)
+          ).catch(() => {
+            return this.$message.error('验证码发送间隔太短')
+          })
+          if (result.code !== 200) {
+            return this.$message.error(result.message)
+          }
           this.$message.success('验证码发送成功')
         }
       })
@@ -196,7 +200,7 @@ export default {
         }
         const { data: result } = await phoneLoginAPI(loginFrom).catch(() => {
           if (this.isverificationCode) {
-            return this.$message.error('验证码错误')
+            return this.$message.error('未知错误')
           } else {
             return this.$message.error('账号不存在')
           }

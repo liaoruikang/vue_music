@@ -50,7 +50,12 @@
               <img :src="userImg" alt="" />
               <ul class="login__nav" v-show="isMove === true">
                 <li>
-                  <router-link to="/user/home"
+                  <router-link
+                    :to="`/user/home${
+                      $store.state.userId == null
+                        ? ''
+                        : `?id=${$store.state.userId}`
+                    }`"
                     ><i class="el-icon-user"></i>我的主页</router-link
                   >
                 </li>

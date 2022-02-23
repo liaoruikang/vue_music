@@ -39,3 +39,18 @@ export const topListAPI = () => {
 export const songDetailsAPI = (id) => {
   return request.get('playlist/detail', { params: { id } })
 }
+
+// 获取用户信息
+export const userInfoAPI = (uid) => {
+  return request.get('user/detail', { params: { uid } })
+}
+
+// 获取用户等级信息
+export const userLevelAPI = () => {
+  return request.get('user/level')
+}
+
+// 签到
+export const signInAPI = () => {
+  return request.get('daily_signin', { params: { type: 1 } })
+}

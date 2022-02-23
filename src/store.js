@@ -1,6 +1,15 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { reSongListAPI, everydaySongListAPI, everydaySongsAPI, newDiscAPI, topListAPI, songDetailsAPI } from '@/api/discoverAPI'
+import {
+  reSongListAPI,
+  everydaySongListAPI,
+  everydaySongsAPI,
+  newDiscAPI,
+  topListAPI,
+  songDetailsAPI,
+  userInfoAPI,
+  userLevelAPI
+} from '@/api/discoverAPI'
 
 Vue.use(Vuex)
 
@@ -8,6 +17,7 @@ export default new Vuex.Store({
   state: {
     // 是否登录
     isLogin: false,
+    userId: null,
     // 推荐歌单列表
     reSongList: [],
     // 每日推荐歌单列表
@@ -19,7 +29,11 @@ export default new Vuex.Store({
     // 榜单列表
     topList: [],
     // 前三榜单的榜单详情
-    topThreeListdetail: []
+    topThreeListdetail: [],
+    // 用户信息
+    userData: {},
+    // 用户等级信息
+    userLevel: null
   },
   mutations: {
     setreSongList(state, songList) {
@@ -42,6 +56,15 @@ export default new Vuex.Store({
     },
     setTopThreeListdetail(state, Listdetail) {
       state.topThreeListdetail.push(Listdetail)
+    },
+    setUserId(state, userId) {
+      state.userId = userId
+    },
+    setUserData(state, userData) {
+      state.userData = userData
+    },
+    setUserLevel(state, userLevel) {
+      state.userLevel = userLevel
     },
     removeTopThreeListdetail(state) {
       state.topThreeListdetail = []
@@ -86,6 +109,16 @@ export default new Vuex.Store({
       const { data: result } = await songDetailsAPI(id)
       result.playlist.tracks = result.playlist.tracks.slice(0, 10)
       commit('setTopThreeListdetail', result.playlist)
+    },
+    // 获取用户信息
+    async getUserData({ commit }, id) {
+      const { data: result } = await userInfoAPI(id)
+      commit('setUserData', result.profile)
+    },
+    // 获取用户等级信息
+    async getUserLevel({ commit }) {
+      const { data: result } = await userLevelAPI()
+      commit('setUserLevel', result.data.level)
     }
 
   },

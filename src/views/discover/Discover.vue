@@ -14,7 +14,10 @@
         <!-- 榜单 -->
         <List></List>
       </div>
-      <div class="main__right"></div>
+      <div class="main__right">
+        <!-- 用户信息区域 -->
+        <Userinfo></Userinfo>
+      </div>
     </div>
   </div>
 </template>
@@ -24,6 +27,7 @@ import Hot from '@/components/discover/Hot'
 import Individuation from '@/components/discover/Individuation'
 import NewDisc from '@/components/discover/NewDisc'
 import List from '@/components/discover/List'
+import Userinfo from '@/components/discover/Userinfo'
 
 // 导入 discoverAPI
 import { bannerListAPI, hotPlaylistAPI } from '@/api/discoverAPI'
@@ -61,7 +65,8 @@ export default {
     Hot,
     Individuation,
     NewDisc,
-    List
+    List,
+    Userinfo
   },
   computed: {
     ...mapState(['isLogin'])
