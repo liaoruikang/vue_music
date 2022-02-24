@@ -14,11 +14,13 @@
             class="top__link"
             :to="`/discover/toplist?id=${item.id}`"
           >
-            <img
+            <el-image
               class="top__img"
               :src="item.coverImgUrl + '?param=80y80'"
-              alt=""
-            />
+              lazy
+            >
+            </el-image>
+            <div class="shadow"></div>
           </router-link>
           <div class="top__text">
             <h3>
@@ -94,7 +96,16 @@ a:hover {
         width: 210px;
         padding: 20px 0 0 20px;
         .top__link {
+          position: relative;
           float: left;
+          .shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80px;
+            height: 80px;
+            background: url('../../assets/uploads/coverall.png') no-repeat -145px -57px;
+          }
           .top__img {
             width: 80px;
             height: 80px;

@@ -47,7 +47,7 @@
               >登录</a
             >
             <div class="headImg" v-show="isLogin">
-              <img :src="userImg" alt="" />
+              <img :src="userImg + '?param=30y30'" alt="" />
               <ul class="login__nav" v-show="isMove === true">
                 <li>
                   <router-link

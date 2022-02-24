@@ -14,7 +14,7 @@
           }') no-repeat center`"
         >
           <div class="img__box w">
-            <img :src="item.imageUrl" />
+            <img :src="item.imageUrl + '?param=730y285'" />
           </div>
         </div>
       </el-carousel-item>

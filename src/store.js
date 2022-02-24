@@ -52,7 +52,6 @@ export default new Vuex.Store({
     },
     setNewDiscList(state, newDiscList) {
       state.newDiscList = newDiscList
-      console.log(newDiscList)
     },
     setTopList(state, topList) {
       state.topList = topList
@@ -71,7 +70,6 @@ export default new Vuex.Store({
     },
     setHotSingerList(state, hotSingerList) {
       state.hotSingerList = hotSingerList
-      console.log(hotSingerList)
     },
     removeTopThreeListdetail(state) {
       state.topThreeListdetail = []

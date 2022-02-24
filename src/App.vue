@@ -9,6 +9,9 @@
     <!-- 路由占位符 -->
     <router-view></router-view>
 
+    <!-- 底部区域 -->
+    <Buttom></Buttom>
+
     <!-- 登录对话框 -->
     <el-dialog
       :close-on-click-modal="false"
@@ -24,13 +27,13 @@
   </div>
 </template>
 <script>
-import Login from '@/components/login/Login.vue'
-import LoginPhone from '@/components/login/LoginPhone.vue'
-import LoginEmail from '@/components/login/LoginEmail.vue'
-import LoginQrCode from '@/components/login/LoginQrCode.vue'
-import Register from '@/components/login/Register.vue'
-import ResetPassword from '@/components/login/ResetPassword.vue'
-import Header from '@/components/Header'
+// import Login from '@/components/login/Login.vue'
+// import LoginPhone from '@/components/login/LoginPhone.vue'
+// import LoginEmail from '@/components/login/LoginEmail.vue'
+// import LoginQrCode from '@/components/login/LoginQrCode.vue'
+// import Register from '@/components/login/Register.vue'
+// import ResetPassword from '@/components/login/ResetPassword.vue'
+// import Header from '@/components/Header'
 
 import { loginStateAPI, logoutAPI } from '@/api/loginAPI'
 // 导入 eventBus
@@ -88,13 +91,14 @@ export default {
     this.loginState()
   },
   components: {
-    Login,
-    LoginPhone,
-    LoginEmail,
-    LoginQrCode,
-    Register,
-    ResetPassword,
-    Header
+    Login: () => import('@/components/login/Login'),
+    LoginPhone: () => import('@/components/login/LoginPhone'),
+    LoginEmail: () => import('@/components/login/LoginEmail'),
+    LoginQrCode: () => import('@/components/login/LoginQrCode'),
+    Register: () => import('@/components/login/Register'),
+    ResetPassword: () => import('@/components/login/ResetPassword'),
+    Header: () => import('@/components/Header'),
+    Buttom: () => import('@/components/Buttom')
   },
   watch: {
     loginDialogVisible() {

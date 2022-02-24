@@ -9,13 +9,7 @@
         <li v-for="item in hotSingerList" :key="item.id">
           <router-link :to="`/artist?id=${item.id}`">
             <div class="pic__img">
-              <div
-                class="img"
-                :style="{
-                  background: `url(${item.picUrl + '?param=62y62'}) no-repeat`,
-                  backgroundSize: '100% 100%'
-                }"
-              ></div>
+              <el-image :src="item.picUrl + '?param=62y62'" lazy></el-image>
             </div>
             <div class="ifo">
               <h5>{{ item.name }}</h5>
@@ -75,7 +69,7 @@ export default {
           .pic__img {
             width: 62px;
             height: 62px;
-            .img {
+            .el-image {
               width: 100%;
               height: 100%;
             }
