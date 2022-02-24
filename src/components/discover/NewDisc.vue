@@ -14,17 +14,6 @@
       >
         <el-carousel-item>
           <Disc
-            v-for="item in oneNewDisc"
-            :key="item.id"
-            :picUrl="item.picUrl"
-            :authorId="item.artist.id"
-            :id="item.id"
-            :name="item.name"
-            :author="item.artist.name"
-          ></Disc>
-        </el-carousel-item>
-        <el-carousel-item>
-          <Disc
             v-for="item in twoNewDisc"
             :key="item.id"
             :picUrl="item.picUrl"
@@ -37,17 +26,6 @@
         <el-carousel-item>
           <Disc
             v-for="item in oneNewDisc"
-            :key="item.id"
-            :picUrl="item.picUrl"
-            :authorId="item.artist.id"
-            :id="item.id"
-            :name="item.name"
-            :author="item.artist.name"
-          ></Disc>
-        </el-carousel-item>
-        <el-carousel-item>
-          <Disc
-            v-for="item in twoNewDisc"
             :key="item.id"
             :picUrl="item.picUrl"
             :authorId="item.artist.id"
@@ -61,8 +39,6 @@
   </div>
 </template>
 <script>
-import FloorHeader from './FloorHeader'
-import Disc from '@/components/common/Disc'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -74,7 +50,10 @@ export default {
     this.$store.dispatch('getNewDiscList')
   },
   methods: {},
-  components: { FloorHeader, Disc },
+  components: {
+    FloorHeader: () => import('./FloorHeader.vue'),
+    Disc: () => import('@/components/common/Disc')
+  },
   computed: {
     ...mapGetters(['oneNewDisc', 'twoNewDisc'])
   }

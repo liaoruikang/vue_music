@@ -34,8 +34,6 @@
   </div>
 </template>
 <script>
-import FloorHeader from '@/components/discover/FloorHeader'
-import SongList from '@/components/common/SongList'
 import { mapState } from 'vuex'
 
 export default {
@@ -54,7 +52,10 @@ export default {
     this.$store.dispatch('getSongList', 8)
   },
   methods: {},
-  components: { FloorHeader, SongList },
+  components: {
+    FloorHeader: () => import('@/components/discover/FloorHeader'),
+    SongList: () => import('@/components/common/SongList')
+  },
   computed: {
     ...mapState(['reSongList'])
   }

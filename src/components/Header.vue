@@ -94,7 +94,9 @@
               <li>
                 <router-link class="subNav__link" to="/discover/toplist"
                   ><em
-                    :class="$route.path == '/discover/toplist' ? 'current' : ''"
+                    :class="
+                      $route.path.includes('/discover/toplist') ? 'current' : ''
+                    "
                     >排行榜</em
                   ></router-link
                 >
@@ -103,7 +105,9 @@
                 <router-link class="subNav__link" to="/discover/playlist"
                   ><em
                     :class="
-                      $route.path == '/discover/playlist' ? 'current' : ''
+                      $route.path.includes('/discover/playlist')
+                        ? 'current'
+                        : ''
                     "
                     >歌单</em
                   ></router-link
@@ -112,7 +116,9 @@
               <li>
                 <router-link class="subNav__link" to="/discover/djradio"
                   ><em
-                    :class="$route.path == '/discover/djradio' ? 'current' : ''"
+                    :class="
+                      $route.path.includes('/discover/djradio') ? 'current' : ''
+                    "
                     >主播电台</em
                   ></router-link
                 >
@@ -120,7 +126,9 @@
               <li>
                 <router-link class="subNav__link" to="/discover/artist"
                   ><em
-                    :class="$route.path == '/discover/artist' ? 'current' : ''"
+                    :class="
+                      $route.path.includes('/discover/artist') ? 'current' : ''
+                    "
                     >歌手</em
                   ></router-link
                 >
@@ -128,7 +136,9 @@
               <li>
                 <router-link class="subNav__link" to="/discover/album"
                   ><em
-                    :class="$route.path == '/discover/album' ? 'current' : ''"
+                    :class="
+                      $route.path.includes('/discover/album') ? 'current' : ''
+                    "
                     >新碟上架</em
                   ></router-link
                 >

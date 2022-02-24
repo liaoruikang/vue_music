@@ -30,8 +30,6 @@
   </div>
 </template>
 <script>
-import FloorHeader from './FloorHeader.vue'
-import SongList from '../common/SongList.vue'
 import { mapGetters } from 'vuex'
 export default {
   name: 'individuation',
@@ -53,7 +51,10 @@ export default {
     this.$store.dispatch('getEverydaySongList')
   },
   methods: {},
-  components: { FloorHeader, SongList },
+  components: {
+    FloorHeader: () => import('./FloorHeader.vue'),
+    SongList: () => import('../common/SongList.vue')
+  },
   computed: {
     ...mapGetters(['daySongList'])
   }

@@ -2,7 +2,7 @@
   <div class="SongList__container">
     <div class="pic__img">
       <router-link :to="`/playlist?id=${id}`">
-        <el-image :src="url" lazy></el-image>
+        <el-image :src="url + '?param=140y140'" lazy></el-image>
       </router-link>
 
       <div class="img__item">

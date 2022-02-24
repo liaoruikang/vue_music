@@ -14,7 +14,11 @@
             class="top__link"
             :to="`/discover/toplist?id=${item.id}`"
           >
-            <img class="top__img" :src="item.coverImgUrl" alt="" />
+            <img
+              class="top__img"
+              :src="item.coverImgUrl + '?param=80y80'"
+              alt=""
+            />
           </router-link>
           <div class="top__text">
             <h3>
@@ -51,7 +55,6 @@
   </div>
 </template>
 <script>
-import FloorHeader from '@/components/discover/FloorHeader'
 import { mapState } from 'vuex'
 export default {
   name: 'list',
@@ -63,7 +66,7 @@ export default {
   },
   methods: {},
   components: {
-    FloorHeader
+    FloorHeader: () => import('./FloorHeader.vue')
   },
   destroyed() {
     // 当组件销毁时 将前三条的榜单数据清空

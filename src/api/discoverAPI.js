@@ -54,3 +54,10 @@ export const userLevelAPI = () => {
 export const signInAPI = () => {
   return request.get('daily_signin', { params: { type: 1 } })
 }
+
+// 获取热门歌手
+export const hotSingerAPI = (limit, offset) => {
+  if (limit === undefined) { limit = 50 }
+  if (offset === undefined) { offset = 0 }
+  return request.get('/top/artists', { params: { limit, offset } })
+}

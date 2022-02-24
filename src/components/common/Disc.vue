@@ -1,7 +1,7 @@
 <template>
   <div class="disc__container">
     <router-link class="disc__link" :to="`/album?id=${id}`">
-      <el-image :src="picUrl" :lazy="lazy"></el-image>
+      <el-image :src="picUrl + '?param=100y100'" :lazy="lazy"></el-image>
       <a href="javascript:;" @click.prevent class="play"></a>
     </router-link>
     <p class="disc__name">

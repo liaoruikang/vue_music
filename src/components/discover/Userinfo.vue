@@ -12,7 +12,7 @@
             $store.state.userId == null ? '' : `?id=${$store.state.userId}`
           }`"
         >
-          <img :src="$store.state.userData.avatarUrl" alt="" />
+          <img :src="$store.state.userData.avatarUrl + '?param=80y80'" alt="" />
         </router-link>
         <div class="info">
           <h4>

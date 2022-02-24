@@ -9,7 +9,9 @@
       <el-carousel-item v-for="(item, index) in bannerData" :key="index">
         <div
           class="banner__box"
-          :style="`background: url('${item.imageUrl}') no-repeat center`"
+          :style="`background: url('${
+            item.imageUrl + '?param=730y285'
+          }') no-repeat center`"
         >
           <div class="img__box w">
             <img :src="item.imageUrl" />

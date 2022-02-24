@@ -8,7 +8,7 @@ import {
   topListAPI,
   songDetailsAPI,
   userInfoAPI,
-  userLevelAPI
+  userLevelAPI, hotSingerAPI
 } from '@/api/discoverAPI'
 
 Vue.use(Vuex)
@@ -33,7 +33,9 @@ export default new Vuex.Store({
     // 用户信息
     userData: {},
     // 用户等级信息
-    userLevel: null
+    userLevel: null,
+    // 热门歌手列表
+    hotSingerList: []
   },
   mutations: {
     setreSongList(state, songList) {
@@ -50,6 +52,7 @@ export default new Vuex.Store({
     },
     setNewDiscList(state, newDiscList) {
       state.newDiscList = newDiscList
+      console.log(newDiscList)
     },
     setTopList(state, topList) {
       state.topList = topList
@@ -65,6 +68,10 @@ export default new Vuex.Store({
     },
     setUserLevel(state, userLevel) {
       state.userLevel = userLevel
+    },
+    setHotSingerList(state, hotSingerList) {
+      state.hotSingerList = hotSingerList
+      console.log(hotSingerList)
     },
     removeTopThreeListdetail(state) {
       state.topThreeListdetail = []
@@ -119,6 +126,11 @@ export default new Vuex.Store({
     async getUserLevel({ commit }) {
       const { data: result } = await userLevelAPI()
       commit('setUserLevel', result.data.level)
+    },
+    // 获取热门歌手列表
+    async getHotSingerList({ commit }, limit, offset) {
+      const { data: result } = await hotSingerAPI(limit, offset)
+      commit('setHotSingerList', result.artists)
     }
 
   },

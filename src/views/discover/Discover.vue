@@ -17,17 +17,19 @@
       <div class="main__right">
         <!-- 用户信息区域 -->
         <Userinfo></Userinfo>
+        <!-- 入驻歌手 -->
+        <InSinger></InSinger>
       </div>
     </div>
   </div>
 </template>
 <script>
-import Banner from '@/components/discover/Banner'
-import Hot from '@/components/discover/Hot'
-import Individuation from '@/components/discover/Individuation'
-import NewDisc from '@/components/discover/NewDisc'
-import List from '@/components/discover/List'
-import Userinfo from '@/components/discover/Userinfo'
+// import Banner from '@/components/discover/Banner'
+// import Hot from '@/components/discover/Hot'
+// import Individuation from '@/components/discover/Individuation'
+// import NewDisc from '@/components/discover/NewDisc'
+// import List from '@/components/discover/List'
+// import Userinfo from '@/components/discover/Userinfo'
 
 // 导入 discoverAPI
 import { bannerListAPI, hotPlaylistAPI } from '@/api/discoverAPI'
@@ -61,12 +63,13 @@ export default {
     }
   },
   components: {
-    Banner,
-    Hot,
-    Individuation,
-    NewDisc,
-    List,
-    Userinfo
+    Banner: () => import('@/components/discover/Banner'),
+    Hot: () => import('@/components/discover/Hot'),
+    Individuation: () => import('@/components/discover/Individuation'),
+    NewDisc: () => import('@/components/discover/NewDisc'),
+    List: () => import('@/components/discover/List'),
+    Userinfo: () => import('@/components/discover/Userinfo'),
+    InSinger: () => import('@/components/discover/InSinger')
   },
   computed: {
     ...mapState(['isLogin'])
