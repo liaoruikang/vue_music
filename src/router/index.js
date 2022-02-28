@@ -21,22 +21,77 @@ const Update = () => import(/* webpackChunkName: "Update" */ '@/views/user/Updat
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: Discover },
-  { path: '/discover', component: Discover },
-  { path: '/My', component: My },
-  { path: '/Friend', component: Friend },
-  { path: '/Download', component: Download },
-  { path: '/discover/album', component: Album },
-  { path: '/discover/toplist', component: Toplist },
-  { path: '/discover/playlist', component: Playlist },
-  { path: '/discover/djradio', component: Djradio },
-  { path: '/discover/artist', component: Artist },
-  { path: '/user/home', component: Home },
-  { path: '/user/update', component: Update }
+  {
+    path: '/',
+    component: Discover,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+  },
+  {
+    path: '/discover',
+    component: Discover,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+  },
+  {
+    path: '/My',
+    component: My,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+  },
+  {
+    path: '/Friend',
+    component: Friend,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+  },
+  {
+    path: '/Download',
+    component: Download,
+    meta: { oneTitle: '下载网易云音乐iPhone、iPad、Mac、Android、WP、PC版客户端', twoTitle: '', threeTitle: '' }
+  },
+
+  {
+    path: '/discover/toplist',
+    component: Toplist,
+    meta: { oneTitle: '网易云音乐', twoTitle: '排行榜', threeTitle: '' }
+  },
+  {
+    path: '/discover/playlist',
+    component: Playlist,
+    meta: { oneTitle: '网易云音乐', twoTitle: '歌单', threeTitle: '' }
+  },
+  {
+    path: '/discover/djradio',
+    component: Djradio,
+    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '' }
+  },
+  {
+    path: '/discover/artist',
+    component: Artist,
+    meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '' }
+  },
+  {
+    path: '/discover/album',
+    component: Album,
+    meta: { oneTitle: '网易云音乐', twoTitle: '新碟上架', threeTitle: '' }
+  },
+  {
+    path: '/user/home',
+    component: Home,
+    meta: { oneTitle: '网易云音乐', twoTitle: '用户', threeTitle: '' }
+  },
+  {
+    path: '/user/update',
+    component: Update,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+  }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const title = (to.meta.threeTitle === '' ? '' : to.meta.threeTitle + ' - ') + (to.meta.twoTitle === '' ? '' : to.meta.twoTitle + ' - ') + to.meta.oneTitle
+  document.querySelector('title').innerHTML = title
+  next()
 })
 
 export default router

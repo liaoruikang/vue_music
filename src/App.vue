@@ -24,6 +24,9 @@
         <component :is="loginMode" @loginMode="loginMode = $event"></component>
       </keep-alive>
     </el-dialog>
+
+    <!-- 播放控件 -->
+    <Play></Play>
   </div>
 </template>
 <script>
@@ -98,7 +101,8 @@ export default {
     Register: () => import('@/components/login/Register'),
     ResetPassword: () => import('@/components/login/ResetPassword'),
     Header: () => import('@/components/Header'),
-    Buttom: () => import('@/components/Buttom')
+    Buttom: () => import('@/components/Buttom'),
+    Play: () => import('@/components/Play')
   },
   watch: {
     loginDialogVisible() {

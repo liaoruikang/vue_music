@@ -18,6 +18,7 @@ module.exports = {
         asyncArrow: 'always'
       }
     ],
-    quotes: ['error', 'single', { allowTemplateLiterals: true }]
+    quotes: ['error', 'single', { allowTemplateLiterals: true }],
+    'no-unused-vars': ["warn", { "args": "after-used" }]
   }
 }

@@ -12,20 +12,9 @@
         height="186px"
         arrow="always"
       >
-        <el-carousel-item>
+        <el-carousel-item v-for="(val, index) in newDisc" :key="index">
           <Disc
-            v-for="item in twoNewDisc"
-            :key="item.id"
-            :picUrl="item.picUrl"
-            :authorId="item.artist.id"
-            :id="item.id"
-            :name="item.name"
-            :author="item.artist.name"
-          ></Disc>
-        </el-carousel-item>
-        <el-carousel-item>
-          <Disc
-            v-for="item in oneNewDisc"
+            v-for="item in val"
             :key="item.id"
             :picUrl="item.picUrl"
             :authorId="item.artist.id"
@@ -55,7 +44,10 @@ export default {
     Disc: () => import('@/components/common/Disc')
   },
   computed: {
-    ...mapGetters(['oneNewDisc', 'twoNewDisc'])
+    ...mapGetters(['oneNewDisc', 'twoNewDisc']),
+    newDisc() {
+      return [this.oneNewDisc, this.twoNewDisc]
+    }
   }
 }
 </script>
@@ -81,6 +73,7 @@ export default {
     background-color: transparent !important;
     color: #333;
     font-size: 20px;
+    z-index: 3;
   }
   /deep/ .el-carousel__arrow--right {
     right: -18px;

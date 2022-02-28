@@ -84,10 +84,19 @@ export default {
     text-decoration: underline;
   }
   .disc__name {
-    color: #000;
+    a {
+      display: block;
+      width: 115px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #000;
+    }
   }
   .disc__author {
-    color: #333;
+    a {
+      color: #333;
+    }
   }
 }
 </style>
