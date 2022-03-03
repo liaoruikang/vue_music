@@ -22,14 +22,15 @@
     <!-- 主体区域 -->
     <div class="hot__body">
       <!-- 电台列表 -->
-      <SongList
-        v-for="item in reSongList"
+      <SongsList
+        v-for="item in reSongsList"
         :key="item.id"
         :url="item.picUrl"
         :audience="item.playCount"
         :id="item.id"
         :title="item.name"
-      ></SongList>
+        @playClick="$store.dispatch('getsongsDetails', item.id)"
+      ></SongsList>
     </div>
   </div>
 </template>
@@ -49,15 +50,15 @@ export default {
   },
   created() {
     // 获取推荐歌单列表
-    this.$store.dispatch('getSongList', 8)
+    this.$store.dispatch('getSongsList', 8)
   },
   methods: {},
   components: {
     FloorHeader: () => import('@/components/discover/FloorHeader'),
-    SongList: () => import('@/components/common/SongList')
+    SongsList: () => import('@/components/common/SongsList')
   },
   computed: {
-    ...mapState(['reSongList'])
+    ...mapState(['reSongsList'])
   }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
   <div>
-    <h3>toplist</h3>
+    <h3 class="toplist__container">toplist</h3>
   </div>
 </template>
 <script>
 export default {
-  name: 'discover',
+  name: 'toplist',
   data() {
     return {}
   },

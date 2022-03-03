@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="friend__container">
     <h3>friend</h3>
   </div>
 </template>
 <script>
 export default {
+  name: 'friend',
   data() {
     return {}
   },

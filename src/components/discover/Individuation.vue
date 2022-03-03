@@ -17,15 +17,16 @@
         </div>
       </div>
       <!-- 每日推荐歌单 -->
-      <SongList
-        v-for="item in daySongList"
+      <SongsList
+        v-for="item in daySongsList"
         :key="item.id"
         :url="item.picUrl"
         :audience="item.playcount"
         :id="item.id"
         :title="item.name"
         :tips="item.copywriter"
-      ></SongList>
+        @playClick="$store.dispatch('getsongsDetails', item.id)"
+      ></SongsList>
     </div>
   </div>
 </template>
@@ -48,15 +49,15 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('getEverydaySongList')
+    this.$store.dispatch('getEverydaySongsList')
   },
   methods: {},
   components: {
     FloorHeader: () => import('./FloorHeader.vue'),
-    SongList: () => import('../common/SongList.vue')
+    SongsList: () => import('../common/SongsList.vue')
   },
   computed: {
-    ...mapGetters(['daySongList'])
+    ...mapGetters(['daySongsList'])
   }
 }
 </script>

@@ -1,8 +1,9 @@
 <template>
-  <div>djradio</div>
+  <div class="djradio__container">djradio</div>
 </template>
 <script>
 export default {
+  name: 'djradio',
   data() {
     return {}
   },

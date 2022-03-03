@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="my__container">
     <h3>my</h3>
   </div>
 </template>
 <script>
 export default {
-  name: 'discover',
+  name: 'my',
   data() {
     return {}
   },

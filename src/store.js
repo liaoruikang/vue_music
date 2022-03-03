@@ -1,14 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {
-  reSongListAPI,
-  everydaySongListAPI,
+  reSongsListAPI,
+  everydaySongsListAPI,
   everydaySongsAPI,
   newDiscAPI,
   topListAPI,
-  songDetailsAPI,
+  songsDetailsAPI,
   userInfoAPI,
-  userLevelAPI, hotSingerAPI
+  userLevelAPI,
+  hotSingerAPI,
+  songDetailsAPI,
+  albumDetailsAPI,
+  lyricAPI, songUrlAPI
 } from '@/api/discoverAPI'
 
 Vue.use(Vuex)
@@ -19,7 +23,7 @@ export default new Vuex.Store({
     isLogin: false,
     userId: null,
     // 推荐歌单列表
-    reSongList: [],
+    reSongsList: [],
     // 每日推荐歌单列表
     everyDayList: [],
     // 每日推荐歌曲列表
@@ -35,17 +39,25 @@ export default new Vuex.Store({
     // 用户等级信息
     userLevel: null,
     // 热门歌手列表
-    hotSingerList: []
+    hotSingerList: [],
+    // 歌曲列表
+    songList: [],
+    // 当前播放的歌曲
+    currentPlay: null,
+    // 当前播放歌曲歌词
+    lyric: '',
+    // 当前歌曲URL
+    songUrl: null
   },
   mutations: {
-    setreSongList(state, songList) {
-      state.reSongList = songList
+    setreSongsList(state, songsList) {
+      state.reSongsList = songsList
     },
     setIsLogin(state, isLogin) {
       state.isLogin = isLogin
     },
-    setEverydaySongList(state, everyDaySongList) {
-      state.everyDayList = everyDaySongList
+    setEverydaySongsList(state, everyDaySongsList) {
+      state.everyDayList = everyDaySongsList
     },
     setSongs(state, songs) {
       state.everydaySongs = songs
@@ -71,20 +83,114 @@ export default new Vuex.Store({
     setHotSingerList(state, hotSingerList) {
       state.hotSingerList = hotSingerList
     },
+    setSongList(state, songs) {
+      if (!songs) return
+      if (state.songList.length === 0) state.songList.push(...songs)
+      if (songs.length > 1) {
+        state.songList = songs
+      } else {
+        songs.forEach(item => {
+          if (state.songList.every(val => val.id !== item.id)) {
+            state.songList.push(item)
+          }
+        })
+      }
+      // 将歌曲信息存到本地
+      window.localStorage.setItem('songList', JSON.stringify(state.songList))
+    },
+    setCurrentPlay(state, song) {
+      if (song.isPlay) {
+        song.song.isPlay = song.isPlay
+        song = song.song
+      }
+      this.dispatch('getSongUrl', song.id)
+      state.currentPlay = song
+      window.localStorage.setItem('currentPlay', JSON.stringify(state.currentPlay))
+    },
+    // 写入歌词
+    setLyric(state, lyric) {
+      // 第一步 将字符串分割为数组
+      const arr1 = lyric.split(/\n/)
+      arr1.splice(arr1.length - 1, 1)
+      // 第二步 将数组里面每个字符串转换为对象
+      const arr2 = []
+      if (lyric.match(/\[[\S]+\]/)) {
+        arr1.forEach(item => {
+          let time = item.match(/\[[\S]+\]/)[0]
+          time = time && time.replace('[', '').replace(']', '')
+          time = (parseInt(time.split(':')[0]) * 60 + parseFloat(time.split(':')[1])).toFixed(2)
+          const content = item.split(']')[1] || ''
+          const obj = {
+            time,
+            content
+          }
+          arr2.push(obj)
+        })
+      } else {
+        arr1.forEach(item => {
+          const content = item
+          const obj = {
+            content,
+            time: 0
+          }
+          arr2.push(obj)
+        })
+        arr2.unshift({ content: '*该歌词不支持自动滚动* ' })
+      }
+      state.lyric = arr2
+    },
+    // 写入歌曲URL
+    setSongUrl(state, url) {
+      // 给每个歌曲URL添加标记 使每一个URL都是不同的
+      url += '#' + Math.floor(Math.random() * 1000000)
+      state.songUrl = url
+    },
     removeTopThreeListdetail(state) {
       state.topThreeListdetail = []
+    },
+    removeSongList(state, id) {
+      if (id === undefined) {
+        state.songList = []
+        state.currentPlay = null
+        state.lyric = []
+        state.songUrl = null
+
+        window.localStorage.removeItem('songList')
+        window.localStorage.removeItem('currentPlay')
+      } else {
+        // 当删除的是当前播放的歌曲时
+        if (state.currentPlay.id === id) {
+          const index = state.songList.findIndex(item => item.id === state.currentPlay.id)
+          if (state.songList[index + 1]) {
+            state.currentPlay = state.songList[index + 1]
+          } else if (state.songList[index - 1]) {
+            state.currentPlay = state.songList[index - 1]
+          } else {
+            state.currentPlay = null
+          }
+          state.currentPlay && this.dispatch('getSongUrl', state.currentPlay.id)
+
+          // 重新更新本地存储数量
+          window.localStorage.setItem('currentPlay', JSON.stringify(state.currentPlay))
+        }
+        // 查找索引删除指定元素
+        const index = state.songList.findIndex(item => item.id === id)
+        state.songList.splice(index, 1)
+        // 重新更新本地存储数量
+        window.localStorage.setItem('songList', JSON.stringify(state.songList))
+      }
     }
   },
   actions: {
     // 获取歌单列表
-    async getSongList({ commit }, limit) {
-      const { data } = await reSongListAPI(limit)
-      commit('setreSongList', data.result)
+    async getSongsList({ commit }, limit) {
+      const { data } = await reSongsListAPI(limit)
+      commit('setreSongsList', data.result)
     },
     // 获取每日推荐歌单列表
-    async getEverydaySongList({ commit }) {
-      const { data: result } = await everydaySongListAPI()
-      commit('setEverydaySongList', result.recommend)
+    async getEverydaySongsList({ commit }) {
+      const { data: result } = await everydaySongsListAPI()
+      commit('setEverydaySongsList', result.recommend)
     },
     // 获取每日推荐歌曲
     async getSongs({ commit }) {
@@ -111,7 +217,7 @@ export default new Vuex.Store({
     },
     // 获取歌单详情
     async getSongsdetails({ commit }, id) {
-      const { data: result } = await songDetailsAPI(id)
+      const { data: result } = await songsDetailsAPI(id)
       result.playlist.tracks = result.playlist.tracks.slice(0, 10)
       commit('setTopThreeListdetail', result.playlist)
     },
@@ -129,11 +235,40 @@ export default new Vuex.Store({
     async getHotSingerList({ commit }, limit, offset) {
       const { data: result } = await hotSingerAPI(limit, offset)
       commit('setHotSingerList', result.artists)
+    },
+    // 获取歌曲详情
+    async getSongDetails({ commit }, ids) {
+      // 获取歌曲详情
+      const { data: result } = await songDetailsAPI(ids)
+      commit('setSongList', result.songs)
+      commit('setCurrentPlay', result.songs[0])
+    },
+    // 获取歌单详情
+    async getsongsDetails({ commit }, id) {
+      const { data: result } = await songsDetailsAPI(id)
+      commit('setSongList', result.playlist.tracks)
+      commit('setCurrentPlay', result.playlist.tracks[0])
+    },
+    // 获取专辑详情
+    async getAlbumDetails({ commit }, id) {
+      const { data: result } = await albumDetailsAPI(id)
+      commit('setSongList', result.songs)
+      commit('setCurrentPlay', result.songs[0])
+    },
+    // 获取歌词
+    async getLyric({ commit }, id) {
+      const { data: result } = await lyricAPI(id)
+      commit('setLyric', result.lrc.lyric)
+    },
+    // 获取歌曲URL
+    async getSongUrl({ commit }, id) {
+      const { data: result } = await songUrlAPI(id)
+      commit('setSongUrl', result.data[0].url)
     }
 
   },
   getters: {
-    daySongList(state) {
+    daySongsList(state) {
       const index = []
       for (let i = 0; i < 100; i++) {
         const random = Math.floor(Math.random() * 5)
@@ -144,18 +279,22 @@ export default new Vuex.Store({
           break
         }
       }
-      const newSongList = []
+      const newSongsList = []
       index.forEach(item => {
-        newSongList.push(state.everyDayList[item])
+        newSongsList.push(state.everyDayList[item])
       })
-      if (newSongList[0] === undefined) return false
-      return newSongList
+      if (newSongsList[0] === undefined) return false
+      return newSongsList
     },
     oneNewDisc(state) {
       return state.newDiscList.slice(0, 5)
     },
     twoNewDisc(state) {
       return state.newDiscList.slice(5, 10)
+    },
+    // 播放列表歌曲数量
+    songTotal(state) {
+      return state.songList.length
     }
   }
 })

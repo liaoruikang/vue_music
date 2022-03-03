@@ -1,5 +1,5 @@
 <template>
-  <div class="SongList__container">
+  <div class="songsList__container">
     <div class="pic__img">
       <router-link :to="`/playlist?id=${id}`">
         <el-image :src="url + '?param=140y140'" lazy></el-image>
@@ -9,7 +9,7 @@
         <div class="audience">
           <span>{{ audience | number_ch }}</span>
         </div>
-        <a href="javascript:;" class="play"></a>
+        <a href="javascript:;" class="play" @click="$emit('playClick')"></a>
       </div>
     </div>
     <div class="title">
@@ -20,7 +20,7 @@
 </template>
 <script>
 export default {
-  name: 'SongList',
+  name: 'songsList',
   props: {
     url: {
       type: String,
@@ -51,7 +51,7 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.SongList__container {
+.songsList__container {
   display: inline-block;
   width: 140px;
   height: 234px;

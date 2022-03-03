@@ -21,6 +21,7 @@
             :id="item.id"
             :name="item.name"
             :author="item.artist.name"
+            @playClick="$store.dispatch('getAlbumDetails', item.id)"
           ></Disc>
         </el-carousel-item>
       </el-carousel>

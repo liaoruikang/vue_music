@@ -1,8 +1,9 @@
 <template>
-  <div>album</div>
+  <div class="album__container">album</div>
 </template>
 <script>
 export default {
+  name: 'albun',
   data() {
     return {}
   },

@@ -171,7 +171,7 @@ export default {
     },
     value: {
       deep: true,
-      handler(newVal, usedVal) {
+      handler(newVal) {
         const newArr = []
         for (const k in newVal) {
           newArr.push(newVal[k])

@@ -2,7 +2,7 @@
   <div class="disc__container">
     <router-link class="disc__link" :to="`/album?id=${id}`">
       <el-image :src="picUrl + '?param=100y100'" :lazy="lazy"></el-image>
-      <a href="javascript:;" @click.prevent class="play"></a>
+      <a href="javascript:;" @click.stop="$emit('playClick')" class="play"></a>
     </router-link>
     <p class="disc__name">
       <router-link :to="`/album?id=${id}`">{{ name }}</router-link>

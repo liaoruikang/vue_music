@@ -1,8 +1,9 @@
 <template>
-  <div>playlist</div>
+  <div class="playlist__container">playlist</div>
 </template>
 <script>
 export default {
+  name: 'playlist',
   data() {
     return {}
   },

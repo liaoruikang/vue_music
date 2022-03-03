@@ -28,7 +28,12 @@
                 item.name
               }}</router-link>
             </h3>
-            <a class="play" href="javascript:;" title="播放"></a>
+            <a
+              class="play"
+              href="javascript:;"
+              title="播放"
+              @click="$store.dispatch('getsongsDetails', item.id)"
+            ></a>
             <a class="collection" href="javascript:;" title="收藏"></a>
           </div>
         </div>
@@ -41,7 +46,11 @@
               </router-link>
             </div>
             <div class="table__f">
-              <a class="song__play" href="javascript:;"></a>
+              <a
+                class="song__play"
+                href="javascript:;"
+                @click="$store.dispatch('getSongDetails', val.id)"
+              ></a>
               <a class="add__list" href="javascript:;"></a>
               <a class="collection" href="javascript:;"></a>
             </div>
@@ -75,7 +84,7 @@ export default {
     this.$store.commit('removeTopThreeListdetail')
   },
   computed: {
-    ...mapState(['topThreeListdetail'])
+    ...mapState(['topThreeListdetail', 'songId'])
   }
 }
 </script>

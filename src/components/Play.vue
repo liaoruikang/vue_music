@@ -1,36 +1,72 @@
 <template>
-  <div class="play__container" ref="playRef" :style="{ bottom: bottom }">
+  <div
+    class="play__container"
+    ref="playRef"
+    @click.stop
+    :style="{ bottom: bottom }"
+  >
     <div class="play__main">
       <!-- 左侧控件区 -->
       <div class="play__btns">
-        <a href="javascript:;" class="play__last"></a>
-        <a href="javascript:;" class="play__stop"></a>
-        <a href="javascript:;" class="play__next"></a>
+        <a href="javascript:;" class="play__last" @click="onEnded('last')"></a>
+        <a
+          href="javascript:;"
+          :class="[isPlay ? 'play__open' : 'play__stop']"
+          @click="play"
+        ></a>
+        <a href="javascript:;" class="play__next" @click="onEnded('next')"></a>
       </div>
       <!-- 进度条以及歌曲信息区域 -->
       <div class="play__progress">
-        <router-link class="song__headPortrait" :to="`/song?id=${id}`">
+        <router-link
+          class="song__headPortrait"
+          :to="`/song?id=${currentPlay && currentPlay.id}`"
+        >
         </router-link>
         <img
           class="play__img"
           width="34"
           height="34"
-          src="http://s4.music.126.net/style/web2/img/default/default_album.jpg"
+          :src="
+            currentPlay
+              ? currentPlay.al.picUrl + '?param=34y34'
+              : 'http://s4.music.126.net/style/web2/img/default/default_album.jpg?param=34y34'
+          "
         />
         <div class="play__pro">
           <div class="play__name clearfix">
-            <router-link :to="`/song?id=${id}`">哪里都是你</router-link>
-            <router-link class="play__mv" :to="`/mv?id=${mvId}`"></router-link>
-            <router-link class="play__author" :to="`/artist?id=${artistId}`"
-              >author</router-link
-            >
+            <router-link :to="`/song?id=${currentPlay && currentPlay.id}`">{{
+              currentPlay && currentPlay.name
+            }}</router-link>
+            <router-link
+              :class="currentPlay && currentPlay.mv && 'play__mv'"
+              :to="`/mv?id=${currentPlay && currentPlay.mv}`"
+            ></router-link>
+            <div class="play__author" v-if="currentPlay">
+              <span
+                v-for="(item, index) in currentPlay && currentPlay.ar"
+                :key="item.id"
+              >
+                <router-link class="" :to="`/artist?id=${item.id}`">
+                  {{ item.name }}
+                </router-link>
+                {{ index == currentPlay.ar.length - 1 ? '' : '/' }}
+              </span>
+            </div>
           </div>
           <div class="progress">
-            <el-slider v-model="songProgress"></el-slider>
+            <el-slider
+              v-model="songProgress"
+              :disabled="!currentPlay"
+              :show-tooltip="false"
+              @change="currentPlayChange"
+              @input="currentPlayInput"
+              @mousedown.native="isChange = true"
+            ></el-slider>
             <span>
-              <em>00:00</em>
+              <em>{{ currentPlayTime || '00:00' }}</em>
               <i>/</i>
-              03:25
+              {{ maxPlayTime }}
             </span>
           </div>
         </div>
@@ -53,13 +89,35 @@
               }
             "
           ></a>
-          <a href="javascript:;" title="循环"></a>
+          <a
+            href="javascript:;"
+            :class="playMode"
+            :title="
+              playMode == 'loop'
+                ? '循环'
+                : playMode == 'random'
+                ? '随机'
+                : playMode == 'oneLoop'
+                ? '单曲循环'
+                : ''
+            "
+            @click="
+              playMode =
+                playMode == 'loop'
+                  ? 'random'
+                  : playMode == 'random'
+                  ? 'oneLoop'
+                  : playMode == 'oneLoop'
+                  ? 'loop'
+                  : playMode
+            "
+          ></a>
           <span>
             <a
               href="javascript:;"
               title="播放列表"
               @click="displayList = !displayList"
-              >0</a
+              >{{ songTotal }}</a
             >
           </span>
           <div v-show="displayVoice" class="voice">
@@ -68,6 +126,7 @@
               vertical
               :show-tooltip="false"
               height="90px"
+              :disabled="!currentPlay"
             >
             </el-slider>
           </div>
@@ -77,29 +136,43 @@
       <div class="play__list" v-show="displayList">
         <div class="list__head">
           <div class="head__left">
-            <h4>播放列表(0)</h4>
+            <h4>播放列表({{ songTotal }})</h4>
             <div class="head__f">
               <a class="add" href="javascript:;"
                 ><span class="icon__add"></span>收藏全部</a
               >
               <span class="line"></span>
-              <a class="del" href="javascript:;"
+              <a class="del" @click="delSongList" href="javascript:;"
                 ><span class="icon__del"></span>删除</a
               >
             </div>
           </div>
           <div class="head__right">
-            <h5>哪里都是你</h5>
+            <h5>{{ currentPlay && currentPlay.name }}</h5>
             <span class="close" @click="displayList = false"></span>
           </div>
         </div>
         <div class="list__body">
-          <img src="//music.163.com/api/img/blur/109951167046276957" />
+          <img
+            :src="currentPlay ? currentPlay.al.picUrl + '?param=100y100' : ''"
+          />
           <div class="body__left">
-            <!-- <el-empty description="你还没有添加任何歌曲"></el-empty> -->
             <div class="body__table" ref="tableRef">
+              <el-empty v-show="songList.length === 0">
+                <template slot="description">
+                  <p class="tips"><i></i>你还没有添加任何歌曲</p>
+                  <p class="tips">
+                    去首页
+                    <router-link to="/">发现音乐</router-link>
+                    ，或在
+                    <router-link to="/my">我的音乐</router-link>
+                    收听自己收藏的歌单。
+                  </p>
+                </template>
+              </el-empty>
               <ul
                 ref="contentRef"
+                v-show="songList.length > 0"
                 @mousewheel="
                   scroll(
                     $refs.contentRef,
@@ -110,68 +183,45 @@
                   )
                 "
               >
-                <li class="current">
-                  <div class="current__play play__c"></div>
-                  <div class="play__name">哪里都是你</div>
-                  <div class="play__f">
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
-                  </div>
-                  <div class="play__author">
-                    <router-link :to="`/artist?id=${artistId}`"
-                      >队长dddddddddddddddddddddddd</router-link
-                    >
-                  </div>
-                  <div class="play__time">03:25</div>
-                  <div class="play__source">
-                    <router-link to="/playlist" title="暂无来源"></router-link>
-                  </div>
-                </li>
                 <li
-                  v-for="(item, index) in [
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-                  ]"
-                  :key="index"
+                  :class="
+                    currentPlay && currentPlay.id == item.id ? 'current' : ''
+                  "
+                  v-for="item in songList"
+                  :key="item.id"
+                  @click="$store.commit('setCurrentPlay', item)"
                 >
-                  <div class="play__c"></div>
-                  <div class="play__name">哪里都是你</div>
+                  <div
+                    :class="[
+                      'play__c',
+                      currentPlay && currentPlay.id == item.id
+                        ? 'current__play'
+                        : ''
+                    ]"
+                  ></div>
+                  <div class="play__name">{{ item.name }}</div>
                   <div class="play__f">
                     <a href="javascript:;"></a>
                     <a href="javascript:;"></a>
                     <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
+                    <a
+                      href="javascript:;"
+                      @click.stop="delSongList($event, item.id)"
+                    ></a>
                   </div>
                   <div class="play__author">
-                    <router-link :to="`/artist?id=${artistId}`"
-                      >队长</router-link
-                    >
+                    <span v-for="(val, index) in item.ar" :key="val.id">
+                      <router-link class="" :to="`/artist?id=${val.id}`">
+                        {{ val.name }}
+                      </router-link>
+                      {{ index == item.ar.length - 1 ? '' : '/' }}
+                    </span>
                   </div>
-                  <div class="play__time">03:25</div>
+                  <div class="play__time">
+                    {{ dayjs(item.dt).format('mm:ss') }}
+                  </div>
                   <div class="play__source">
-                    <router-link to="/playlist" title="暂无来源"></router-link>
-                  </div>
-                </li>
-                <li class="current">
-                  <div class="current__play play__c"></div>
-                  <div class="play__name">哪里都是你sadsads</div>
-                  <div class="play__f">
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
-                  </div>
-                  <div class="play__author">
-                    <router-link :to="`/artist?id=${artistId}`"
-                      >队长dddddddddddddddddddddddd</router-link
-                    >
-                  </div>
-                  <div class="play__time">03:25</div>
-                  <div class="play__source">
-                    <router-link to="/playlist" title="暂无来源"></router-link>
+                    <a href="javascript:;" title="暂无来源"></a>
                   </div>
                 </li>
               </ul>
@@ -193,27 +243,33 @@
             </div>
           </div>
           <div class="body__right" ref="rightBoxRef">
-            <div
-              class="lyric__content"
-              ref="rightContentRef"
-              @mousewheel="
-                scroll(
-                  $refs.rightContentRef,
-                  $refs.rightScrollRef,
-                  $refs.rightBarRef,
-                  $refs.rightBoxRef,
-                  $event
-                )
-              "
-            >
-              <p
-                :class="item === '从不在意别人口中的自己' ? 'current' : ''"
-                v-for="(item, index) in lyric"
-                :key="index"
+            <div class="box">
+              <div
+                class="lyric__content"
+                ref="rightContentRef"
+                @mousewheel="
+                  scroll(
+                    $refs.rightContentRef,
+                    $refs.rightScrollRef,
+                    $refs.rightBarRef,
+                    $refs.rightBoxRef,
+                    $event
+                  )
+                "
               >
-                {{ item }}
-              </p>
+                <p
+                  :class="item.className"
+                  v-for="(item, index) in lyric"
+                  :key="index"
+                >
+                  <a href="javascript:;" @click="jump(item.time)"
+                    ><i class="el-icon-video-play"></i
+                  ></a>
+                  {{ item.content }}
+                </p>
+              </div>
             </div>
+
             <div class="lyric__scroll" ref="rightScrollRef">
               <div
                 class="lyric__bar"
@@ -251,30 +307,23 @@
     <div class="open" title="打开播放条"></div>
     <!-- 画中画歌词 -->
     <div class="pip__lyric"></div>
+    <!-- 音乐播放标签 -->
+    <audio
+      ref="audioRef"
+      @loadedmetadata="onLoadedmetadata"
+      @timeupdate="onTimeupdate"
+      :src="songUrl"
+      @ended="onEnded()"
+    ></audio>
   </div>
 </template>
 <script>
+import { mapState, mapGetters } from 'vuex'
+import Bus from '@/plugin/eventBus'
 export default {
   name: 'play',
-  props: {
-    // 歌曲id
-    id: {
-      type: String,
-      default: null
-    },
-    mvId: {
-      type: String,
-      default: null
-    },
-    artistId: {
-      type: String,
-      default: null
-    }
-  },
   data() {
     return {
-      // 零时属性 可取进度条双向绑定值
-      value: 1,
       // 控制播放控件是否显示
       ishide: false,
       // 当显示播放控件时的定时器
@@ -302,108 +351,35 @@ export default {
       scrollTop: 0,
       // contentEl的移动距离
       contentY: 0,
-      // 歌词
-      lyric: [
-        '作词 : 队长',
-
-        '作曲 : 队长/박수석/김문철',
-
-        '编曲：박수석，김문철',
-
-        '从不在意别人口中的自己',
-
-        '她说过了一个想听花言巧语的年纪',
-
-        '你选择了他们口中所谓的放弃',
-
-        '却才发现早就丢掉了自己',
-
-        '特别是一个人的夜里',
-
-        '没人能够控制住自己',
-
-        '让全部回忆藏在心底泛起涟漪',
-
-        '你想要的是现在',
-
-        '而不是那遥远的未来',
-
-        '选择的困惑',
-
-        '再没人能懂你',
-
-        '生气的原因和哭泣的无力',
-
-        '最遥远的距离',
-
-        '忘了吧忘了吧忘了吧忘了你的所有',
-
-        '不过只是找了一堆美丽的理由',
-
-        '把你的痕迹都统统掩埋',
-
-        '你走过的地方只剩下思念难捱',
-
-        '把你藏在心头',
-
-        '每天每夜想你',
-
-        '害怕你的眼泪',
-
-        '没人为你抹去',
-
-        '不能想象没有了你的未来',
-
-        '你身边那位能让你过得比我更精彩I want you back',
-
-        '我忘掉你的所有 风里雨里一直大步往前走',
-
-        '我又怎么能够忘掉你的温柔',
-
-        '换不同的场景',
-
-        '但哪里都是你',
-
-        '要怎么能忘记 忘记你',
-
-        `所有人都知道I can't let you go`,
-
-        `每个人都知道 I can't let you go`,
-
-        `你为什么还不知道 I can't let you go`,
-
-        `Baby baby I can't let you go`,
-
-        '在你的心里我是怎样一个人',
-
-        '把话都袒露让你知道我心声',
-
-        'You know you know',
-
-        '感谢你陪我走过这一程',
-
-        'You know you know',
-
-        '感谢你陪我走过这一程',
-
-        'You know you know',
-
-        '每天多爱自己一点 把恨我当成动力',
-
-        '别那么晚睡',
-
-        '我想你过的好 是唯一对你放不下的',
-
-        '习惯吧',
-
-        '-----'
-      ],
       // 是否显示声音控件
       displayVoice: false,
+
+      // audioDOM
+      audioEl: null,
+      // 当前播放时间
+      currentPlayTime: null,
+      currentTime: null,
       // 歌曲进度
       songProgress: 0,
       // 音量
-      volume: 0
+      volume: parseInt(window.localStorage.getItem('volume')),
+      // 是否处于播放
+      isPlay: false,
+      // 最大播放时间
+      maxPlayTime: '00:00',
+      maxTime: null,
+      // 是否拖拽
+      isChange: false,
+      // 播放方式
+      // loop 循环
+      // random 随机播放
+      // oneLoop 单曲循环
+      playMode: 'loop',
+      // 节流阀
+      throttle: false,
+      // 歌词防抖定时器
+      lyricTimer: null,
+      isLyric: false
     }
   },
   created() {
@@ -419,6 +395,30 @@ export default {
         }
       }
     })
+    setTimeout(() => {
+      // 页面数据加载完成获取保存在本地的歌曲数据
+      // 页面数据加载完成获取保存在本地的歌曲数据
+      if (window.localStorage.getItem('songList')) {
+        this.$store.commit(
+          'setSongList',
+          JSON.parse(window.localStorage.getItem('songList'))
+        )
+      }
+      if (window.localStorage.getItem('currentPlay')) {
+        this.$store.commit('setCurrentPlay', {
+          song: JSON.parse(window.localStorage.getItem('currentPlay')),
+          isPlay: 1
+        })
+      }
+    }, 150)
+    Bus.$on('display', (val) => {
+      this.displayList = val
+    })
+    window.addEventListener('mouseup', () => {
+      if (this.isChange === true) {
+        this.isChange = false
+      }
+    })
   },
   mounted() {
     // 当页面加载时判断是否上锁
@@ -430,6 +430,7 @@ export default {
       this.bottom = '0'
       this.$refs.lockRef.style.backgroundPosition = '-100px -380px'
     }
+    this.audioEl = this.$refs.audioRef
   },
   methods: {
     show() {
@@ -443,7 +444,7 @@ export default {
           .split('px')[0]
       )
       this.showTimer = setInterval(() => {
-        if (bottom === 0) {
+        if (bottom >= 0) {
           return clearInterval(this.showTimer)
         }
         bottom += 2
@@ -461,7 +462,7 @@ export default {
           .split('px')[0]
       )
       this.hideTimer = setInterval(() => {
-        if (bottom === -46) {
+        if (bottom <= -46) {
           return clearInterval(this.hideTimer)
         }
         bottom -= 2
@@ -500,7 +501,7 @@ export default {
       // 判断是否需要滚动
       if (tableRef.offsetHeight >= contentEl.offsetHeight) return
       // 禁止文字选中
-      document.querySelector('.app__container').style = `
+      document.querySelector('body').style = `
           moz-user-select: -moz-none;
           -moz-user-select: none;
           -o-user-select:none;
@@ -517,6 +518,8 @@ export default {
       this.barMax = scrollEl.offsetHeight - barEl.offsetHeight
 
       this.isDown = true
+      // 当滚动时禁止歌词自动滚动
+      this.isLyric = true
       window.onmousemove = this.move.bind(this, barEl, contentEl, scrollEl)
       window.onmouseup = this.up
     },
@@ -538,13 +541,13 @@ export default {
       const contentZoom = contentEl.offsetHeight / scrollEl.offsetHeight
 
       // 动态修改滚动条top值
-      contentEl.style.top = `-${Math.ceil(y * contentZoom)}px`
+      contentEl.style.transform = `translateY(-${Math.ceil(y * contentZoom)}px)`
       barEl.style.top = y + 'px'
     },
     // 当鼠标松开
     up() {
       // 允许文字选中
-      document.querySelector('.app__container').style = `
+      document.querySelector('body').style = `
           moz-user-select: -moz-select;
           -moz-user-select: select;
           -o-user-select:select;
@@ -554,26 +557,31 @@ export default {
           user-select:select;
           `
       this.isDown = false
+      clearTimeout(this.lyricTimer)
+      this.lyricTimer = setTimeout(() => {
+        this.isLyric = false
+      }, 1000)
     },
     // 当内容区域滚动时
     scroll(contentEl, scrollEl, barEl, tableRef, e) {
       // 禁止页面滚动
       e.preventDefault()
-
       // 判断是否需要滚动
       if (tableRef.offsetHeight >= contentEl.offsetHeight) return
-
       // 获取cententEl的top值
       this.contentY = parseInt(
         window
           .getComputedStyle(contentEl)
-          .getPropertyValue('top')
-          .slice(
-            0,
-            window.getComputedStyle(contentEl).getPropertyValue('top').length -
-              2
-          )
+          .getPropertyValue('transform')
+          .replace(/[matrix()]+/g, '')
+          .split(',')[5]
       )
+      // 当滚动时禁止歌词自动滚动
+      this.isLyric = true
+      clearTimeout(this.lyricTimer)
+      this.lyricTimer = setTimeout(() => {
+        this.isLyric = false
+      }, 1000)
       // 移动速度
       const speed = contentEl.children.length / 2
       // 获取最大移动距离
@@ -586,7 +594,7 @@ export default {
         let y = this.contentY - speed
         // 限制可移动范围
         if (y <= -contentMax) y = -contentMax
-        contentEl.style.top = y + 'px'
+        contentEl.style.transform = `translateY(${y}px)`
         barEl.style.top = `${Math.floor(Math.abs(y) * contentZoom)}px`
       } else {
         // 当前要移动的距离
@@ -594,9 +602,197 @@ export default {
         // 限制可移动范围
         if (y >= 0) y = 0
 
-        contentEl.style.top = y + 'px'
+        contentEl.style.transform = `translateY(${y}px)`
         barEl.style.top = `${Math.floor(Math.abs(y) * contentZoom)}px`
       }
+    },
+    // 删除歌曲列表所有歌曲
+    delSongList(e, id) {
+      // 调用删除函数
+      this.$store.commit('removeSongList', id)
+      // 重新判断是否需要滚动
+      this.$nextTick(() => {
+        // 判断是否需要滚动
+        if (
+          this.$refs.tableRef.offsetHeight >= this.$refs.contentRef.offsetHeight
+        ) {
+          this.$refs.barRef.style = 'height:0;border:0'
+        } else {
+          this.$refs.barRef.style.height =
+            (this.$refs.tableRef.offsetHeight *
+              this.$refs.tableRef.offsetHeight) /
+              this.$refs.contentRef.offsetHeight +
+            'px'
+        }
+        if (
+          this.$refs.rightBoxRef.offsetHeight >=
+          this.$refs.rightContentRef.offsetHeight
+        ) {
+          this.$refs.rightBarRef.style = 'height:0;border:0'
+        } else {
+          this.$refs.rightBarRef.style.height =
+            (this.$refs.rightBoxRef.offsetHeight *
+              this.$refs.rightBoxRef.offsetHeight) /
+              this.$refs.rightContentRef.offsetHeight +
+            'px'
+        }
+      })
+      if (id === undefined) {
+        this.$refs.contentRef.style.transform = 'translateY(0)'
+      } else {
+        const contentMax =
+          this.$refs.contentRef.offsetHeight - this.$refs.tableRef.offsetHeight
+        if (contentMax - 28 <= Math.abs(this.$refs.contentRef.offsetTop)) {
+          this.$refs.contentRef.style.transform = `translateY(${
+            this.$refs.contentRef.offsetTop + 28
+          }px)`
+          // 获取进度条的缩放值
+          const barZoom =
+            this.$refs.barRef.offsetHeight / this.$refs.contentRef.offsetHeight
+          this.$refs.barRef.style.top =
+            this.$refs.barRef.offsetTop + -(28 * barZoom) + 'px'
+        }
+      }
+    },
+    // 播放音乐
+    play() {
+      // 当页面正在播放的歌曲为空时不播放歌曲
+      if (!this.currentPlay) return (this.isPlay = false)
+      if (!this.isPlay) {
+        this.$nextTick(() => {
+          const playPremise = this.audioEl.play()
+          if (playPremise !== undefined) {
+            playPremise
+              .then(() => {
+                this.audioEl.play()
+                this.isPlay = true
+              })
+              .catch(() => {})
+          }
+        })
+      } else {
+        this.audioEl.pause()
+        this.isPlay = false
+      }
+    },
+    // 当歌曲源加载完毕获取到歌曲总时长
+    onLoadedmetadata(e) {
+      // 处理最大播放时间格式
+      let m = parseInt(e.target.duration / 60)
+      let s = parseInt(e.target.duration % 60)
+      m = m < 10 ? '0' + m : m
+      s = s < 10 ? '0' + s : s
+      this.maxPlayTime = m + ':' + s
+      this.maxTime = e.target.duration
+    },
+    // 当歌曲播放时触发 会重复调用 用来获取当前播放时间
+    onTimeupdate(e) {
+      if (this.isChange) return
+      // 处理最大播放时间格式
+      let m = parseInt(e.target.currentTime / 60)
+      let s = parseInt(e.target.currentTime % 60)
+      m = m < 10 ? '0' + m : m
+      s = s < 10 ? '0' + s : s
+      this.currentPlayTime = m + ':' + s
+      this.currentTime = e.target.currentTime
+      this.songProgress = parseInt(
+        (e.target.currentTime / e.target.duration) * 100
+      )
+
+      // 当播放时间和歌词时间对应 调整歌词位置
+      if (this.isLyric) return
+      this.lyric.some((item, index) => {
+        if (!this.lyric[index + 1]) return true
+        if (
+          this.currentTime >= item.time &&
+          this.currentTime < this.lyric[index + 1].time
+        ) {
+          if (!this.lyricsDOM[index]) return true
+          item.className = 'current'
+          const barMax =
+            this.$refs.rightContentRef.offsetHeight -
+            this.$refs.rightBoxRef.offsetHeight
+          if (
+            this.lyricsDOM[index].offsetTop < 32 * 3 ||
+            this.lyricsDOM[index].offsetTop +
+              28 -
+              this.$refs.rightBoxRef.offsetHeight ===
+              barMax
+          ) {
+            return true
+          }
+          const y = -this.lyricsDOM[index].offsetTop + 32 * 3
+          const zoom =
+            this.$refs.rightScrollRef.offsetHeight /
+            this.$refs.rightContentRef.offsetHeight
+          this.$refs.rightContentRef.style.transform = `translateY(${y}px)`
+          this.$refs.rightBarRef.style.top = -y * zoom + 'px'
+
+          return true
+        } else {
+          item.className = ''
+        }
+      })
+    },
+    // 将新的歌曲进度
+    currentPlayChange(val) {
+      this.audioEl.currentTime = parseInt((val / 100) * this.maxTime)
+    },
+    // 当鼠标发生拖拽时 歌曲事件变化
+    currentPlayInput(val) {
+      let m = parseInt(parseInt((val / 100) * this.maxTime) / 60)
+      let s = parseInt(parseInt((val / 100) * this.maxTime) % 60)
+      m = m < 10 ? '0' + m : m
+      s = s < 10 ? '0' + s : s
+      this.currentPlayTime = m + ':' + s
+    },
+    // 当歌曲播放完最后一帧要执行的操作 单曲循环 顺序循环 列表
+    onEnded(val) {
+      if (this.throttle) return
+      this.throttle = true
+      // 获取到当前播放歌曲的索引
+      const index = this.songList.findIndex(
+        (item) => item.id === this.currentPlay.id
+      )
+
+      if (val === undefined) {
+        if (this.playMode === 'loop') {
+          // 列表循环
+          if (!this.songList[index + 1]) {
+            this.$store.commit('setCurrentPlay', this.songList[0])
+          } else {
+            this.$store.commit('setCurrentPlay', this.songList[index + 1])
+          }
+        } else if (this.playMode === 'oneLoop') {
+          // 单曲循环
+          // this.$store.commit('setCurrentPlay', this.songList[index])
+          this.isPlay = false
+          this.play()
+        } else if (this.playMode === 'random') {
+          // 随机播放
+          const random = Math.floor(Math.random() * this.songList.length + 1)
+          this.$store.commit('setCurrentPlay', this.songList[random])
+        }
+      } else if (val === 'next') {
+        if (!this.songList[index + 1]) {
+          this.$store.commit('setCurrentPlay', this.songList[0])
+        } else {
+          this.$store.commit('setCurrentPlay', this.songList[index + 1])
+        }
+      } else if (val === 'last') {
+        if (!this.songList[index - 1]) {
+          this.$store.commit(
+            'setCurrentPlay',
+            this.songList[this.songList.length - 1]
+          )
+        } else {
+          this.$store.commit('setCurrentPlay', this.songList[index - 1])
+        }
+      }
+    },
+    // 点击歌词跳转按钮 跳转到指定进度
+    jump(time) {
+      this.audioEl.currentTime = time
     }
   },
   watch: {
@@ -609,18 +805,26 @@ export default {
             this.$refs.tableRef.offsetHeight >=
             this.$refs.contentRef.offsetHeight
           ) {
-            return
+            this.$refs.barRef.style = 'height:0;border:0'
+          } else {
+            this.$refs.barRef.style.height =
+              (this.$refs.tableRef.offsetHeight *
+                this.$refs.tableRef.offsetHeight) /
+                this.$refs.contentRef.offsetHeight +
+              'px'
           }
-          this.$refs.barRef.style.height =
-            (this.$refs.tableRef.offsetHeight *
-              this.$refs.tableRef.offsetHeight) /
-              this.$refs.contentRef.offsetHeight +
-            'px'
-          this.$refs.rightBarRef.style.height =
-            (this.$refs.rightBoxRef.offsetHeight *
-              this.$refs.rightBoxRef.offsetHeight) /
-              this.$refs.rightContentRef.offsetHeight +
-            'px'
+          if (
+            this.$refs.rightBoxRef.offsetHeight >=
+            this.$refs.rightContentRef.offsetHeight
+          ) {
+            this.$refs.rightBarRef.style = 'height:0;border:0'
+          } else {
+            this.$refs.rightBarRef.style.height =
+              (this.$refs.rightBoxRef.offsetHeight *
+                this.$refs.rightBoxRef.offsetHeight) /
+                this.$refs.rightContentRef.offsetHeight +
+              'px'
+          }
         })
         this.scrollTop = document.documentElement.scrollTop
       }
@@ -634,6 +838,153 @@ export default {
       } else if (val === 1) {
         this.$refs.lockRef.style.backgroundPosition = '-100px -380px'
       }
+      window.localStorage.setItem('isLock', val)
+    },
+    songList(val) {
+      if (val.length) {
+        this.$nextTick(() => {
+          this.isLock = 1
+          this.ishide = false
+          clearTimeout(this.delayedTimer)
+          clearInterval(this.hideTimer)
+          this.show()
+        })
+        this.$nextTick(() => {
+          // 判断是否需要滚动
+          if (
+            this.$refs.tableRef.offsetHeight >=
+            this.$refs.contentRef.offsetHeight
+          ) {
+            this.$refs.barRef.style = 'height:0;border:0'
+            this.$refs.contentRef.style.transform = 'translateY(0)'
+          } else {
+            this.$refs.barRef.style.height =
+              (this.$refs.tableRef.offsetHeight *
+                this.$refs.tableRef.offsetHeight) /
+                this.$refs.contentRef.offsetHeight +
+              'px'
+          }
+          if (
+            this.$refs.rightBoxRef.offsetHeight >=
+            this.$refs.rightContentRef.offsetHeight
+          ) {
+            this.$refs.rightBarRef.style = 'height:0;border:0'
+          } else {
+            this.$refs.rightBarRef.style.height =
+              (this.$refs.rightBoxRef.offsetHeight *
+                this.$refs.rightBoxRef.offsetHeight) /
+                this.$refs.rightContentRef.offsetHeight +
+              'px'
+          }
+        })
+      } else {
+        this.maxPlayTime = '00:00'
+      }
+    },
+    // 当当前歌曲变化时
+    currentPlay(val) {
+      // 获取当前播放歌曲的DOM
+      if (val) {
+        this.$store.dispatch('getLyric', val.id)
+        this.isPlay = false
+        this.audioEl.currentTime = 0
+        const topCurrentDOM = document.querySelector('li.current')
+        this.$nextTick(() => {
+          if (!topCurrentDOM) return
+          // 获取最大移动距离
+          const contentMax =
+            this.$refs.contentRef.offsetHeight -
+            this.$refs.tableRef.offsetHeight
+          // 获取当前播放歌曲的DOM
+          const currentDOM = document.querySelector('li.current')
+          // 获取cententEl的top值
+          const currentY =
+            currentDOM.offsetTop -
+            Math.abs(
+              parseInt(
+                window
+                  .getComputedStyle(this.$refs.contentRef)
+                  .getPropertyValue('transform')
+                  .replace(/[matrix()]+/g, '')
+                  .split(',')[5]
+              )
+            )
+          let y = 0
+          // 获取进度条区域与内容区域的缩放比例
+          const contentZoom =
+            this.$refs.scrollRef.offsetHeight /
+            this.$refs.contentRef.offsetHeight
+          if (currentY <= 0) {
+            y = -currentDOM.offsetTop
+          } else if (currentY + 10 >= this.$refs.tableRef.offsetHeight) {
+            y = -(currentDOM.offsetTop - this.$refs.tableRef.offsetHeight) - 28
+          } else {
+            y = parseInt(
+              window
+                .getComputedStyle(this.$refs.contentRef)
+                .getPropertyValue('transform')
+                .replace(/[matrix()]+/g, '')
+                .split(',')[5]
+            )
+          }
+          if (
+            topCurrentDOM.offsetTop === 0 &&
+            currentDOM.offsetTop + 28 - this.$refs.tableRef.offsetHeight ===
+              contentMax
+          ) {
+            y = -contentMax
+          } else if (
+            topCurrentDOM.offsetTop + 28 - this.$refs.tableRef.offsetHeight ===
+              contentMax &&
+            currentDOM.offsetTop === 0
+          ) {
+            y = 0
+          }
+          this.$refs.contentRef.style.transform = `translateY(${y}px)`
+          this.$refs.barRef.style.top = `${Math.floor(
+            Math.abs(y) * contentZoom
+          )}px`
+        })
+      }
+    },
+    // 当歌词变化时
+    lyric() {
+      if (
+        this.$refs.rightBoxRef.offsetHeight >=
+        this.$refs.rightContentRef.offsetHeight
+      ) {
+        this.$refs.rightBarRef.style = 'height:0;border:0'
+      } else {
+        this.$refs.rightBarRef.style.height =
+          (this.$refs.rightBoxRef.offsetHeight *
+            this.$refs.rightBoxRef.offsetHeight) /
+            this.$refs.rightContentRef.offsetHeight +
+          'px'
+        this.$refs.rightBarRef.style.top = 0
+        this.$refs.rightContentRef.style.top = 0
+      }
+    },
+    // 歌曲URL改变
+    songUrl(val) {
+      // 第一次进入页面不会触发自动播放
+      if (this.currentPlay && this.currentPlay.isPlay) return
+      this.throttle = false
+      this.play()
+      if (val === null) {
+        this.audioEl.src = null
+      }
+    },
+    // 改变音量
+    volume(val) {
+      this.audioEl.volume = val / 100
+      window.localStorage.setItem('volume', val)
+    }
+  },
+  computed: {
+    ...mapState(['songList', 'currentPlay', 'lyric', 'songUrl']),
+    ...mapGetters(['songTotal']),
+    lyricsDOM() {
+      return document.querySelector('.lyric__content').querySelectorAll('p')
     }
   }
 }
@@ -726,6 +1077,17 @@ export default {
       .play__last:hover {
         background-position: -30px -130px;
       }
+      // 当播放时
+      .play__open {
+        float: left;
+        margin: 11px 10px 0 10px;
+        width: 36px;
+        height: 36px;
+        background: url('../assets/uploads/playbar.png') no-repeat 0 -165px;
+      }
+      .play__open:hover {
+        background: url('../assets/uploads/playbar.png') no-repeat -40px -165px;
+      }
     }
     .play__progress {
       float: left;
@@ -748,9 +1110,11 @@ export default {
         margin-left: 15px;
         height: 100%;
         .play__name {
+          height: 18px;
           margin-bottom: 5px;
           a {
             float: left;
+            height: 16px;
             color: #e8e8e8;
           }
           .play__mv {
@@ -761,9 +1125,17 @@ export default {
             margin-left: 3px;
           }
           .play__author {
-            color: #9b9b9b;
+            float: left;
             margin-left: 15px;
-            margin-top: 2px;
+            span {
+              float: left;
+              color: #9b9b9b;
+              a {
+                display: inline-block;
+                height: 100%;
+                color: #9b9b9b;
+              }
+            }
           }
         }
         .progress {
@@ -837,10 +1209,25 @@ export default {
         > a:nth-child(1):hover {
           background-position: -31px -248px;
         }
-        > a:nth-child(2) {
+        // 列表循环
+        .loop {
+          background-position: -3px -344px;
+        }
+        .loop:hover {
+          background-position: -33px -344px;
+        }
+        // 随机播放
+        .random {
+          background-position: -66px -248px;
+        }
+        .random:hover {
+          background-position: -93px -248px;
+        }
+        // 单曲循环
+        .oneLoop {
           background-position: -66px -344px;
         }
-        > a:nth-child(2):hover {
+        .oneLoop:hover {
           background-position: -93px -344px;
         }
         span {
@@ -861,9 +1248,11 @@ export default {
             background-position: -42px -98px;
           }
         }
+
         // 声音调节控件
         .voice {
           position: absolute;
+          z-index: 999;
           top: -106px;
           left: 10px;
           width: 32px;
@@ -982,7 +1371,11 @@ export default {
         height: 261px;
         background: url('../assets/uploads/playlist_bg.png') repeat-y -1016px 0;
         overflow: hidden;
-
+        > img {
+          width: 100%;
+          height: 100%;
+          filter: blur(10px) saturate(50%);
+        }
         .body__left {
           position: relative;
           z-index: 1;
@@ -992,10 +1385,33 @@ export default {
             float: left;
             width: 553px;
             height: 261px;
-            background-color: rgba(22, 22, 22, 0.7);
+            background-color: rgba(22, 22, 22, 0.8);
+            .el-empty {
+              padding-top: 70px;
+              /deep/ .el-empty__image {
+                display: none;
+              }
+            }
+            .tips {
+              color: #aaa;
+              text-align: center;
+              line-height: 43px;
+              font-size: 12px;
+              a {
+                color: #aaa;
+                text-decoration: underline;
+              }
+              i {
+                display: inline-block;
+                width: 36px;
+                height: 29px;
+                background: url('../assets/uploads/playlist.png') no-repeat -138px
+                  0;
+                vertical-align: middle;
+                margin-right: 3px;
+              }
+            }
             ul {
-              position: relative;
-              top: 0;
               li {
                 display: flex;
                 height: 28px;
@@ -1020,10 +1436,10 @@ export default {
                 .play__f {
                   width: 100px;
                   height: 100%;
-                  margin-left: 180px;
+                  margin-left: 170px;
                 }
                 .play__author {
-                  width: 70px;
+                  width: 90px;
                   white-space: nowrap;
                   overflow: hidden;
                   text-overflow: ellipsis;
@@ -1037,13 +1453,11 @@ export default {
                     display: inline-block;
                     width: 14px;
                     height: 16px;
-                    background: url('../assets/uploads/playlist.png') no-repeat -80px
-                      0px;
+                    background: url('../assets/uploads/playlist.png') no-repeat -100px
+                      0;
                     margin-top: 5px;
                     margin-left: 25px;
-                  }
-                  a:hover {
-                    background-position: -80px -20px;
+                    cursor: default;
                   }
                 }
               }
@@ -1061,7 +1475,7 @@ export default {
               }
             }
             li:hover {
-              background-color: rgba(0, 0, 0, 0.3);
+              background-color: rgba(0, 0, 0, 0.5);
               color: #fff;
               a {
                 color: #fff;
@@ -1113,7 +1527,7 @@ export default {
               position: absolute;
               top: 0;
               left: 0;
-              width: 4px;
+              width: 7px;
               height: 100px;
               background-color: #707070;
               border: 1px solid #a6a6a6;
@@ -1128,23 +1542,42 @@ export default {
           z-index: 1;
           flex: 1;
           height: 100%;
-          background-color: rgba(22, 22, 22, 0.3);
-          .lyric__content {
-            position: relative;
-            width: 354px;
-            margin: 21px auto;
+          background: rgba(22, 22, 22, 0.5);
+          .box {
+            width: 380px;
+            height: 219px;
+            margin: 20px auto;
             overflow: hidden;
-            p {
-              height: 32px;
-              text-align: center;
-              color: #989898;
-              line-height: 32px;
-            }
-            p.current {
-              font-size: 14px;
-              color: #fff;
+            .lyric__content {
+              transition: all 0.2s;
+              transform: translateY(0);
+              p {
+                position: relative;
+                text-align: center;
+                color: #989898;
+                line-height: 32px;
+                transition: all 0.5s;
+                a {
+                  position: absolute;
+                  display: none;
+                  top: 50%;
+                  transform: translateY(-50%);
+                  left: 0;
+                  i {
+                    color: #989898;
+                  }
+                }
+              }
+              p:hover a {
+                display: inline-block;
+              }
+              p.current {
+                font-size: 14px;
+                color: #fff;
+              }
             }
           }
+
           .lyric__scroll {
             position: absolute;
             float: left;
@@ -1157,10 +1590,9 @@ export default {
               position: absolute;
               top: 0;
               left: 0;
-              width: 4px;
+              width: 6px;
               height: 100px;
-              background-color: #707070;
-              border: 1px solid #a6a6a6;
+              background-color: #868686;
               opacity: 0.8;
               border-radius: 5px;
               cursor: pointer;
@@ -1183,7 +1615,7 @@ export default {
   /deep/ .play__progress .el-slider__runway {
     margin: 0;
     height: 9px;
-    width: 466px;
+    width: 450px;
     background: url('../assets/uploads/statbar.png') right 0;
     border-radius: 6px;
     .el-slider__button-wrapper {

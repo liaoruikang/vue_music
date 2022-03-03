@@ -1,8 +1,9 @@
 <template>
-  <div>artist</div>
+  <div class="artist">artist</div>
 </template>
 <script>
 export default {
+  name: 'artist',
   data() {
     return {}
   },

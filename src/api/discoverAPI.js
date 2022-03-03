@@ -11,12 +11,12 @@ export const hotPlaylistAPI = () => {
 }
 
 // 获取推荐歌单
-export const reSongListAPI = (limit) => {
+export const reSongsListAPI = (limit) => {
   return request.get('personalized', { params: { limit } })
 }
 
 // 获取每日推荐歌单
-export const everydaySongListAPI = () => {
+export const everydaySongsListAPI = () => {
   return request.get('recommend/resource')
 }
 
@@ -36,7 +36,7 @@ export const topListAPI = () => {
 }
 
 // 获取歌单详情
-export const songDetailsAPI = (id) => {
+export const songsDetailsAPI = (id) => {
   return request.get('playlist/detail', { params: { id } })
 }
 
@@ -60,4 +60,25 @@ export const hotSingerAPI = (limit, offset) => {
   if (limit === undefined) { limit = 50 }
   if (offset === undefined) { offset = 0 }
   return request.get('/top/artists', { params: { limit, offset } })
+}
+
+// 获取歌曲详情
+export const songDetailsAPI = (ids) => {
+  return request.get('song/detail', { params: { ids } })
+}
+
+// 获取专辑详情
+export const albumDetailsAPI = (id) => {
+  return request.get('album', { params: { id } })
+}
+
+// 获取歌词
+export const lyricAPI = (id) => {
+  return request.get('lyric', { params: { id } })
+}
+
+// 获取歌曲Url
+export const songUrlAPI = (id, br) => {
+  if (br === undefined) br = 999000
+  return request.get('song/url', { params: { id, br } })
 }

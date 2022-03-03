@@ -1,5 +1,9 @@
 <template>
-  <div class="app__container">
+  <div
+    class="app__container"
+    style="height: 100vh; overflow-x: hidden"
+    @click="blur"
+  >
     <!-- 头部区域 -->
     <Header
       :isLogin="isLogin"
@@ -27,6 +31,29 @@
 
     <!-- 播放控件 -->
     <Play></Play>
+
+    <!-- 回到顶部控件 -->
+    <el-backtop
+      target=".app__container"
+      :bottom="100"
+      :right="170"
+      :visibility-height="300"
+    >
+      <div
+        style="
+          height: 100%;
+          width: 100%;
+          background-color: #f2f5f6;
+          box-shadow: 0 0 6px rgba(0, 0, 0, 0.12);
+          text-align: center;
+          line-height: 40px;
+          color: #c20c0c;
+          text-indent: -1px;
+        "
+      >
+        <i style="font-weight: 900" class="el-icon-top"></i>
+      </div>
+    </el-backtop>
   </div>
 </template>
 <script>
@@ -144,6 +171,9 @@ export default {
         this.$store.commit('setUserData', {})
         this.$store.commit('setUserLevel', null)
       }
+    },
+    blur() {
+      Bus.$emit('display', false)
     }
   },
   computed: {}
