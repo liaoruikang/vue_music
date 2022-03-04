@@ -23,7 +23,14 @@
             >
               {{ $store.state.userData.nickname }}
             </router-link>
-            <span></span>
+            <span
+              :style="{
+                backgroundImage: `url(${
+                  $store.state.vipData &&
+                  $store.state.vipData.redVipDynamicIconUrl + '?param=43y16'
+                })`
+              }"
+            ></span>
           </h4>
           <router-link class="level" to="/user/level">
             <i>{{ $store.state.userLevel }}</i></router-link
@@ -186,9 +193,7 @@ export default {
           display: inline-block;
           width: 43px;
           height: 16px;
-          background: url('../../assets/uploads/obj_wo3DlcOGw6DClTvDisK1_4357872257_9f40_483a_0341_78d106c94bf17f8f1e98a2f6748061c4.png')
-            no-repeat;
-          background-size: 100%;
+          background-size: 43px 16px;
           margin-left: 5px;
         }
       }

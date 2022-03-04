@@ -50,7 +50,7 @@
                 <router-link class="" :to="`/artist?id=${item.id}`">
                   {{ item.name }}
                 </router-link>
-                {{ index == currentPlay.ar.length - 1 ? '' : '/' }}
+                <i v-show="index !== currentPlay.ar.length - 1">/</i>
               </span>
             </div>
           </div>
@@ -80,12 +80,13 @@
         </div>
         <div class="right">
           <a
+            :class="volume === 0 ? 'mute' : ''"
             href="javascript:;"
             title="声音"
             @click="
               () => {
                 displayVoice = !displayVoice
-                isLock = displayVoice ? 1 : 0
+                isLock = displayVoice ? 1 : displayList ? 1 : 0
               }
             "
           ></a>
@@ -214,7 +215,7 @@
                       <router-link class="" :to="`/artist?id=${val.id}`">
                         {{ val.name }}
                       </router-link>
-                      {{ index == item.ar.length - 1 ? '' : '/' }}
+                      <i v-show="index !== item.ar.length - 1">/</i>
                     </span>
                   </div>
                   <div class="play__time">
@@ -259,7 +260,7 @@
               >
                 <p
                   :class="item.className"
-                  v-for="(item, index) in lyric"
+                  v-for="(item, index) in newLyric"
                   :key="index"
                 >
                   <a href="javascript:;" @click="jump(item.time)"
@@ -312,8 +313,9 @@
       ref="audioRef"
       @loadedmetadata="onLoadedmetadata"
       @timeupdate="onTimeupdate"
-      :src="songUrl"
+      :src="url"
       @ended="onEnded()"
+      @stalled="onstalled"
     ></audio>
   </div>
 </template>
@@ -379,7 +381,11 @@ export default {
       throttle: false,
       // 歌词防抖定时器
       lyricTimer: null,
-      isLyric: false
+      isLyric: false,
+      // 歌词
+      newLyric: [],
+      url: null,
+      lyricsDOM: null
     }
   },
   created() {
@@ -413,6 +419,7 @@ export default {
     }, 150)
     Bus.$on('display', (val) => {
       this.displayList = val
+      this.displayVoice = val
     })
     window.addEventListener('mouseup', () => {
       if (this.isChange === true) {
@@ -431,6 +438,7 @@ export default {
       this.$refs.lockRef.style.backgroundPosition = '-100px -380px'
     }
     this.audioEl = this.$refs.audioRef
+    this.audioEl.volume = this.volume / 100
   },
   methods: {
     show() {
@@ -667,7 +675,7 @@ export default {
                 this.audioEl.play()
                 this.isPlay = true
               })
-              .catch(() => {})
+              .catch((e) => {})
           }
         })
       } else {
@@ -700,39 +708,40 @@ export default {
       )
 
       // 当播放时间和歌词时间对应 调整歌词位置
-      if (this.isLyric) return
-      this.lyric.some((item, index) => {
-        if (!this.lyric[index + 1]) return true
+      if (this.isLyric || !this.displayList) return
+      const contentMax =
+        this.$refs.rightContentRef.offsetHeight -
+        this.$refs.rightBoxRef.offsetHeight
+      const zoom =
+        this.$refs.rightScrollRef.offsetHeight /
+        this.$refs.rightContentRef.offsetHeight
+      let y = 0
+      this.newLyric.some((item, index) => {
+        if (!this.newLyric[index + 1]) return true
         if (
           this.currentTime >= item.time &&
-          this.currentTime < this.lyric[index + 1].time
+          this.currentTime <= this.lyric[index + 1].time
         ) {
-          if (!this.lyricsDOM[index]) return true
           item.className = 'current'
-          const barMax =
-            this.$refs.rightContentRef.offsetHeight -
-            this.$refs.rightBoxRef.offsetHeight
+          if (this.lyricsDOM[index] === undefined) return
           if (
             this.lyricsDOM[index].offsetTop < 32 * 3 ||
             this.lyricsDOM[index].offsetTop +
               28 -
-              this.$refs.rightBoxRef.offsetHeight ===
-              barMax
+              this.$refs.rightBoxRef.offsetHeight >=
+              contentMax - 32 * 4
           ) {
             return true
           }
-          const y = -this.lyricsDOM[index].offsetTop + 32 * 3
-          const zoom =
-            this.$refs.rightScrollRef.offsetHeight /
-            this.$refs.rightContentRef.offsetHeight
-          this.$refs.rightContentRef.style.transform = `translateY(${y}px)`
-          this.$refs.rightBarRef.style.top = -y * zoom + 'px'
-
-          return true
+          y = -this.lyricsDOM[index].offsetTop + 32 * 3
         } else {
           item.className = ''
         }
       })
+      this.$refs.rightContentRef.style.transform = `translateY(${y}px)`
+      this.$refs.rightBarRef.style.top = -y * zoom + 'px'
+      this.$refs.rightBarRef.style.height =
+        this.$refs.rightContentRef.offsetHeight * zoom
     },
     // 将新的歌曲进度
     currentPlayChange(val) {
@@ -774,13 +783,21 @@ export default {
           this.$store.commit('setCurrentPlay', this.songList[random])
         }
       } else if (val === 'next') {
-        if (!this.songList[index + 1]) {
+        if (this.playMode === 'random') {
+          // 随机播放
+          const random = Math.floor(Math.random() * this.songList.length + 1)
+          this.$store.commit('setCurrentPlay', this.songList[random])
+        } else if (!this.songList[index + 1]) {
           this.$store.commit('setCurrentPlay', this.songList[0])
         } else {
           this.$store.commit('setCurrentPlay', this.songList[index + 1])
         }
       } else if (val === 'last') {
-        if (!this.songList[index - 1]) {
+        if (this.playMode === 'random') {
+          // 随机播放
+          const random = Math.floor(Math.random() * this.songList.length + 1)
+          this.$store.commit('setCurrentPlay', this.songList[random])
+        } else if (!this.songList[index - 1]) {
           this.$store.commit(
             'setCurrentPlay',
             this.songList[this.songList.length - 1]
@@ -793,6 +810,13 @@ export default {
     // 点击歌词跳转按钮 跳转到指定进度
     jump(time) {
       this.audioEl.currentTime = time
+      this.newLyric.forEach((item) => {
+        item.className = ''
+      })
+    },
+    // audio停止事件
+    onstalled(e) {
+      console.log(e)
     }
   },
   watch: {
@@ -887,7 +911,7 @@ export default {
       if (val) {
         this.$store.dispatch('getLyric', val.id)
         this.isPlay = false
-        this.audioEl.currentTime = 0
+        this.newLyric = []
         const topCurrentDOM = document.querySelector('li.current')
         this.$nextTick(() => {
           if (!topCurrentDOM) return
@@ -946,9 +970,10 @@ export default {
           )}px`
         })
       }
+      this.audioEl.pause()
     },
     // 当歌词变化时
-    lyric() {
+    lyric(val) {
       if (
         this.$refs.rightBoxRef.offsetHeight >=
         this.$refs.rightContentRef.offsetHeight
@@ -963,15 +988,26 @@ export default {
         this.$refs.rightBarRef.style.top = 0
         this.$refs.rightContentRef.style.top = 0
       }
+      this.$refs.rightContentRef.style.transform = 'translateY(0)'
+      this.$refs.rightBarRef.style.top = 0
+      if (val) {
+        this.newLyric = val
+        this.$nextTick(() => {
+          this.lyricsDOM = document
+            .querySelector('.lyric__content')
+            .querySelectorAll('p')
+        })
+      }
     },
     // 歌曲URL改变
     songUrl(val) {
-      // 第一次进入页面不会触发自动播放
-      if (this.currentPlay && this.currentPlay.isPlay) return
-      this.throttle = false
-      this.play()
-      if (val === null) {
-        this.audioEl.src = null
+      if (val) {
+        this.url = val.split('#')[0]
+        this.audioEl.currentTime = 0
+        // 第一次进入页面不会触发自动播放
+        if (this.currentPlay && this.currentPlay.isPlay) return
+        this.throttle = false
+        this.play()
       }
     },
     // 改变音量
@@ -982,10 +1018,7 @@ export default {
   },
   computed: {
     ...mapState(['songList', 'currentPlay', 'lyric', 'songUrl']),
-    ...mapGetters(['songTotal']),
-    lyricsDOM() {
-      return document.querySelector('.lyric__content').querySelectorAll('p')
-    }
+    ...mapGetters(['songTotal'])
   }
 }
 </script>
@@ -1129,8 +1162,14 @@ export default {
             margin-left: 15px;
             span {
               float: left;
+              height: 14px;
               color: #9b9b9b;
+              i {
+                float: left;
+                margin-top: 1px;
+              }
               a {
+                float: left;
                 display: inline-block;
                 height: 100%;
                 color: #9b9b9b;
@@ -1169,6 +1208,7 @@ export default {
           margin-right: 2px;
           background: url('../assets/uploads/playbar.png') no-repeat 0 0;
         }
+
         a:nth-child(1) {
           background: url('../assets/uploads/DLVi_1eymwAX8gDunfd2bg==_109951165524394991.png')
             no-repeat;
@@ -1208,6 +1248,12 @@ export default {
         }
         > a:nth-child(1):hover {
           background-position: -31px -248px;
+        }
+        .mute {
+          background-position: -104px -69px !important;
+        }
+        .mute:hover {
+          background-position: -126px -69px !important;
         }
         // 列表循环
         .loop {
@@ -1556,7 +1602,7 @@ export default {
                 text-align: center;
                 color: #989898;
                 line-height: 32px;
-                transition: all 0.5s;
+                transition: all 0.3s;
                 a {
                   position: absolute;
                   display: none;

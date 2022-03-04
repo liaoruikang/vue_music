@@ -82,3 +82,8 @@ export const songUrlAPI = (id, br) => {
   if (br === undefined) br = 999000
   return request.get('song/url', { params: { id, br } })
 }
+
+// 获取vip信息
+export const vipDataAPI = () => {
+  return request.get('/vip/info')
+}

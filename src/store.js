@@ -12,7 +12,9 @@ import {
   hotSingerAPI,
   songDetailsAPI,
   albumDetailsAPI,
-  lyricAPI, songUrlAPI
+  lyricAPI,
+  songUrlAPI,
+  vipDataAPI
 } from '@/api/discoverAPI'
 
 Vue.use(Vuex)
@@ -22,6 +24,7 @@ export default new Vuex.Store({
     // 是否登录
     isLogin: false,
     userId: null,
+    vipData: null,
     // 推荐歌单列表
     reSongsList: [],
     // 每日推荐歌单列表
@@ -145,6 +148,9 @@ export default new Vuex.Store({
       url += '#' + Math.floor(Math.random() * 1000000)
       state.songUrl = url
     },
+    setVipData(state, Data) {
+      state.vipData = Data
+    },
     removeTopThreeListdetail(state) {
       state.topThreeListdetail = []
     },
@@ -262,8 +268,13 @@ export default new Vuex.Store({
     },
     // 获取歌曲URL
     async getSongUrl({ commit }, id) {
-      const { data: result } = await songUrlAPI(id)
+      const { data: result } = await songUrlAPI(id, 128000)
       commit('setSongUrl', result.data[0].url)
+    },
+    // 获取vip信息
+    async getVipData({ commit }) {
+      const { data: result } = await vipDataAPI()
+      commit('setVipData', result.data)
     }
 
   },

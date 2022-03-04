@@ -121,15 +121,25 @@ export default {
     this.loginState()
   },
   components: {
-    Login: () => import('@/components/login/Login'),
-    LoginPhone: () => import('@/components/login/LoginPhone'),
-    LoginEmail: () => import('@/components/login/LoginEmail'),
-    LoginQrCode: () => import('@/components/login/LoginQrCode'),
-    Register: () => import('@/components/login/Register'),
-    ResetPassword: () => import('@/components/login/ResetPassword'),
-    Header: () => import('@/components/Header'),
-    Buttom: () => import('@/components/Buttom'),
-    Play: () => import('@/components/Play')
+    Login: () =>
+      import(/* webpackChunkName: "Login" */ '@/components/login/Login'),
+    LoginPhone: () =>
+      import(/* webpackChunkName: "Login" */ '@/components/login/LoginPhone'),
+    LoginEmail: () =>
+      import(/* webpackChunkName: "Login" */ '@/components/login/LoginEmail'),
+    LoginQrCode: () =>
+      import(/* webpackChunkName: "Login" */ '@/components/login/LoginQrCode'),
+    Register: () =>
+      import(/* webpackChunkName: "Login" */ '@/components/login/Register'),
+    ResetPassword: () =>
+      import(
+        /* webpackChunkName: "Login" */ '@/components/login/ResetPassword'
+      ),
+    Header: () =>
+      import(/* webpackChunkName: "Header" */ '@/components/Header'),
+    Buttom: () =>
+      import(/* webpackChunkName: "Button" */ '@/components/Buttom'),
+    Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/Play')
   },
   watch: {
     loginDialogVisible() {
@@ -149,8 +159,13 @@ export default {
         }
       }
     },
-    isLogin() {
+    isLogin(val) {
       this.$store.commit('setIsLogin', this.isLogin)
+      if (val === false) {
+        this.$store.commit('setVipData', null)
+      } else {
+        this.$store.dispatch('getVipData')
+      }
     }
   },
   methods: {
