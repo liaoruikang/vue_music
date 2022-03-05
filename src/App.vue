@@ -21,6 +21,7 @@
       width="530px"
       :show-close="false"
       :modal="false"
+      @click.native.stop
     >
       <keep-alive include="Login">
         <component :is="loginMode" @loginMode="loginMode = $event"></component>
@@ -31,9 +32,10 @@
     <el-dialog
       :close-on-click-modal="false"
       :visible.sync="$store.state.CFDVisible"
-      width="530px"
       :show-close="false"
       :modal="false"
+      custom-class="cfd__dialog"
+      @click.native.stop
     >
       <component :is="displayWho"></component>
     </el-dialog>
@@ -237,9 +239,13 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0 !important;
+  box-shadow: 0 5px 16px rgb(0, 0, 0, 80%) !important;
 }
 /deep/ .el-backtop {
   right: 50% !important;
   margin-right: -550px;
+}
+/deep/ .cfd__dialog {
+  width: auto !important;
 }
 </style>
