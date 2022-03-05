@@ -115,16 +115,18 @@ export default {
   }
 }
 /deep/ .el-carousel__arrow {
-  font-size: 36px;
   width: 60px;
   height: 60px;
   margin-top: -10px;
+  font-size: 36px;
   line-height: 60px;
 }
 /deep/ .el-carousel__arrow--right {
-  right: 148px;
+  right: 50%;
+  transform: translateX(580px);
 }
 /deep/ .el-carousel__arrow--left {
-  left: 150px;
+  left: 50%;
+  transform: translateX(-580px);
 }
 </style>

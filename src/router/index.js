@@ -24,63 +24,63 @@ const routes = [
   {
     path: '/',
     component: Discover,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/discover',
     component: Discover,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/My',
     component: My,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/Friend',
     component: Friend,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/Download',
     component: Download,
-    meta: { oneTitle: '下载网易云音乐iPhone、iPad、Mac、Android、WP、PC版客户端', twoTitle: '', threeTitle: '' }
+    meta: { oneTitle: '下载网易云音乐iPhone、iPad、Mac、Android、WP、PC版客户端', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
 
   {
     path: '/discover/toplist',
     component: Toplist,
-    meta: { oneTitle: '网易云音乐', twoTitle: '排行榜', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '排行榜', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/discover/playlist',
     component: Playlist,
-    meta: { oneTitle: '网易云音乐', twoTitle: '歌单', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '歌单', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/discover/djradio',
     component: Djradio,
-    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/discover/artist',
     component: Artist,
-    meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/discover/album',
     component: Album,
-    meta: { oneTitle: '网易云音乐', twoTitle: '新碟上架', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '新碟上架', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/user/home',
     component: Home,
-    meta: { oneTitle: '网易云音乐', twoTitle: '用户', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '用户', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/user/update',
     component: Update,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   }
 ]
 
@@ -89,7 +89,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const title = (to.meta.threeTitle === '' ? '' : to.meta.threeTitle + ' - ') + (to.meta.twoTitle === '' ? '' : to.meta.twoTitle + ' - ') + to.meta.oneTitle
+  const title = (to.meta.fourTitle === '' ? '' : to.meta.fourTitle + ' - ') + (to.meta.threeTitle === '' ? '' : to.meta.threeTitle + ' - ') + (to.meta.twoTitle === '' ? '' : to.meta.twoTitle + ' - ') + to.meta.oneTitle
   document.querySelector('title').innerHTML = title
   next()
 })

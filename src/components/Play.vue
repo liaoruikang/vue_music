@@ -75,8 +75,26 @@
       <div class="play__f">
         <div class="left">
           <a href="javascript:;" title="画中画歌词（未开放）"></a>
-          <a href="javascript:;" title="收藏"></a>
-          <a href="javascript:;" title="转发"></a>
+          <a
+            href="javascript:;"
+            title="收藏"
+            @click="
+              $store.commit('setCFDVisible', {
+                display: true,
+                component: 'Collection'
+              })
+            "
+          ></a>
+          <a
+            href="javascript:;"
+            title="转发"
+            @click="
+              $store.commit('setCFDVisible', {
+                display: true,
+                component: 'forward'
+              })
+            "
+          ></a>
         </div>
         <div class="right">
           <a
@@ -202,9 +220,33 @@
                   ></div>
                   <div class="play__name">{{ item.name }}</div>
                   <div class="play__f">
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
-                    <a href="javascript:;"></a>
+                    <a
+                      href="javascript:;"
+                      @click.stop="
+                        $store.commit('setCFDVisible', {
+                          display: true,
+                          component: 'Collection'
+                        })
+                      "
+                    ></a>
+                    <a
+                      href="javascript:;"
+                      @click.stop="
+                        $store.commit('setCFDVisible', {
+                          display: true,
+                          component: 'Forward'
+                        })
+                      "
+                    ></a>
+                    <a
+                      href="javascript:;"
+                      @click.stop="
+                        $store.commit('setCFDVisible', {
+                          display: true,
+                          component: 'Client'
+                        })
+                      "
+                    ></a>
                     <a
                       href="javascript:;"
                       @click.stop="delSongList($event, item.id)"
@@ -364,7 +406,7 @@ export default {
       // 歌曲进度
       songProgress: 0,
       // 音量
-      volume: parseInt(window.localStorage.getItem('volume')),
+      volume: parseInt(window.localStorage.getItem('volume')) || 50,
       // 是否处于播放
       isPlay: false,
       // 最大播放时间
@@ -675,7 +717,7 @@ export default {
                 this.audioEl.play()
                 this.isPlay = true
               })
-              .catch((e) => {})
+              .catch(() => {})
           }
         })
       } else {
@@ -708,7 +750,7 @@ export default {
       )
 
       // 当播放时间和歌词时间对应 调整歌词位置
-      if (this.isLyric || !this.displayList) return
+      if (!this.displayList) return
       const contentMax =
         this.$refs.rightContentRef.offsetHeight -
         this.$refs.rightBoxRef.offsetHeight
@@ -738,10 +780,11 @@ export default {
           item.className = ''
         }
       })
-      this.$refs.rightContentRef.style.transform = `translateY(${y}px)`
-      this.$refs.rightBarRef.style.top = -y * zoom + 'px'
-      this.$refs.rightBarRef.style.height =
-        this.$refs.rightContentRef.offsetHeight * zoom
+      if (this.isLyric) return
+      if (y) {
+        this.$refs.rightContentRef.style.transform = `translateY(${y}px)`
+        this.$refs.rightBarRef.style.top = -y * zoom + 'px'
+      }
     },
     // 将新的歌曲进度
     currentPlayChange(val) {
@@ -773,8 +816,6 @@ export default {
             this.$store.commit('setCurrentPlay', this.songList[index + 1])
           }
         } else if (this.playMode === 'oneLoop') {
-          // 单曲循环
-          // this.$store.commit('setCurrentPlay', this.songList[index])
           this.isPlay = false
           this.play()
         } else if (this.playMode === 'random') {
@@ -914,7 +955,13 @@ export default {
         this.newLyric = []
         const topCurrentDOM = document.querySelector('li.current')
         this.$nextTick(() => {
-          if (!topCurrentDOM) return
+          if (
+            !topCurrentDOM ||
+            this.$refs.contentRef.offsetHeight <=
+              this.$refs.tableRef.offsetHeight
+          ) {
+            return
+          }
           // 获取最大移动距离
           const contentMax =
             this.$refs.contentRef.offsetHeight -
@@ -974,22 +1021,6 @@ export default {
     },
     // 当歌词变化时
     lyric(val) {
-      if (
-        this.$refs.rightBoxRef.offsetHeight >=
-        this.$refs.rightContentRef.offsetHeight
-      ) {
-        this.$refs.rightBarRef.style = 'height:0;border:0'
-      } else {
-        this.$refs.rightBarRef.style.height =
-          (this.$refs.rightBoxRef.offsetHeight *
-            this.$refs.rightBoxRef.offsetHeight) /
-            this.$refs.rightContentRef.offsetHeight +
-          'px'
-        this.$refs.rightBarRef.style.top = 0
-        this.$refs.rightContentRef.style.top = 0
-      }
-      this.$refs.rightContentRef.style.transform = 'translateY(0)'
-      this.$refs.rightBarRef.style.top = 0
       if (val) {
         this.newLyric = val
         this.$nextTick(() => {
@@ -997,6 +1028,8 @@ export default {
             .querySelector('.lyric__content')
             .querySelectorAll('p')
         })
+      } else {
+        this.newLyric = []
       }
     },
     // 歌曲URL改变
@@ -1005,7 +1038,7 @@ export default {
         this.url = val.split('#')[0]
         this.audioEl.currentTime = 0
         // 第一次进入页面不会触发自动播放
-        if (this.currentPlay && this.currentPlay.isPlay) return
+        if (this.currentPlay && this.currentPlay.isPlay === 1) return
         this.throttle = false
         this.play()
       }
@@ -1014,6 +1047,17 @@ export default {
     volume(val) {
       this.audioEl.volume = val / 100
       window.localStorage.setItem('volume', val)
+    },
+    newLyric(val) {
+      if (val) {
+        this.$refs.rightBarRef.style.height =
+          (this.$refs.rightBoxRef.offsetHeight *
+            this.$refs.rightBoxRef.offsetHeight) /
+            this.$refs.rightContentRef.offsetHeight +
+          'px'
+        this.$refs.rightBarRef.style.top = 0
+        this.$refs.rightContentRef.style.transform = 'translateY(0px)'
+      }
     }
   },
   computed: {
@@ -1025,7 +1069,7 @@ export default {
 <style lang="less" scoped>
 .play__container {
   position: fixed;
-  z-index: 3;
+  z-index: 4;
   left: 0;
   width: 100%;
   height: 53px;
@@ -1169,7 +1213,6 @@ export default {
                 margin-top: 1px;
               }
               a {
-                float: left;
                 display: inline-block;
                 height: 100%;
                 color: #9b9b9b;

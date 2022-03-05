@@ -12,10 +12,8 @@
     ></Header>
     <!-- 路由占位符 -->
     <router-view></router-view>
-
     <!-- 底部区域 -->
     <Buttom></Buttom>
-
     <!-- 登录对话框 -->
     <el-dialog
       :close-on-click-modal="false"
@@ -29,16 +27,21 @@
       </keep-alive>
     </el-dialog>
 
+    <!-- 收藏转发下载对话框 -->
+    <el-dialog
+      :close-on-click-modal="false"
+      :visible.sync="$store.state.CFDVisible"
+      width="530px"
+      :show-close="false"
+      :modal="false"
+    >
+      <component :is="displayWho"></component>
+    </el-dialog>
+
     <!-- 播放控件 -->
     <Play></Play>
-
     <!-- 回到顶部控件 -->
-    <el-backtop
-      target=".app__container"
-      :bottom="100"
-      :right="170"
-      :visibility-height="300"
-    >
+    <el-backtop target=".app__container" :bottom="100" :visibility-height="300">
       <div
         style="
           height: 100%;
@@ -49,6 +52,7 @@
           line-height: 40px;
           color: #c20c0c;
           text-indent: -1px;
+          z-index: 1;
         "
       >
         <i style="font-weight: 900" class="el-icon-top"></i>
@@ -57,19 +61,11 @@
   </div>
 </template>
 <script>
-// import Login from '@/components/login/Login.vue'
-// import LoginPhone from '@/components/login/LoginPhone.vue'
-// import LoginEmail from '@/components/login/LoginEmail.vue'
-// import LoginQrCode from '@/components/login/LoginQrCode.vue'
-// import Register from '@/components/login/Register.vue'
-// import ResetPassword from '@/components/login/ResetPassword.vue'
-// import Header from '@/components/Header'
-
 import { loginStateAPI, logoutAPI } from '@/api/loginAPI'
 // 导入 eventBus
 import Bus from '@/plugin/eventBus'
-// 导入 API 接口
-// import { loginStateAPI } from '@/api/loginAPI'
+import { mapState } from 'vuex'
+
 export default {
   name: 'App',
   data() {
@@ -101,6 +97,7 @@ export default {
     Bus.$on('headerPosition', (e) => {
       const domWidth = document.documentElement.clientWidth
       const domHeight = document.documentElement.clientHeight
+
       if (e.x + this.dialogDOM.offsetWidth >= domWidth) {
         e.x = domWidth - this.dialogDOM.offsetWidth
       } else if (e.x <= 0) {
@@ -118,6 +115,7 @@ export default {
       this.userData = data
       this.$store.commit('setUserId', data.userId)
     })
+
     this.loginState()
   },
   components: {
@@ -139,7 +137,19 @@ export default {
       import(/* webpackChunkName: "Header" */ '@/components/Header'),
     Buttom: () =>
       import(/* webpackChunkName: "Button" */ '@/components/Buttom'),
-    Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/Play')
+    Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/Play'),
+    LoginHeader: () =>
+      import(
+        /* webpackChunkName: "loginHeader"  */ '@/components/login/LoginHeader'
+      ),
+    Collection: () =>
+      import(
+        /* webpackChunkName: "Collection" */ '@/components/common/Collection'
+      ),
+    Client: () =>
+      import(/* webpackChunkName: "Client" */ '@/components/common/Client'),
+    Forward: () =>
+      import(/* webpackChunkName: "Forward" */ '@/components/common/Forward')
   },
   watch: {
     loginDialogVisible() {
@@ -147,8 +157,12 @@ export default {
         setTimeout(() => {
           this.loginMode = 'login'
         }, 300)
+      } else {
+        this.dialogDOM = document.querySelectorAll('.el-dialog')[0]
       }
-      this.dialogDOM = document.querySelector('.el-dialog')
+    },
+    CFDVisible(val) {
+      if (val) this.dialogDOM = document.querySelectorAll('.el-dialog')[1]
     },
     userData: {
       handler() {
@@ -165,6 +179,17 @@ export default {
         this.$store.commit('setVipData', null)
       } else {
         this.$store.dispatch('getVipData')
+      }
+    },
+    displayWho(val) {
+      if (val && val !== 'Client') {
+        if (!this.isLogin) {
+          this.$store.commit('setCFDVisible', {
+            display: false,
+            component: null
+          })
+          this.loginDialogVisible = true
+        }
       }
     }
   },
@@ -191,7 +216,9 @@ export default {
       Bus.$emit('display', false)
     }
   },
-  computed: {}
+  computed: {
+    ...mapState(['CFDVisible', 'displayWho'])
+  }
 }
 </script>
 <style lang="less" scoped>
@@ -210,5 +237,9 @@ export default {
   left: 50%;
   transform: translate(-50%, -50%);
   margin: 0 !important;
+}
+/deep/ .el-backtop {
+  right: 50% !important;
+  margin-right: -550px;
 }
 </style>

@@ -21,6 +21,7 @@ Vue.use(ElementUI)
 
 Vue.config.productionTip = false
 
+// 将数字单位转化为汉字单位
 Vue.filter('number_ch', (value) => {
   const arr = [' 百', ' 千', ' 万', ' 亿']
   value = value.toString()

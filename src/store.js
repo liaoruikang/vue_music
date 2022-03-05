@@ -50,7 +50,14 @@ export default new Vuex.Store({
     // 当前播放歌曲歌词
     lyric: '',
     // 当前歌曲URL
-    songUrl: null
+    songUrl: null,
+    // 收藏转发下载对话框
+    CFDVisible: false,
+    // 显示谁
+    // Coollection 收藏
+    // Forward 转发
+    // Download 下载
+    displayWho: null
   },
   mutations: {
     setreSongsList(state, songsList) {
@@ -102,10 +109,14 @@ export default new Vuex.Store({
       window.localStorage.setItem('songList', JSON.stringify(state.songList))
     },
     setCurrentPlay(state, song) {
-      if (song.isPlay) {
+      if (!('isPlay' in song)) {
+        song.isPlay = 0
+      } else if (song.isPlay === 0) {
+      } else {
         song.song.isPlay = song.isPlay
         song = song.song
       }
+
       this.dispatch('getSongUrl', song.id)
       state.currentPlay = song
       window.localStorage.setItem('currentPlay', JSON.stringify(state.currentPlay))
@@ -151,6 +162,10 @@ export default new Vuex.Store({
     setVipData(state, Data) {
       state.vipData = Data
     },
+    setCFDVisible(state, val) {
+      state.CFDVisible = val.display
+      state.displayWho = val.component
+    },
     removeTopThreeListdetail(state) {
       state.topThreeListdetail = []
     },
@@ -177,7 +192,7 @@ export default new Vuex.Store({
           state.currentPlay && this.dispatch('getSongUrl', state.currentPlay.id)
 
           // 重新更新本地存储数量
-          window.localStorage.setItem('currentPlay', JSON.stringify(state.currentPlay))
+          state.currentPlay && window.localStorage.setItem('currentPlay', JSON.stringify(state.currentPlay))
         }
         // 查找索引删除指定元素
         const index = state.songList.findIndex(item => item.id === id)

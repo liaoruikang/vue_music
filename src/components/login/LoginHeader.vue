@@ -84,6 +84,7 @@ export default {
   h3 {
     display: flex;
     align-items: center;
+    font-size: 14px;
   }
   i {
     color: #eee;
