@@ -82,7 +82,7 @@ export default {
           display: inline-block;
           width: 17px;
           height: 17px;
-          background: url('../../assets/uploads/icon2.png') no-repeat 0px -310px;
+          background: url('../assets/uploads/icon2.png') no-repeat 0px -310px;
           vertical-align: middle;
         }
         em {
@@ -104,7 +104,7 @@ export default {
       .qtcode {
         width: 86px;
         height: 86px;
-        background: url('../../assets/uploads/qtcode86.png') no-repeat;
+        background: url('../assets/uploads/qtcode86.png') no-repeat;
         margin: 15px auto;
       }
     }

@@ -81,7 +81,8 @@
             @click="
               $store.commit('setCFDVisible', {
                 display: true,
-                component: 'Collection'
+                component: 'Collection',
+                songId: $store.state.currentPlay.id
               })
             "
           ></a>
@@ -91,7 +92,8 @@
             @click="
               $store.commit('setCFDVisible', {
                 display: true,
-                component: 'forward'
+                component: 'forward',
+                songId: $store.state.currentPlay.id
               })
             "
           ></a>
@@ -225,7 +227,8 @@
                       @click.stop="
                         $store.commit('setCFDVisible', {
                           display: true,
-                          component: 'Collection'
+                          component: 'Collection',
+                          songId: item.id
                         })
                       "
                     ></a>
@@ -234,7 +237,8 @@
                       @click.stop="
                         $store.commit('setCFDVisible', {
                           display: true,
-                          component: 'Forward'
+                          component: 'Forward',
+                          songId: item.id
                         })
                       "
                     ></a>

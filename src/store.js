@@ -16,7 +16,8 @@ import {
   songUrlAPI,
   vipDataAPI
 } from '@/api/discoverAPI'
-
+// 导入歌单API
+import { userPlayListAPI, playlistTarcksAPI, createPlaylistAPI } from '@/api/collectionAPI'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -54,10 +55,14 @@ export default new Vuex.Store({
     // 收藏转发下载对话框
     CFDVisible: false,
     // 显示谁
-    // Coollection 收藏
+    // Collection 收藏
     // Forward 转发
     // Download 下载
-    displayWho: null
+    displayWho: null,
+    // 用户歌单列表
+    userPlayList: [],
+    // 将要被添加到歌单的歌曲id
+    songId: null
   },
   mutations: {
     setreSongsList(state, songsList) {
@@ -165,6 +170,12 @@ export default new Vuex.Store({
     setCFDVisible(state, val) {
       state.CFDVisible = val.display
       state.displayWho = val.component
+      if (val.songId) state.songId = val.songId
+    },
+    // 获取用户歌单
+    setUserPlayList(state, userPlayList) {
+      state.userPlayList = userPlayList
+      console.log(state.userPlayList)
     },
     removeTopThreeListdetail(state) {
       state.topThreeListdetail = []
@@ -290,6 +301,22 @@ export default new Vuex.Store({
     async getVipData({ commit }) {
       const { data: result } = await vipDataAPI()
       commit('setVipData', result.data)
+    },
+    // 获取用户歌单
+    async getUserPlayList({ commit }, uid) {
+      const { data: result } = await userPlayListAPI(uid)
+      if (result.code !== 200) return
+      commit('setUserPlayList', result)
+    },
+    // 添加或删除歌单歌曲
+    async playlistTarcks({ commit }, val) {
+      return await playlistTarcksAPI(val.op, val.pid, val.tarcks).catch(err => {
+        return err.response
+      })
+    },
+    // 新建歌单
+    async createPlaylist({ commit }, val) {
+      return await createPlaylistAPI(val.name)
     }
 
   },

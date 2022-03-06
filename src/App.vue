@@ -145,13 +145,11 @@ export default {
         /* webpackChunkName: "loginHeader"  */ '@/components/login/LoginHeader'
       ),
     Collection: () =>
-      import(
-        /* webpackChunkName: "Collection" */ '@/components/common/Collection'
-      ),
+      import(/* webpackChunkName: "Collection" */ '@/components/Collection'),
     Client: () =>
-      import(/* webpackChunkName: "Client" */ '@/components/common/Client'),
+      import(/* webpackChunkName: "Client" */ '@/components/Client'),
     Forward: () =>
-      import(/* webpackChunkName: "Forward" */ '@/components/common/Forward')
+      import(/* webpackChunkName: "Forward" */ '@/components/Forward')
   },
   watch: {
     loginDialogVisible() {
