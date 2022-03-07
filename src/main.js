@@ -9,7 +9,7 @@ import '@/assets/css/global.less'
 // 导入Cookie.js
 import { delCookie } from '@/plugin/Cookie'
 // 导入 vuex
-import store from './store'
+import store from '@/store'
 // 导入 dayjs
 import dayjs from 'dayjs'
 

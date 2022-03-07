@@ -8,7 +8,7 @@
       <el-row class="collection__list">
         <el-row
           class="collection__item"
-          v-for="item in $store.state.userPlayList.playlist"
+          v-for="item in userPlayList.playlist"
           :key="item.id"
           @click.native="add(item.id)"
         >
@@ -50,6 +50,7 @@
 </template>
 <script>
 import Bus from '@/plugin/eventBus'
+import { mapState } from 'vuex'
 export default {
   name: 'collection',
   data() {
@@ -94,15 +95,18 @@ export default {
       this.$store.commit('setCFDVisible', val)
     })
     // 获取用户歌单
-    this.$store.dispatch('getUserPlayList', this.$store.state.userId)
+    this.$store.dispatch('collection/getUserPlayList', this.userId)
   },
   methods: {
     async add(pid) {
-      const { data: result } = await this.$store.dispatch('playlistTarcks', {
-        op: `add`,
-        pid,
-        tarcks: this.$store.state.songId
-      })
+      const { data: result } = await this.$store.dispatch(
+        'collection/playlistTarcks',
+        {
+          op: `add`,
+          pid,
+          tarcks: this.$store.state.songId
+        }
+      )
       if (result.code) {
         return this.$message.error(result.msg)
       }
@@ -118,7 +122,7 @@ export default {
       this.$refs.playlistRef.validateField('name', async (valid) => {
         if (!valid) {
           const { data: result } = await this.$store.dispatch(
-            'createPlaylist',
+            'collection/createPlaylist',
             this.playlistForm
           )
           if (result.code !== 200) return this.$message.error(result.message)
@@ -140,6 +144,14 @@ export default {
       import(
         /* webpackChunkName: "loginHeader"  */ '@/components/login/LoginHeader'
       )
+  },
+  computed: {
+    ...mapState('collection', {
+      userPlayList: 'userPlayList'
+    }),
+    ...mapState('user', {
+      userId: 'userId'
+    })
   }
 }
 </script>

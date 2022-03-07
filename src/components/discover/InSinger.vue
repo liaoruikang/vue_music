@@ -36,11 +36,13 @@ export default {
     return {}
   },
   created() {
-    this.$store.dispatch('getHotSingerList', 10)
+    this.$store.dispatch('insinger/getHotSingerList', 10)
   },
   methods: {},
   computed: {
-    ...mapState(['hotSingerList'])
+    ...mapState('insinger', {
+      hotSingerList: 'hotSingerList'
+    })
   }
 }
 </script>

@@ -13,7 +13,7 @@
     <!-- 路由占位符 -->
     <router-view></router-view>
     <!-- 底部区域 -->
-    <Buttom></Buttom>
+    <Bottom></Bottom>
     <!-- 登录对话框 -->
     <el-dialog
       :close-on-click-modal="false"
@@ -115,7 +115,7 @@ export default {
     })
     Bus.$on('loginData', (data) => {
       this.userData = data
-      this.$store.commit('setUserId', data.userId)
+      this.$store.commit('user/setUserId', data.userId)
     })
 
     this.loginState()
@@ -137,8 +137,8 @@ export default {
       ),
     Header: () =>
       import(/* webpackChunkName: "Header" */ '@/components/Header'),
-    Buttom: () =>
-      import(/* webpackChunkName: "Button" */ '@/components/Buttom'),
+    Bottom: () =>
+      import(/* webpackChunkName: "Button" */ '@/components/Bottom'),
     Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/Play'),
     LoginHeader: () =>
       import(
@@ -174,11 +174,11 @@ export default {
       }
     },
     isLogin(val) {
-      this.$store.commit('setIsLogin', this.isLogin)
+      this.$store.commit('user/setIsLogin', this.isLogin)
       if (val === false) {
         this.$store.commit('setVipData', null)
       } else {
-        this.$store.dispatch('getVipData')
+        this.$store.dispatch('user/getVipData')
       }
     },
     displayWho(val) {
@@ -199,7 +199,7 @@ export default {
       const { data: result } = await loginStateAPI()
       if (result.data.profile === null) return (this.isLogin = false)
       this.userData = result.data.profile
-      this.$store.commit('setUserId', result.data.profile.userId)
+      this.$store.commit('user/setUserId', result.data.profile.userId)
     },
     // 退出登录
     async logout() {
@@ -207,9 +207,9 @@ export default {
       if (result.code === 200) {
         this.$message.success('退出成功')
         this.userData = null
-        this.$store.commit('setUserId', null)
-        this.$store.commit('setUserData', {})
-        this.$store.commit('setUserLevel', null)
+        this.$store.commit('user/setUserId', null)
+        this.$store.commit('user/setUserData', {})
+        this.$store.commit('user/setUserLevel', null)
       }
     },
     blur() {

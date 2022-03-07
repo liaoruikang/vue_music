@@ -73,7 +73,7 @@ export default {
     return {}
   },
   created() {
-    this.$store.dispatch('getTopList')
+    this.$store.dispatch('list/getTopList')
   },
   methods: {},
   components: {
@@ -81,10 +81,12 @@ export default {
   },
   destroyed() {
     // 当组件销毁时 将前三条的榜单数据清空
-    this.$store.commit('removeTopThreeListdetail')
+    this.$store.commit('list/removeTopThreeListdetail')
   },
   computed: {
-    ...mapState(['topThreeListdetail', 'songId'])
+    ...mapState('list', {
+      topThreeListdetail: 'topThreeListdetail'
+    })
   }
 }
 </script>

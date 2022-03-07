@@ -72,7 +72,9 @@ export default {
     InSinger: () => import('@/components/discover/InSinger')
   },
   computed: {
-    ...mapState(['isLogin'])
+    ...mapState('user', {
+      isLogin: 'isLogin'
+    })
   }
 }
 </script>

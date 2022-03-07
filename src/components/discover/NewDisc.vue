@@ -37,7 +37,7 @@ export default {
     return {}
   },
   created() {
-    this.$store.dispatch('getNewDiscList')
+    this.$store.dispatch('newdisc/getNewDiscList')
   },
   methods: {},
   components: {
@@ -45,7 +45,10 @@ export default {
     Disc: () => import('@/components/common/Disc')
   },
   computed: {
-    ...mapGetters(['oneNewDisc', 'twoNewDisc']),
+    ...mapGetters('newdisc', {
+      oneNewDisc: 'oneNewDisc',
+      twoNewDisc: 'twoNewDisc'
+    }),
     newDisc() {
       return [this.oneNewDisc, this.twoNewDisc]
     }

@@ -49,7 +49,7 @@ export default {
     }
   },
   created() {
-    this.$store.dispatch('getEverydaySongsList')
+    this.$store.dispatch('individuation/getEverydaySongsList')
   },
   methods: {},
   components: {
@@ -57,7 +57,9 @@ export default {
     SongsList: () => import('../common/SongsList.vue')
   },
   computed: {
-    ...mapGetters(['daySongsList'])
+    ...mapGetters('individuation', {
+      daySongsList: 'daySongsList'
+    })
   }
 }
 </script>

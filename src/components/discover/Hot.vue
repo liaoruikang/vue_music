@@ -50,7 +50,7 @@ export default {
   },
   created() {
     // 获取推荐歌单列表
-    this.$store.dispatch('getSongsList', 8)
+    this.$store.dispatch('hot/getSongsList', 8)
   },
   methods: {},
   components: {
@@ -58,7 +58,9 @@ export default {
     SongsList: () => import('@/components/common/SongsList')
   },
   computed: {
-    ...mapState(['reSongsList'])
+    ...mapState('hot', {
+      reSongsList: 'reSongsList'
+    })
   }
 }
 </script>

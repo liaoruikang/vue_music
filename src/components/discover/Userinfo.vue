@@ -8,32 +8,27 @@
       <div class="top clearfix">
         <router-link
           class="user__link"
-          :to="`/user/home${
-            $store.state.userId == null ? '' : `?id=${$store.state.userId}`
-          }`"
+          :to="`/user/home${userId == null ? '' : `?id=${userId}`}`"
         >
-          <img :src="$store.state.userData.avatarUrl + '?param=80y80'" alt="" />
+          <img :src="userData.avatarUrl + '?param=80y80'" alt="" />
         </router-link>
         <div class="info">
           <h4>
             <router-link
-              :to="`/user/home${
-                $store.state.userId == null ? '' : `?id=${$store.state.userId}`
-              }`"
+              :to="`/user/home${userId == null ? '' : `?id=${userId}`}`"
             >
-              {{ $store.state.userData.nickname }}
+              {{ userData.nickname }}
             </router-link>
             <span
               :style="{
                 backgroundImage: `url(${
-                  $store.state.vipData &&
-                  $store.state.vipData.redVipDynamicIconUrl + '?param=43y16'
+                  vipData && vipData.redVipDynamicIconUrl + '?param=43y16'
                 })`
               }"
             ></span>
           </h4>
           <router-link class="level" to="/user/level">
-            <i>{{ $store.state.userLevel }}</i></router-link
+            <i>{{ userLevel }}</i></router-link
           >
           <div
             class="signIn"
@@ -56,27 +51,19 @@
       </div>
       <div class="buttom">
         <router-link
-          :to="`/user/event${
-            $store.state.userId == null ? '' : `?id=${$store.state.userId}`
-          }`"
+          :to="`/user/event${userId == null ? '' : `?id=${userId}`}`"
         >
-          <p>{{ $store.state.userData.eventCount }}</p>
+          <p>{{ userData.eventCount }}</p>
           <span>动态</span>
         </router-link>
         <router-link
-          :to="`/user/follows${
-            $store.state.userId == null ? '' : `?id=${$store.state.userId}`
-          }`"
+          :to="`/user/follows${userId == null ? '' : `?id=${userId}`}`"
         >
-          <p>{{ $store.state.userData.follows }}</p>
+          <p>{{ userData.follows }}</p>
           <span>关注</span></router-link
         >
-        <router-link
-          :to="`/user/fans${
-            $store.state.userId == null ? '' : `?id=${$store.state.userId}`
-          }`"
-        >
-          <p>{{ $store.state.userData.followeds }}</p>
+        <router-link :to="`/user/fans${userId == null ? '' : `?id=${userId}`}`">
+          <p>{{ userData.followeds }}</p>
           <span>粉丝</span></router-link
         >
       </div>
@@ -96,8 +83,8 @@ export default {
   },
   created() {
     if (this.isLogin) {
-      this.$store.dispatch('getUserData', this.$store.state.userId)
-      this.$store.dispatch('getUserLevel')
+      this.$store.dispatch('user/getUserData', this.userId)
+      this.$store.dispatch('user/getUserLevel')
     }
   },
   methods: {
@@ -116,13 +103,19 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isLogin'])
+    ...mapState('user', {
+      isLogin: 'isLogin',
+      userId: 'userId',
+      userData: 'userData',
+      vipData: 'vipData',
+      userLevel: 'userLevel'
+    })
   },
   watch: {
     isLogin(val) {
       if (val) {
-        this.$store.dispatch('getUserData', this.$store.state.userId)
-        this.$store.dispatch('getUserLevel')
+        this.$store.dispatch('user/getUserData', this.userId)
+        this.$store.dispatch('user/getUserLevel')
       }
     }
   }

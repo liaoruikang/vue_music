@@ -82,7 +82,7 @@
               $store.commit('setCFDVisible', {
                 display: true,
                 component: 'Collection',
-                songId: $store.state.currentPlay.id
+                songId: currentPlay.id
               })
             "
           ></a>
@@ -93,7 +93,7 @@
               $store.commit('setCFDVisible', {
                 display: true,
                 component: 'forward',
-                songId: $store.state.currentPlay.id
+                songId: currentPlay.id
               })
             "
           ></a>
@@ -210,7 +210,7 @@
                   "
                   v-for="item in songList"
                   :key="item.id"
-                  @click="$store.commit('setCurrentPlay', item)"
+                  @click="$store.commit('play/setCurrentPlay', item)"
                 >
                   <div
                     :class="[
@@ -452,12 +452,12 @@ export default {
       // 页面数据加载完成获取保存在本地的歌曲数据
       if (window.localStorage.getItem('songList')) {
         this.$store.commit(
-          'setSongList',
+          'play/setSongList',
           JSON.parse(window.localStorage.getItem('songList'))
         )
       }
       if (window.localStorage.getItem('currentPlay')) {
-        this.$store.commit('setCurrentPlay', {
+        this.$store.commit('play/setCurrentPlay', {
           song: JSON.parse(window.localStorage.getItem('currentPlay')),
           isPlay: 1
         })
@@ -637,7 +637,8 @@ export default {
         this.isLyric = false
       }, 1000)
       // 移动速度
-      const speed = contentEl.children.length / 2
+      let speed = contentEl.children.length / 2
+      speed = contentEl.children.length > 50 ? (speed += 20) : speed
       // 获取最大移动距离
       const contentMax = contentEl.offsetHeight - tableRef.offsetHeight
 
@@ -663,7 +664,7 @@ export default {
     // 删除歌曲列表所有歌曲
     delSongList(e, id) {
       // 调用删除函数
-      this.$store.commit('removeSongList', id)
+      this.$store.commit('play/removeSongList', id)
       // 重新判断是否需要滚动
       this.$nextTick(() => {
         // 判断是否需要滚动
@@ -815,9 +816,9 @@ export default {
         if (this.playMode === 'loop') {
           // 列表循环
           if (!this.songList[index + 1]) {
-            this.$store.commit('setCurrentPlay', this.songList[0])
+            this.$store.commit('play/setCurrentPlay', this.songList[0])
           } else {
-            this.$store.commit('setCurrentPlay', this.songList[index + 1])
+            this.$store.commit('play/setCurrentPlay', this.songList[index + 1])
           }
         } else if (this.playMode === 'oneLoop') {
           this.isPlay = false
@@ -825,30 +826,30 @@ export default {
         } else if (this.playMode === 'random') {
           // 随机播放
           const random = Math.floor(Math.random() * this.songList.length + 1)
-          this.$store.commit('setCurrentPlay', this.songList[random])
+          this.$store.commit('play/setCurrentPlay', this.songList[random])
         }
       } else if (val === 'next') {
         if (this.playMode === 'random') {
           // 随机播放
           const random = Math.floor(Math.random() * this.songList.length + 1)
-          this.$store.commit('setCurrentPlay', this.songList[random])
+          this.$store.commit('play/setCurrentPlay', this.songList[random])
         } else if (!this.songList[index + 1]) {
-          this.$store.commit('setCurrentPlay', this.songList[0])
+          this.$store.commit('play/setCurrentPlay', this.songList[0])
         } else {
-          this.$store.commit('setCurrentPlay', this.songList[index + 1])
+          this.$store.commit('play/setCurrentPlay', this.songList[index + 1])
         }
       } else if (val === 'last') {
         if (this.playMode === 'random') {
           // 随机播放
           const random = Math.floor(Math.random() * this.songList.length + 1)
-          this.$store.commit('setCurrentPlay', this.songList[random])
+          this.$store.commit('play/setCurrentPlay', this.songList[random])
         } else if (!this.songList[index - 1]) {
           this.$store.commit(
-            'setCurrentPlay',
+            'play/setCurrentPlay',
             this.songList[this.songList.length - 1]
           )
         } else {
-          this.$store.commit('setCurrentPlay', this.songList[index - 1])
+          this.$store.commit('play/setCurrentPlay', this.songList[index - 1])
         }
       }
     },
@@ -954,7 +955,7 @@ export default {
     currentPlay(val) {
       // 获取当前播放歌曲的DOM
       if (val) {
-        this.$store.dispatch('getLyric', val.id)
+        this.$store.dispatch('play/getLyric', val.id)
         this.isPlay = false
         this.newLyric = []
         const topCurrentDOM = document.querySelector('li.current')
@@ -1065,8 +1066,15 @@ export default {
     }
   },
   computed: {
-    ...mapState(['songList', 'currentPlay', 'lyric', 'songUrl']),
-    ...mapGetters(['songTotal'])
+    ...mapState('play', {
+      songList: 'songList',
+      currentPlay: 'currentPlay',
+      lyric: 'lyric',
+      songUrl: 'songUrl'
+    }),
+    ...mapGetters('play', {
+      songTotal: 'songTotal'
+    })
   }
 }
 </script>
