@@ -98,5 +98,13 @@ export default {
     // 给每个歌曲URL添加标记 使每一个URL都是不同的
     url += '#' + Math.floor(Math.random() * 1000000)
     state.songUrl = url
+  },
+  // 添加播放列表
+  addSongs(state, songs) {
+    songs.forEach(item => {
+      if (state.songList.findIndex(val => val.id === item.id) === -1) {
+        state.songList.push(item)
+      }
+    })
   }
 }

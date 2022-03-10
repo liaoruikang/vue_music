@@ -8,4 +8,5 @@ export default {
   displayWho: null,
   // 将要被添加到歌单的歌曲id
   songId: null
+
 }

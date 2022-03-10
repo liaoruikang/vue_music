@@ -23,5 +23,11 @@ export default {
     const { data: result } = await albumDetailsAPI(id)
     commit('play/setSongList', result.songs)
     commit('play/setCurrentPlay', result.songs[0])
+  },
+  // 添加歌曲
+  async addSong({ commit }, ids) {
+    // 获取歌曲详情
+    const { data: result } = await songDetailsAPI(ids)
+    commit('play/addSongs', result.songs)
   }
 }

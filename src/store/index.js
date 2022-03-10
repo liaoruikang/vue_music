@@ -15,6 +15,7 @@ import newdisc from './newdisc'
 import play from './play'
 import insinger from './insinger'
 import collection from './collection'
+import forward from './forward'
 
 Vue.use(Vuex)
 
@@ -30,6 +31,7 @@ export default new Vuex.Store({
     newdisc,
     play,
     insinger,
-    collection
+    collection,
+    forward
   }
 })
