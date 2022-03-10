@@ -51,7 +51,16 @@
                 href="javascript:;"
                 @click="$store.dispatch('getSongDetails', val.id)"
               ></a>
-              <a class="add__list" href="javascript:;"></a>
+              <a
+                class="add__list"
+                href="javascript:;"
+                @click="
+                  () => {
+                    $store.dispatch('addSong', val.id)
+                    $message.success('添加成功')
+                  }
+                "
+              ></a>
               <a class="collection" href="javascript:;"></a>
             </div>
           </li>
@@ -79,7 +88,7 @@ export default {
   components: {
     FloorHeader: () => import('./FloorHeader.vue')
   },
-  destroyed() {
+  beforeDestroy() {
     // 当组件销毁时 将前三条的榜单数据清空
     this.$store.commit('list/removeTopThreeListdetail')
   },

@@ -7,7 +7,7 @@
       <div>
         <div class="songs__box">
           <router-link to="/discover/recommend/taste">
-            <h6>{{ week }}</h6>
+            <h6>{{ week[dayjs().day()] }}</h6>
             <p>{{ dayjs().date() }}</p>
           </router-link>
         </div>
@@ -39,13 +39,13 @@ export default {
       // week
       week: [
         '星期天',
+        '星期一',
         '星期二',
         '星期三',
         '星期四',
         '星期五',
-        '星期六',
-        '星期七'
-      ][this.dayjs().day()]
+        '星期六'
+      ]
     }
   },
   created() {

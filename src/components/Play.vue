@@ -93,7 +93,8 @@
               $store.commit('setCFDVisible', {
                 display: true,
                 component: 'forward',
-                songId: currentPlay.id
+                songId: currentPlay.id,
+                shareDetails: currentPlay
               })
             "
           ></a>
@@ -238,7 +239,8 @@
                         $store.commit('setCFDVisible', {
                           display: true,
                           component: 'Forward',
-                          songId: item.id
+                          songId: item.id,
+                          shareDetails: item
                         })
                       "
                     ></a>
@@ -955,6 +957,11 @@ export default {
     currentPlay(val) {
       // 获取当前播放歌曲的DOM
       if (val) {
+        if (val.fee === 4) {
+          this.$message.warning('版权方要求，当前专辑需单独付费')
+        } else if (val.fee === 1) {
+          this.$message.warning('正在播放会员歌曲')
+        }
         this.$store.dispatch('play/getLyric', val.id)
         this.isPlay = false
         this.newLyric = []
