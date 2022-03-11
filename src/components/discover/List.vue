@@ -34,7 +34,12 @@
               title="播放"
               @click="$store.dispatch('getsongsDetails', item.id)"
             ></a>
-            <a class="collection" href="javascript:;" title="收藏"></a>
+            <a
+              class="collection"
+              href="javascript:;"
+              title="收藏"
+              @click="shoucang({ t: 1, id: item.id })"
+            ></a>
           </div>
         </div>
         <ul class="list__box__table">
@@ -61,7 +66,17 @@
                   }
                 "
               ></a>
-              <a class="collection" href="javascript:;"></a>
+              <a
+                class="collection"
+                href="javascript:;"
+                @click="
+                  $store.commit('setCFDVisible', {
+                    display: true,
+                    component: 'Collection',
+                    songId: val.id
+                  })
+                "
+              ></a>
             </div>
           </li>
           <li>
@@ -75,7 +90,7 @@
   </div>
 </template>
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'list',
   data() {
@@ -84,7 +99,18 @@ export default {
   created() {
     this.$store.dispatch('list/getTopList')
   },
-  methods: {},
+  methods: {
+    ...mapActions('collection', {
+      shoucangPlaylist: 'shoucangPlaylist'
+    }),
+    async shoucang(val) {
+      const { data: result } = await this.shoucangPlaylist(val).catch((err) => {
+        return err.response
+      })
+      if (result.code !== 200) return this.$message.error('此歌单已收藏')
+      this.$message.success('收藏成功')
+    }
+  },
   components: {
     FloorHeader: () => import('./FloorHeader.vue')
   },

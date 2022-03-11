@@ -414,7 +414,7 @@ export default {
       outline: none;
       margin: 0 !important;
       margin-bottom: 10px !important;
-      border-radius: 2px;
+      border-radius: 2px !important;
       font-size: 12px;
       color: #666;
     }
@@ -432,7 +432,7 @@ export default {
         box-sizing: border-box;
       }
       .private__textarea {
-        height: 64px;
+        height: 56px;
       }
       .at__list {
         position: absolute;

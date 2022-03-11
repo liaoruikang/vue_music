@@ -28,3 +28,8 @@ export const createPlaylistAPI = (name, privacy, type) => {
     return Promise.reject(new Error({ message: '请传递参数' }))
   }
 }
+
+// 收藏/取消收藏歌单
+export const shoucangPlaylistAPI = (t, id) => {
+  return request.get('playlist/subscribe', { params: { t, id } })
+}

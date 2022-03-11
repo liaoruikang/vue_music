@@ -176,7 +176,7 @@ export default {
     isLogin(val) {
       this.$store.commit('user/setIsLogin', this.isLogin)
       if (val === false) {
-        this.$store.commit('setVipData', null)
+        this.$store.commit('user/setVipData', null)
       } else {
         this.$store.dispatch('user/getVipData')
       }

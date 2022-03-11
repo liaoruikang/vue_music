@@ -1,5 +1,5 @@
 // 导入歌单API
-import { userPlayListAPI, playlistTarcksAPI, createPlaylistAPI } from '@/api/collectionAPI'
+import { userPlayListAPI, playlistTarcksAPI, createPlaylistAPI, shoucangPlaylistAPI } from '@/api/collectionAPI'
 export default {
   // 获取用户歌单
   async getUserPlayList({ commit }, uid) {
@@ -16,5 +16,9 @@ export default {
   // 新建歌单
   async createPlaylist({ commit }, val) {
     return await createPlaylistAPI(val.name)
+  },
+  // 收藏/取消收藏歌单
+  async shoucangPlaylist({ commit }, val) {
+    return shoucangPlaylistAPI(val.t, val.id)
   }
 }

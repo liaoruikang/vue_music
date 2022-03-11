@@ -160,7 +160,7 @@
           <div class="head__left">
             <h4>播放列表({{ songTotal }})</h4>
             <div class="head__f">
-              <a class="add" href="javascript:;"
+              <a class="add" href="javascript:;" @click="collection"
                 ><span class="icon__add"></span>收藏全部</a
               >
               <span class="line"></span>
@@ -865,6 +865,16 @@ export default {
     // audio停止事件
     onstalled(e) {
       console.log(e)
+    },
+    collection() {
+      let ids = ''
+      this.songList.forEach((item) => (ids += item.id + ','))
+      ids = ids.substr(0, ids.length - 1)
+      this.$store.commit('setCFDVisible', {
+        display: true,
+        component: 'Collection',
+        songId: ids
+      })
     }
   },
   watch: {
@@ -1661,6 +1671,7 @@ export default {
               transform: translateY(0);
               p {
                 position: relative;
+                height: 32px;
                 text-align: center;
                 color: #989898;
                 line-height: 32px;

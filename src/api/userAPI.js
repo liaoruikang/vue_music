@@ -10,5 +10,7 @@ export const userLevelAPI = () => {
 }
 // 获取vip信息
 export const vipDataAPI = () => {
-  return request.get('/vip/info')
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('/vip/info', { params: { timestamp } })
 }
