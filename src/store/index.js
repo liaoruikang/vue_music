@@ -8,14 +8,15 @@ import actions from './actions'
 
 // 导入module节点模块
 import user from './user'
-import hot from './hot'
-import individuation from './individuation'
-import list from './list'
-import newdisc from './newdisc'
+import hot from './discover/hot'
+import individuation from './discover/individuation'
+import list from './discover/list'
+import newdisc from './discover/newdisc'
 import play from './play'
-import insinger from './insinger'
+import insinger from './discover/insinger'
 import collection from './collection'
 import forward from './forward'
+import toplist from './toplist'
 
 Vue.use(Vuex)
 
@@ -32,6 +33,7 @@ export default new Vuex.Store({
     play,
     insinger,
     collection,
-    forward
+    forward,
+    toplist
   }
 })

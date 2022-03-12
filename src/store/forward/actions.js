@@ -1,4 +1,4 @@
-import { followsAPI, shareAPI, privateSongAPI } from '@/api/forwardAPI'
+import { followsAPI, shareAPI, privateSongAPI, privateSongsAPI } from '@/api/forwardAPI'
 export default {
   // 获取用户好友列表
   async getFollows({ commit }, uid) {
@@ -13,5 +13,9 @@ export default {
   // 私信分享（好友）
   async privateSong({ commit }, privateForm) {
     return await privateSongAPI(privateForm)
+  },
+  // 私信分享（歌单）
+  async privateSongs({ commit }, privateForm) {
+    return await privateSongsAPI(privateForm)
   }
 }

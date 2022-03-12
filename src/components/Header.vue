@@ -204,13 +204,17 @@ export default {
   computed: {
     isfind: {
       get() {
+        // this.$route.path === '/' ||
+        //   this.$route.path.match(/^\/[\S]+\//) !== null ||
+        //   this.$route.path === '/discover'
         if (
-          this.$route.path === '/' ||
-          this.$route.path.match(/^\/[\S]+\//) !== null ||
-          this.$route.path === '/discover'
+          this.$route.path.match(
+            /^\/my|\/friend|\/download|\/user\/home|\/user\/update/
+          ) === null
         ) {
           return 1
         } else {
+          console.log(1)
           return 0
         }
       },

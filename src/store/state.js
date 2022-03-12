@@ -4,7 +4,7 @@ export default {
   // 显示谁
   // Collection 收藏
   // Forward 转发
-  // Download 下载
+  // Client 下载
   displayWho: null,
   // 将要被添加到歌单的歌曲id
   songId: null

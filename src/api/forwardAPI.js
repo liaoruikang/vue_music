@@ -21,3 +21,8 @@ export const shareAPI = (shareForm) => {
 export const privateSongAPI = (privateForm) => {
   return request.get('send/song', { params: { user_ids: privateForm.user_id, id: privateForm.id, msg: privateForm.msg } })
 }
+
+// 私信分享（歌单）
+export const privateSongsAPI = (privateForm) => {
+  return request.get('send/playlist', { params: { user_ids: privateForm.user_id, playlist: privateForm.id, msg: privateForm.msg } })
+}

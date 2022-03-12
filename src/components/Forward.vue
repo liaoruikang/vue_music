@@ -96,7 +96,7 @@
             :contentEditable="true"
             @keydown="privateForm.msg = $refs.privateRef.innerHTML"
           ></div>
-          <p class="share__name">{{ shareName.content }}</p>
+          <p class="share__name">{{ shareName && shareName.content }}</p>
         </el-form>
         <div class="share__f">
           <span
@@ -225,7 +225,8 @@ export default {
     ...mapActions('forward', {
       getFollows: 'getFollows',
       shareSong: 'shareSong',
-      privateSong: 'privateSong'
+      privateSong: 'privateSong',
+      privateSongs: 'privateSongs'
     }),
     // 将好友名称添加到输入框中
     getAtName(val) {
@@ -309,14 +310,25 @@ export default {
         this.$message.warning('字数范围在0-140之间')
       } else {
         this.privateForm.user_id = this.privateForm.user_id.join(',')
-        const { data: result } = await this.privateSong(this.privateForm)
-        if (result.code !== 200) return this.$message.error(result.message)
-        this.$message.success('分享成功')
-        this.$store.commit('setCFDVisible', {
-          display: false,
-          component: null,
-          songId: null
-        })
+        if (this.shareName.type === 'playlist') {
+          const { data: result } = await this.privateSongs(this.privateForm)
+          if (result.code !== 200) return this.$message.error(result.message)
+          this.$message.success('分享成功')
+          this.$store.commit('setCFDVisible', {
+            display: false,
+            component: null,
+            songId: null
+          })
+        } else if (this.shareName.type === 'song') {
+          const { data: result } = await this.privateSong(this.privateForm)
+          if (result.code !== 200) return this.$message.error(result.message)
+          this.$message.success('分享成功')
+          this.$store.commit('setCFDVisible', {
+            display: false,
+            component: null,
+            songId: null
+          })
+        }
       }
     }
   },

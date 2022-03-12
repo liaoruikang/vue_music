@@ -637,7 +637,7 @@ export default {
       clearTimeout(this.lyricTimer)
       this.lyricTimer = setTimeout(() => {
         this.isLyric = false
-      }, 1000)
+      }, 2000)
       // 移动速度
       let speed = contentEl.children.length / 2
       speed = contentEl.children.length > 50 ? (speed += 20) : speed
@@ -772,6 +772,8 @@ export default {
           this.currentTime <= this.lyric[index + 1].time
         ) {
           item.className = 'current'
+          this.lyricsDOM[index].style.color = '#fff'
+          this.lyricsDOM[index].style.fontSize = '14px'
           if (this.lyricsDOM[index] === undefined) return
           if (
             this.lyricsDOM[index].offsetTop < 32 * 3 ||
@@ -784,10 +786,13 @@ export default {
           }
           y = -this.lyricsDOM[index].offsetTop + 32 * 3
         } else {
+          this.lyricsDOM[index].style.color = '#989898'
+          this.lyricsDOM[index].style.fontSize = '12px'
           item.className = ''
         }
       })
       if (this.isLyric) return
+
       if (y) {
         this.$refs.rightContentRef.style.transform = `translateY(${y}px)`
         this.$refs.rightBarRef.style.top = -y * zoom + 'px'
@@ -889,11 +894,12 @@ export default {
           ) {
             this.$refs.barRef.style = 'height:0;border:0'
           } else {
-            this.$refs.barRef.style.height =
+            let h =
               (this.$refs.tableRef.offsetHeight *
                 this.$refs.tableRef.offsetHeight) /
-                this.$refs.contentRef.offsetHeight +
-              'px'
+              this.$refs.contentRef.offsetHeight
+            h = h < 20 ? 20 : h
+            this.$refs.barRef.style.height = h + 'px'
           }
           if (
             this.$refs.rightBoxRef.offsetHeight >=
@@ -940,11 +946,12 @@ export default {
             this.$refs.barRef.style = 'height:0;border:0'
             this.$refs.contentRef.style.transform = 'translateY(0)'
           } else {
-            this.$refs.barRef.style.height =
+            let h =
               (this.$refs.tableRef.offsetHeight *
                 this.$refs.tableRef.offsetHeight) /
-                this.$refs.contentRef.offsetHeight +
-              'px'
+              this.$refs.contentRef.offsetHeight
+            h = h < 20 ? 20 : h
+            this.$refs.barRef.style.height = h + 'px'
           }
           if (
             this.$refs.rightBoxRef.offsetHeight >=
@@ -1689,10 +1696,6 @@ export default {
               }
               p:hover a {
                 display: inline-block;
-              }
-              p.current {
-                font-size: 14px;
-                color: #fff;
               }
             }
           }

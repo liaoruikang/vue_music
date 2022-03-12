@@ -106,5 +106,7 @@ export default {
         state.songList.push(item)
       }
     })
+    // 将歌曲信息存到本地
+    window.localStorage.setItem('songList', JSON.stringify(state.songList))
   }
 }

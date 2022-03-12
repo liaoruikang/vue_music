@@ -11,7 +11,9 @@
       @logout="logout"
     ></Header>
     <!-- 路由占位符 -->
-    <router-view></router-view>
+    <keep-alive include="toplist">
+      <router-view></router-view>
+    </keep-alive>
     <!-- 底部区域 -->
     <Bottom></Bottom>
     <!-- 登录对话框 -->

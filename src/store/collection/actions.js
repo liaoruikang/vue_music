@@ -2,7 +2,7 @@
 import { userPlayListAPI, playlistTarcksAPI, createPlaylistAPI, shoucangPlaylistAPI } from '@/api/collectionAPI'
 export default {
   // 获取用户歌单
-  async getUserPlayList({ commit }, uid) {
+  async getUserPlayList({ commit, state }, uid) {
     const { data: result } = await userPlayListAPI(uid)
     if (result.code !== 200) return
     commit('setUserPlayList', result)

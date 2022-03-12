@@ -8,7 +8,7 @@
       <el-row class="collection__list">
         <el-row
           class="collection__item"
-          v-for="item in userPlayList.playlist"
+          v-for="item in newPlayList"
           :key="item.id"
           @click.native="add(item.id)"
         >
@@ -151,7 +151,17 @@ export default {
     }),
     ...mapState('user', {
       userId: 'userId'
-    })
+    }),
+    newPlayList() {
+      if (this.userPlayList.length === 0) return null
+      const arr = []
+      this.userPlayList.playlist.forEach((item) => {
+        if (item.creator.userId === this.userId) {
+          arr.push(item)
+        }
+      })
+      return arr
+    }
   }
 }
 </script>
