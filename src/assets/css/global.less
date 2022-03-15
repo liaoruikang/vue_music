@@ -62,3 +62,64 @@ em {
 .el-input__inner:focus {
   border-color: #c0c4cc !important;
 }
+.el-pagination {
+  display: inline-block;
+}
+.btn-next,
+.btn-prev {
+  width: 71px !important;
+  height: 26px !important;
+  margin: 0 1px 0 2px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 2px !important;
+  background: url('../uploads/button.png') no-repeat !important;
+  span {
+    height: 26px;
+    line-height: 26px !important;
+  }
+}
+.btn-prev {
+  text-indent: 5px;
+  background-position: 0 -560px !important;
+}
+.btn-prev[disabled] {
+  background-position: 0 -621px !important;
+}
+.btn-next {
+  text-indent: -5px !important;
+  background-position: -75px -560px !important;
+}
+.btn-next[disabled] {
+  background-position: -75px -620px !important;
+}
+
+.number {
+  height: 24px !important;
+  padding: 0 8px !important;
+  line-height: 24px !important;
+  background-color: #fff !important;
+  margin: 0 1px 0 2px !important;
+  display: inline-block !important;
+  border: 1px solid #ccc !important;
+  border-radius: 2px !important;
+  font-weight: normal !important;
+  min-width: 0 !important;
+}
+.number:hover {
+  border-color: #666 !important;
+  color: #333 !important;
+}
+.el-pager .active {
+  background: url('../uploads/button.png') no-repeat 0 -650px !important;
+  border-color: #a2161b !important;
+  color: #fff !important;
+}
+.more {
+  height: 24px !important;
+  border: 1px solid #ccc !important;
+  line-height: 22px !important;
+}
+.more::before {
+  color: #000 !important;
+  line-height: 0 !important;
+}

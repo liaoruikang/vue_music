@@ -18,6 +18,7 @@ import collection from './collection'
 import forward from './forward'
 import toplist from './toplist'
 import comment from './comment'
+import playlist from './playlist'
 
 Vue.use(Vuex)
 
@@ -36,6 +37,7 @@ export default new Vuex.Store({
     collection,
     forward,
     toplist,
-    comment
+    comment,
+    playlist
   }
 })

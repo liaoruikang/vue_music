@@ -38,7 +38,7 @@
     <div class="comment__page">
       <el-pagination
         background
-        layout="prev, pager, next, slot"
+        layout="prev, pager, next"
         :total="total"
         :current-page="queryInfo.pageNo"
         :page-size="queryInfo.pageSize"
@@ -171,66 +171,6 @@ export default {
   .comment__page {
     padding: 20px 0 30px 0;
     text-align: center;
-    /deep/ .el-pagination {
-      display: inline-block;
-    }
-    /deep/ .btn-next,
-    /deep/ .btn-prev {
-      width: 71px;
-      height: 24px;
-      margin: 0 1px 0 2px;
-      border: 1px solid #ccc;
-      border-radius: 2px;
-      background: url('../../assets/uploads/button.png') no-repeat;
-      span {
-        line-height: 24px;
-      }
-    }
-    /deep/ .btn-prev {
-      text-indent: 5px;
-      background-position: 0 -560px;
-    }
-    /deep/ .btn-prev[disabled] {
-      background-position: 0 -621px;
-    }
-    /deep/ .btn-next {
-      text-indent: -5px;
-      background-position: -75px -560px;
-    }
-    /deep/ .btn-next[disabled] {
-      background-position: -75px -620px;
-    }
-
-    /deep/ .number {
-      height: 22px;
-      padding: 0 8px;
-      line-height: 22px;
-      background-color: #fff;
-      margin: 0 1px 0 2px;
-      display: inline-block;
-      border: 1px solid #ccc;
-      border-radius: 2px;
-      font-weight: normal;
-      min-width: 0;
-    }
-    /deep/ .number:hover {
-      border-color: #666;
-      color: #333 !important;
-    }
-    /deep/ .el-pager .active {
-      background: url('../../assets/uploads/button.png') no-repeat 0 -650px;
-      border-color: #a2161b;
-      color: #fff !important;
-    }
-    /deep/ .more {
-      height: 22px;
-      border: 1px solid #ccc;
-      line-height: 22px;
-    }
-    /deep/ .more::before {
-      color: #000;
-      line-height: 0;
-    }
   }
 }
 </style>

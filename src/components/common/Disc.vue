@@ -65,6 +65,15 @@ export default {
       width: 100px;
       height: 100px;
     }
+    .el-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('../../assets/uploads/coverall.png') no-repeat 0 -570px;
+    }
     .play {
       position: absolute;
       bottom: 5px;

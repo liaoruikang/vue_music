@@ -279,8 +279,9 @@ export default {
       const maxScroll = this.$refs.commentRef.offsetTop
       let scroll = 0
       this.timer = setInterval(() => {
-        scroll +=
+        scroll += Math.ceil(
           (maxScroll - document.querySelector('.app__container').scrollTop) / 15
+        )
         if (scroll >= maxScroll) return clearInterval(this.timer)
         document.querySelector('.app__container').scrollTop = scroll
       }, 10)

@@ -68,7 +68,6 @@ export default {
 .hot__body {
   display: flex;
   flex-wrap: wrap;
-  flex: 1;
   justify-content: space-between;
 }
 </style>

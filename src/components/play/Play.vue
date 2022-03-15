@@ -1685,7 +1685,7 @@ export default {
                 text-align: center;
                 color: #989898;
                 line-height: 32px;
-                transition: all 0.3s;
+                transition: all 0.5s;
                 a {
                   position: absolute;
                   display: none;

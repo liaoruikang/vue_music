@@ -66,6 +66,15 @@ export default {
       border: 1px solid #ccc;
       border-radius: 3px;
     }
+    .el-image::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: url('../../assets/uploads/coverall.png') no-repeat;
+    }
     .img__item {
       position: absolute;
       bottom: -1px;

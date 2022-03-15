@@ -214,7 +214,6 @@ export default {
         ) {
           return 1
         } else {
-          console.log(1)
           return 0
         }
       },
@@ -377,6 +376,9 @@ header {
               border-radius: 20px;
             }
           }
+        }
+        li:hover em {
+          background: #9b0909;
         }
       }
     }
