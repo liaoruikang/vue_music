@@ -388,7 +388,7 @@ export default {
       li {
         float: left;
         width: 91px;
-        background: url('../assets/uploads/tab.png') no-repeat right -303px;
+        background: url('../../assets/uploads/tab.png') no-repeat right -303px;
         border-bottom: 1px solid #dedede;
         margin-top: -1px;
         margin-right: 4px;
@@ -400,7 +400,7 @@ export default {
           display: inline-block;
           width: 100%;
           height: 27px;
-          background: url('../assets/uploads/tab.png') no-repeat 0 -206px;
+          background: url('../../assets/uploads/tab.png') no-repeat 0 -206px;
         }
       }
       .current {
@@ -487,7 +487,7 @@ export default {
         width: 18px;
         height: 18px;
         margin-right: 10px;
-        background: url('../assets/uploads/icon.png') no-repeat;
+        background: url('../../assets/uploads/icon.png') no-repeat;
       }
       .share__at {
         background-position: -60px -490px;
@@ -505,7 +505,7 @@ export default {
         display: inline-block;
         width: 80px;
         height: 31px;
-        background: url('../assets/uploads/button2.png') no-repeat;
+        background: url('../../assets/uploads/button2.png') no-repeat;
         padding-right: 5px;
         i {
           position: absolute;
@@ -513,7 +513,7 @@ export default {
           left: 0;
           width: 80px;
           height: 100%;
-          background: url('../assets/uploads/button2.png') no-repeat;
+          background: url('../../assets/uploads/button2.png') no-repeat;
           font-style: normal;
           text-align: center;
           line-height: 31px;

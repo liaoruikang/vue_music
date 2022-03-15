@@ -25,7 +25,9 @@ export const createPlaylistAPI = (name, privacy, type) => {
   } else if (name) {
     return request.get('playlist/create', { params: { name, timestamp } })
   } else {
-    return Promise.reject(new Error({ message: '请传递参数' }))
+    return new Promise((resolve, reject) => {
+      reject(new Error({ message: '请传递参数' }))
+    })
   }
 }
 

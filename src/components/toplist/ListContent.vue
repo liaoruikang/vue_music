@@ -1,5 +1,5 @@
 <template>
-  <div class="listContent__container" v-show="songsDetails.coverImgUrl">
+  <div class="listContent__container">
     <div class="listContent__header clearfix">
       <div class="img">
         <img
@@ -78,7 +78,7 @@
           >
             <em> 下载 </em>
           </a>
-          <a href="javascript:;" class="comment">
+          <a href="javascript:;" class="comment" @click="anchorPoint">
             <em> ({{ songsDetails.commentCount }}) </em>
           </a>
         </div>
@@ -93,6 +93,7 @@
           >次</span
         >
       </div>
+      <!-- 表格区域 -->
       <el-table
         stripe
         :data="songsDetails.tracks"
@@ -100,7 +101,9 @@
         size="mini"
         style="width: 100%"
       >
+        <!-- 索引 -->
         <el-table-column type="index"> </el-table-column>
+        <!-- 标题 -->
         <el-table-column label="标题">
           <template slot-scope="scope">
             <router-link
@@ -151,6 +154,7 @@
             </span>
           </template>
         </el-table-column>
+        <!-- 时长 -->
         <el-table-column label="时长" width="100">
           <template slot-scope="scope">
             <div class="time__box">
@@ -203,10 +207,11 @@
             </div>
           </template>
         </el-table-column>
+        <!-- 歌手 -->
         <el-table-column label="歌手" width="130">
           <template slot-scope="scope">
             <div class="author">
-              <span v-for="(item, index) in scope.row.ar" :key="item.id">
+              <span v-for="(item, index) in scope.row.ar" :key="index">
                 <router-link :to="`/artist?id=${item.id}`">{{
                   item.name
                 }}</router-link
@@ -216,6 +221,25 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 客户端下载 -->
+      <div
+        class="listContent__download"
+        v-if="songsDetails.tracks && songsDetails.tracks.length === 20"
+      >
+        <p>查看更多内容，请下载客户端</p>
+        <router-link to="/download">立即下载</router-link>
+      </div>
+    </div>
+    <div class="listContent__comment" ref="commentRef">
+      <!-- 头部标题区域 -->
+      <div class="comment__head">
+        <h3>评论</h3>
+        <span class="comment__count"
+          >共{{ songsDetails.commentCount }}评论</span
+        >
+      </div>
+      <!-- 评论 -->
+      <Comment :id="songsDetails.id || 0" type="2"></Comment>
     </div>
   </div>
 </template>
@@ -224,7 +248,9 @@ import { mapState, mapActions } from 'vuex'
 export default {
   name: 'listContent',
   data() {
-    return {}
+    return {
+      timer: null
+    }
   },
   created() {
     this.$store.dispatch('collection/getUserPlayList', this.userId)
@@ -233,10 +259,11 @@ export default {
     ...mapActions('collection', {
       shoucangPlaylist: 'shoucangPlaylist'
     }),
+    // 收藏歌单
     async collection() {
-      if (this.collectionListId.includes(this.songsDetails.id)) {
-        return
-      }
+      // 判断歌单是否已收藏
+      if (this.collectionListId.includes(this.songsDetails.id)) return
+
       const { data: result } = await this.shoucangPlaylist({
         t: 1,
         id: this.songsDetails.id
@@ -246,6 +273,24 @@ export default {
       if (result.code !== 200) return this.$message.error(result.message)
       this.$message.success('收藏成功')
       this.$store.dispatch('collection/getUserPlayList', this.userId)
+    },
+    // 锚点跳转到评论区
+    anchorPoint() {
+      const maxScroll = this.$refs.commentRef.offsetTop
+      let scroll = 0
+      this.timer = setInterval(() => {
+        scroll +=
+          (maxScroll - document.querySelector('.app__container').scrollTop) / 15
+        if (scroll >= maxScroll) return clearInterval(this.timer)
+        document.querySelector('.app__container').scrollTop = scroll
+      }, 10)
+    }
+  },
+  watch: {
+    userId(val) {
+      if (val) {
+        this.$store.dispatch('collection/getUserPlayList', val)
+      }
     }
   },
   computed: {
@@ -253,15 +298,15 @@ export default {
       songsDetails: 'songsDetails',
       featureList: 'featureList'
     }),
-    ...mapState('user', {
-      userId: 'userId'
-    }),
     ...mapState('collection', {
       userPlayList: 'userPlayList'
     }),
     ...mapState('play', {
       currentPlay: 'currentPlay'
     }),
+    userId() {
+      return this.$store.state.user.userId
+    },
     collectionListId() {
       if (this.userPlayList.length === 0) return []
       let arr = []
@@ -273,6 +318,10 @@ export default {
       arr = arr.join(',')
       return arr
     }
+  },
+  components: {
+    Comment: () =>
+      import(/* webpackChunkName: "comment"  */ '@/components/comment/Comment')
   }
 }
 </script>
@@ -568,6 +617,45 @@ export default {
         .f {
           display: inline;
         }
+      }
+    }
+    .listContent__download {
+      margin-top: 30px;
+      text-align: center;
+
+      p {
+        font-size: 13px;
+        margin-bottom: 20px;
+      }
+      a {
+        display: inline-block;
+        width: 120px;
+        height: 30px;
+        background-image: linear-gradient(90deg, #ff5a4c 0%, #ff1d12 100%);
+        border-radius: 18px;
+        line-height: 30px;
+        font-size: 12px;
+        color: #ffffff;
+        text-align: center;
+      }
+    }
+  }
+  .listContent__comment {
+    padding: 0 30px 40px 40px;
+    .comment__head {
+      height: 33px;
+      border-bottom: 2px solid #c20c0c;
+      line-height: 33px;
+      h3 {
+        float: left;
+        font-size: 20px;
+        font-weight: normal;
+        color: #333;
+      }
+      .comment__count {
+        float: left;
+        margin-left: 15px;
+        color: #666;
       }
     }
   }

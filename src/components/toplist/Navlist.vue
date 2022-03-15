@@ -7,7 +7,7 @@
           :class="['clearfix', songsId === item.id ? 'active' : '']"
           v-for="item in featureList"
           :key="item.id"
-          @click="jump(item.id, item.updateFrequency)"
+          @click="jump(item.id, item.updateFrequency, item.name)"
         >
           <div class="img">
             <img
@@ -30,7 +30,7 @@
           :class="['clearfix', songsId === item.id ? 'active' : '']"
           v-for="item in globalList"
           :key="item.id"
-          @click="jump(item.id, item.updateFrequency)"
+          @click="jump(item.id, item.updateFrequency, item.name)"
         >
           <div class="img">
             <img
@@ -63,17 +63,38 @@ export default {
     this.$store.dispatch('toplist/getToplist')
   },
   methods: {
-    jump(id, frequency) {
+    jump(id, frequency, name) {
       this.$router.push(`/discover/toplist?id=${id}&frequency=${frequency}`)
       this.songsId = id
       this.$store.dispatch('toplist/getSongsDetails', this.songsId)
+      this.$store.commit('toplist/removeSongsDetails')
+      // 设置网页标题
+      this.updateTitle(this.$route.meta, name, 3)
+    }
+  },
+  activated() {
+    // 当从其他页面跳转过来检测是否携带id 如果携带就根据id展示对应歌单详情
+    if (this.$route.query.id) {
+      const id = parseInt(this.$route.query.id)
+      let frequency = ''
+      let name = ''
+      this.featureList.some((item) => {
+        if (id === item.id) {
+          frequency = item.updateFrequency
+          name = item.name
+          return true
+        }
+      })
+      this.jump(id, frequency, name)
     }
   },
   watch: {
     featureList(val) {
       if (val) {
-        this.songsId = parseInt(this.$route.query.id) || val[0].id
-        this.$store.dispatch('toplist/getSongsDetails', this.songsId)
+        this.songsId = val[0].id
+        const frequency = val[0].updateFrequency
+        const name = val[0].name
+        this.jump(this.songsId, frequency, name)
       }
     }
   },

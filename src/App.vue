@@ -138,20 +138,22 @@ export default {
         /* webpackChunkName: "Login" */ '@/components/login/ResetPassword'
       ),
     Header: () =>
-      import(/* webpackChunkName: "Header" */ '@/components/Header'),
+      import(/* webpackChunkName: "Header" */ '@/components/header/Header'),
     Bottom: () =>
-      import(/* webpackChunkName: "Button" */ '@/components/Bottom'),
-    Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/Play'),
+      import(/* webpackChunkName: "Button" */ '@/components/bottom/Bottom'),
+    Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/play/Play'),
     LoginHeader: () =>
       import(
         /* webpackChunkName: "loginHeader"  */ '@/components/login/LoginHeader'
       ),
     Collection: () =>
-      import(/* webpackChunkName: "Collection" */ '@/components/Collection'),
+      import(
+        /* webpackChunkName: "Collection" */ '@/components/collection/Collection'
+      ),
     Client: () =>
-      import(/* webpackChunkName: "Client" */ '@/components/Client'),
+      import(/* webpackChunkName: "Client" */ '@/components/client/Client'),
     Forward: () =>
-      import(/* webpackChunkName: "Forward" */ '@/components/Forward')
+      import(/* webpackChunkName: "Forward" */ '@/components/forward/Forward')
   },
   watch: {
     loginDialogVisible() {

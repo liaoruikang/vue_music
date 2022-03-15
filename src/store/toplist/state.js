@@ -4,5 +4,5 @@ export default {
   // 全球媒体榜
   globalList: [],
   // 歌单详情
-  songsDetails: []
+  songsDetails: {}
 }

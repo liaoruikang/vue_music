@@ -95,7 +95,28 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const title = (to.meta.fourTitle === '' ? '' : to.meta.fourTitle + ' - ') + (to.meta.threeTitle === '' ? '' : to.meta.threeTitle + ' - ') + (to.meta.twoTitle === '' ? '' : to.meta.twoTitle + ' - ') + to.meta.oneTitle
   document.querySelector('title').innerHTML = title
+  const appEl = document.querySelector('.app__container')
+  if (appEl) {
+    document.querySelector('.app__container').scrollTop = 0
+  }
   next()
 })
+
+// 定义全局更新标题方法
+// 参数1 要修改的路由属性
+// 参数2 要修改的值
+Vue.prototype.updateTitle = (title, val, grade) => {
+  if (grade === 1) {
+    title.oneTitle = val
+  } else if (grade === 2) {
+    title.twoTitle = val
+  } else if (grade === 3) {
+    title.threeTitle = val
+  } else if (grade === 4) {
+    title.fourTitle = val
+  }
+  const t = (title.fourTitle === '' ? '' : title.fourTitle + ' - ') + (title.threeTitle === '' ? '' : title.threeTitle + ' - ') + (title.twoTitle === '' ? '' : title.twoTitle + ' - ') + title.oneTitle
+  document.querySelector('title').innerHTML = t
+}
 
 export default router

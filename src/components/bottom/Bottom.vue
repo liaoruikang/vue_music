@@ -117,7 +117,7 @@ export default {
           display: inline-block;
           width: 14px;
           height: 14px;
-          background: url('../assets/uploads/police.png') no-repeat;
+          background: url('../../assets/uploads/police.png') no-repeat;
           background-size: 100%;
           margin-bottom: -3px;
           margin-left: 5px;
@@ -134,7 +134,7 @@ export default {
         position: relative;
         width: 50px;
         height: 45px;
-        background: url('../assets/uploads/foot_enter_new.png') no-repeat;
+        background: url('../../assets/uploads/foot_enter_new.png') no-repeat;
         background-size: 110px 552px;
         margin: -30px 14px 0 14px;
       }
@@ -146,7 +146,7 @@ export default {
         transform: translateX(-50%);
         height: 14px;
         width: 100%;
-        background: url('../assets/uploads/foot_enter_tt.png') no-repeat;
+        background: url('../../assets/uploads/foot_enter_tt.png') no-repeat;
         background-size: 180px 139px;
       }
       a:nth-child(1) {

@@ -1110,7 +1110,7 @@ export default {
   width: 100%;
   height: 53px;
   .bg {
-    background: url('../assets/uploads/playbar.png') repeat-x;
+    background: url('../../assets/uploads/playbar.png') repeat-x;
     height: 100%;
     margin-right: 92px;
   }
@@ -1120,21 +1120,21 @@ export default {
     right: 40px;
     width: 52px;
     height: 67px;
-    background: url('../assets/uploads/playbar.png') no-repeat 0 -380px;
+    background: url('../../assets/uploads/playbar.png') no-repeat 0 -380px;
     a {
       display: inline-block;
       width: 18px;
       height: 18px;
       margin: 6px 17px;
-      // background: url('../assets/uploads/playbar.png') no-repeat -100px -380px;
-      background: url('../assets/uploads/playbar.png') no-repeat -80px -380px;
+      // background: url('../../assets/uploads/playbar.png') no-repeat -100px -380px;
+      background: url('../../assets/uploads/playbar.png') no-repeat -80px -380px;
     }
   }
   .fr {
     float: right;
     height: 53px;
     width: 40px;
-    background: url('../assets/uploads/playbar.png') repeat-x;
+    background: url('../../assets/uploads/playbar.png') repeat-x;
 
     margin-top: -53px;
   }
@@ -1165,21 +1165,21 @@ export default {
         margin-top: 15px;
         width: 28px;
         height: 28px;
-        background: url('../assets/uploads/playbar.png') no-repeat 0 -130px;
+        background: url('../../assets/uploads/playbar.png') no-repeat 0 -130px;
       }
       .play__stop {
         float: left;
         margin: 11px 10px 0 10px;
         width: 36px;
         height: 36px;
-        background: url('../assets/uploads/playbar.png') no-repeat 0 -204px;
+        background: url('../../assets/uploads/playbar.png') no-repeat 0 -204px;
       }
       .play__next {
         float: left;
         margin-top: 15px;
         width: 28px;
         height: 28px;
-        background: url('../assets/uploads/playbar.png') no-repeat -80px -130px;
+        background: url('../../assets/uploads/playbar.png') no-repeat -80px -130px;
       }
       .play__next:hover {
         background-position: -110px -130px;
@@ -1196,10 +1196,10 @@ export default {
         margin: 11px 10px 0 10px;
         width: 36px;
         height: 36px;
-        background: url('../assets/uploads/playbar.png') no-repeat 0 -165px;
+        background: url('../../assets/uploads/playbar.png') no-repeat 0 -165px;
       }
       .play__open:hover {
-        background: url('../assets/uploads/playbar.png') no-repeat -40px -165px;
+        background: url('../../assets/uploads/playbar.png') no-repeat -40px -165px;
       }
     }
     .play__progress {
@@ -1213,7 +1213,7 @@ export default {
         left: 0;
         width: 34px;
         height: 34px;
-        background: url('../assets/uploads/playbar.png') no-repeat -0 -80px;
+        background: url('../../assets/uploads/playbar.png') no-repeat -0 -80px;
       }
       .play__img {
         float: left;
@@ -1234,7 +1234,7 @@ export default {
             display: inline-block;
             width: 19px;
             height: 17px;
-            background: url('../assets/uploads/playbar.png') no-repeat 0 -57px;
+            background: url('../../assets/uploads/playbar.png') no-repeat 0 -57px;
             margin-left: 3px;
           }
           .play__author {
@@ -1285,15 +1285,15 @@ export default {
           height: 25px;
           margin-top: 17px;
           margin-right: 2px;
-          background: url('../assets/uploads/playbar.png') no-repeat 0 0;
+          background: url('../../assets/uploads/playbar.png') no-repeat 0 0;
         }
 
         a:nth-child(1) {
-          background: url('../assets/uploads/DLVi_1eymwAX8gDunfd2bg==_109951165524394991.png')
+          background: url('../../assets/uploads/DLVi_1eymwAX8gDunfd2bg==_109951165524394991.png')
             no-repeat;
         }
         a:nth-child(1):hover {
-          background: url('../assets/uploads/DLVi_1eymwAX8gDunfd2bg==_109951165524394991.png')
+          background: url('../../assets/uploads/DLVi_1eymwAX8gDunfd2bg==_109951165524394991.png')
             no-repeat 0 -25px;
         }
         a:nth-child(2) {
@@ -1313,14 +1313,14 @@ export default {
         position: relative;
         float: left;
         padding-left: 13px;
-        background: url('../assets/uploads/playbar.png') no-repeat -147px -231px;
+        background: url('../../assets/uploads/playbar.png') no-repeat -147px -231px;
         > a {
           display: inline-block;
           width: 25px;
           height: 25px;
           margin-top: 17px;
           margin-right: 2px;
-          background: url('../assets/uploads/playbar.png') no-repeat 0 0;
+          background: url('../../assets/uploads/playbar.png') no-repeat 0 0;
         }
         > a:nth-child(1) {
           background-position: -2px -248px;
@@ -1363,7 +1363,7 @@ export default {
             width: 38px;
             height: 25px;
             padding-left: 21px;
-            background: url('../assets/uploads/playbar.png') no-repeat -42px -68px;
+            background: url('../../assets/uploads/playbar.png') no-repeat -42px -68px;
             text-align: center;
             color: #666;
             line-height: 26px;
@@ -1382,7 +1382,7 @@ export default {
           left: 10px;
           width: 32px;
           height: 113px;
-          background: url('../assets/uploads/playbar.png') no-repeat 0 -503px;
+          background: url('../../assets/uploads/playbar.png') no-repeat 0 -503px;
           border-radius: 3px;
           /deep/ .el-slider__runway {
             width: 4px;
@@ -1391,14 +1391,15 @@ export default {
               width: 22px;
               height: 24px;
               border: 0;
-              background: url('../assets/uploads/iconall.png') no-repeat 0 -250px;
+              background: url('../../assets/uploads/iconall.png') no-repeat 0 -250px;
               margin-left: -2px;
               transform: scale(80%);
               cursor: default;
             }
             .el-slider__bar {
               width: 4px;
-              background: url('../assets/uploads/playbar.png') no-repeat -40px bottom;
+              background: url('../../assets/uploads/playbar.png') no-repeat -40px
+                bottom;
             }
           }
         }
@@ -1414,7 +1415,7 @@ export default {
       .list__head {
         display: flex;
         height: 40px;
-        background: url('../assets/uploads/playlist_bg.png') no-repeat -2px 0;
+        background: url('../../assets/uploads/playlist_bg.png') no-repeat -2px 0;
         .head__left {
           width: 560px;
           height: 41px;
@@ -1442,7 +1443,7 @@ export default {
                 right: 3px;
                 width: 16px;
                 height: 16px;
-                background: url('../assets/uploads/playlist.png') no-repeat -24px
+                background: url('../../assets/uploads/playlist.png') no-repeat -24px
                   0;
               }
               .icon__del {
@@ -1482,7 +1483,8 @@ export default {
           .close {
             width: 30px;
             height: 30px;
-            background: url('../assets/uploads/playlist.png') no-repeat -195px 9px;
+            background: url('../../assets/uploads/playlist.png') no-repeat -195px
+              9px;
             cursor: pointer;
           }
           .close:hover {
@@ -1494,7 +1496,8 @@ export default {
         display: flex;
         position: relative;
         height: 261px;
-        background: url('../assets/uploads/playlist_bg.png') repeat-y -1016px 0;
+        background: url('../../assets/uploads/playlist_bg.png') repeat-y -1016px
+          0;
         overflow: hidden;
         > img {
           width: 100%;
@@ -1530,7 +1533,7 @@ export default {
                 display: inline-block;
                 width: 36px;
                 height: 29px;
-                background: url('../assets/uploads/playlist.png') no-repeat -138px
+                background: url('../../assets/uploads/playlist.png') no-repeat -138px
                   0;
                 vertical-align: middle;
                 margin-right: 3px;
@@ -1578,8 +1581,8 @@ export default {
                     display: inline-block;
                     width: 14px;
                     height: 16px;
-                    background: url('../assets/uploads/playlist.png') no-repeat -100px
-                      0;
+                    background: url('../../assets/uploads/playlist.png')
+                      no-repeat -100px 0;
                     margin-top: 5px;
                     margin-left: 25px;
                     cursor: default;
@@ -1594,7 +1597,7 @@ export default {
               .current__play {
                 width: 10px;
                 height: 13px;
-                background: url('../assets/uploads/playlist.png') no-repeat -182px
+                background: url('../../assets/uploads/playlist.png') no-repeat -182px
                   0;
                 margin-left: 10px;
               }
@@ -1613,7 +1616,7 @@ export default {
                   background-color: #fff;
                   margin-top: 6px;
                   margin-right: 8px;
-                  background: url('../assets/uploads/playlist.png') no-repeat;
+                  background: url('../../assets/uploads/playlist.png') no-repeat;
                 }
                 a:nth-child(1) {
                   background-position: -24px 0;
@@ -1678,7 +1681,7 @@ export default {
               transform: translateY(0);
               p {
                 position: relative;
-                height: 32px;
+                min-height: 16px;
                 text-align: center;
                 color: #989898;
                 line-height: 32px;
@@ -1738,7 +1741,7 @@ export default {
     margin: 0;
     height: 9px;
     width: 450px;
-    background: url('../assets/uploads/statbar.png') right 0;
+    background: url('../../assets/uploads/statbar.png') right 0;
     border-radius: 6px;
     .el-slider__button-wrapper {
       width: 22px;
@@ -1749,12 +1752,12 @@ export default {
       width: 22px;
       height: 24px;
       border: 0;
-      background: url('../assets/uploads/iconall.png') no-repeat 0 -250px;
+      background: url('../../assets/uploads/iconall.png') no-repeat 0 -250px;
       cursor: default;
     }
     .el-slider__bar {
       height: 9px;
-      background: url('../assets/uploads/statbar.png') left -66px;
+      background: url('../../assets/uploads/statbar.png') left -66px;
     }
   }
 }

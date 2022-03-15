@@ -17,6 +17,7 @@ import insinger from './discover/insinger'
 import collection from './collection'
 import forward from './forward'
 import toplist from './toplist'
+import comment from './comment'
 
 Vue.use(Vuex)
 
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     insinger,
     collection,
     forward,
-    toplist
+    toplist,
+    comment
   }
 })

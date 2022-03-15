@@ -239,7 +239,7 @@ header {
       float: left;
       width: 176px;
       height: 70px;
-      background: url('../assets/uploads/topbar.png') no-repeat;
+      background: url('../../assets/uploads/topbar.png') no-repeat;
       a {
         display: block;
         width: 100%;
@@ -342,7 +342,7 @@ header {
         margin-top: 19px;
         /deep/ .el-input__inner {
           border-radius: 20px;
-          background: url('../assets/uploads/topbar.png') no-repeat;
+          background: url('../../assets/uploads/topbar.png') no-repeat;
           background-position: 0 -101px;
           padding-left: 30px;
         }

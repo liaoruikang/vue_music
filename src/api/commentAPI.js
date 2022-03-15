@@ -9,17 +9,20 @@ import request from '@/plugin/request'
 // sortType: 排序方式, 1:按推荐排序, 2:按热度排序, 3:按时间排序
 // cursor: 当sortType为 3 时且页数不是第一页时需传入,值为上一条数据的 time
 export const commentAPI = (id, type, pageNo, pageSize, sortType, cursor) => {
+  const timestamp = new Date().getTime()
   if (id && type && pageNo && pageSize && sortType && cursor) {
-    return request.get('comment/new', { params: { id, type, pageNo, pageSize, sortType, cursor } })
+    return request.get('comment/new', { params: { id, type, pageNo, pageSize, sortType, cursor, timestamp } })
   } else if (id && type && pageNo && pageSize && sortType) {
-    return request.get('comment/new', { params: { id, type, pageNo, pageSize, sortType } })
+    return request.get('comment/new', { params: { id, type, pageNo, pageSize, sortType, timestamp } })
   } else if (id && type && pageNo && pageSize) {
-    return request.get('comment/new', { params: { id, type, pageNo, pageSize } })
+    return request.get('comment/new', { params: { id, type, pageNo, pageSize, timestamp } })
   } else if (id && type && pageNo) {
-    return request.get('comment/new', { params: { id, type, pageNo } })
+    return request.get('comment/new', { params: { id, type, pageNo, timestamp } })
   } else if (id && type) {
-    return request.get('comment/new', { params: { id, type } })
+    return request.get('comment/new', { params: { id, type, timestamp } })
   } else {
-    return new Promise().reject(new Error('请传递参数'))
+    return new Promise((resolve, reject) => {
+      reject(new Error({ message: '请传递参数' }))
+    }).catch(err => err.message)
   }
 }

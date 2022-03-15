@@ -4,15 +4,17 @@
       <!-- 歌单分类导航 -->
       <NavList></NavList>
     </div>
-    <div class="toplist__right">
-      <!-- 歌单详情页 -->
-      <ListContent></ListContent>
-      <!-- 评论 -->
-      <Comment :count="1738"></Comment>
+    <div class="toplist__right" v-loading="!songsDetails.coverImgUrl">
+      <div v-show="songsDetails.coverImgUrl">
+        <!-- 歌单详情页 -->
+        <ListContent></ListContent>
+      </div>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'toplist',
   data() {
@@ -26,9 +28,12 @@ export default {
     ListContent: () =>
       import(
         /* webpackChunkName: "toplist"  */ '@/components/toplist/ListContent'
-      ),
-    Comment: () =>
-      import(/* webpackChunkName: "comment"  */ '@/components/common/Comment')
+      )
+  },
+  computed: {
+    ...mapState('toplist', {
+      songsDetails: 'songsDetails'
+    })
   }
 }
 </script>
@@ -43,7 +48,12 @@ export default {
     min-height: 1000px;
   }
   .toplist__right {
+    min-width: 700px;
+    min-height: 600px;
     float: left;
+    /deep/ .el-loading-mask {
+      z-index: 0;
+    }
   }
 }
 </style>

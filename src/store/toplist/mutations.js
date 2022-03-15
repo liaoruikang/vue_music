@@ -6,5 +6,9 @@ export default {
   // 写入歌单详情
   setSongsDetails(state, songs) {
     state.songsDetails = songs
+  },
+  // 清除歌单详情
+  removeSongsDetails(state) {
+    state.songsDetails = {}
   }
 }

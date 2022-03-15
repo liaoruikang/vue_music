@@ -179,7 +179,7 @@ export default {
     display: inline-block;
     width: 35px;
     height: 36px;
-    background: url('..//assets/uploads/icon.png') no-repeat 0 -495px;
+    background: url('../../assets/uploads/icon.png') no-repeat 0 -495px;
     margin-right: 10px;
     vertical-align: middle;
   }
@@ -237,7 +237,7 @@ export default {
         top: 2px;
         width: 14px;
         height: 14px;
-        background: url('../assets/uploads/icon.png') no-repeat -50px -270px;
+        background: url('../../assets/uploads/icon.png') no-repeat -50px -270px;
         margin-right: 8px;
       }
     }
@@ -256,7 +256,7 @@ export default {
       display: inline-block;
       width: 80px;
       height: 31px;
-      background: url('../assets/uploads/button2.png') no-repeat;
+      background: url('../../assets/uploads/button2.png') no-repeat;
       padding-right: 5px;
       i {
         position: absolute;
@@ -264,7 +264,7 @@ export default {
         left: 0;
         width: 80px;
         height: 100%;
-        background: url('../assets/uploads/button2.png') no-repeat;
+        background: url('../../assets/uploads/button2.png') no-repeat;
         font-style: normal;
         text-align: center;
         line-height: 31px;
