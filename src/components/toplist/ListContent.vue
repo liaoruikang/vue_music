@@ -1,245 +1,252 @@
 <template>
-  <div class="listContent__container">
-    <div class="listContent__header clearfix">
-      <div class="img">
-        <img
-          v-show="songsDetails.coverImgUrl"
-          :src="songsDetails.coverImgUrl + '?param=150y150'"
-          width="150"
-          height="150"
-        />
-      </div>
-      <div class="listContent__f">
-        <h3 class="f__name">{{ songsDetails.name }}</h3>
-        <p class="f__time">
-          <i></i>最近更新：{{
-            dayjs(songsDetails.updateTime).format('MM月DD日')
-          }}
-          <span
-            >（{{
-              $route.query.frequency
-                ? $route.query.frequency
-                : featureList[0] && featureList[0].updateFrequency
-            }}）</span
-          >
-        </p>
-        <div class="f__btn">
-          <a
-            href="javascript:;"
-            class="play"
-            @click="$store.dispatch('getsongsDetails', songsDetails.id)"
-          >
-            <em>
-              <i></i>
-              播放
-            </em>
-          </a>
-          <a
-            href="javascript:;"
-            class="next"
-            @click="
-              $store.dispatch('addSongs', songsDetails.id)
-              $message.success('添加成功')
-            "
-          ></a>
-          <a
-            href="javascript:;"
-            :class="[
-              'collection',
-              collectionListId.includes(songsDetails.id) ? 'already' : ''
-            ]"
-            @click="collection"
-          >
-            <em> ({{ songsDetails.subscribedCount }}) </em>
-          </a>
-          <a
-            href="javascript:;"
-            class="share"
-            @click="
-              $store.commit('setCFDVisible', {
-                display: true,
-                component: 'Forward',
-                songId: songsDetails.id,
-                shareDetails: songsDetails
-              })
-            "
-          >
-            <em> ({{ songsDetails.shareCount }}) </em>
-          </a>
-          <a
-            href="javascript:;"
-            class="download"
-            @click="
-              $store.commit('setCFDVisible', {
-                display: true,
-                component: 'Client'
-              })
-            "
-          >
-            <em> 下载 </em>
-          </a>
-          <a href="javascript:;" class="comment" @click="anchorPoint">
-            <em> ({{ songsDetails.commentCount }}) </em>
-          </a>
+  <div
+    class="listContent__container"
+    v-loading.lock="!songsDetails.coverImgUrl"
+  >
+    <div v-show="songsDetails.coverImgUrl">
+      <div class="listContent__header clearfix">
+        <div class="img">
+          <img
+            v-show="songsDetails.coverImgUrl"
+            :src="songsDetails.coverImgUrl + '?param=150y150'"
+            width="150"
+            height="150"
+          />
+        </div>
+        <div class="listContent__f">
+          <h3 class="f__name">{{ songsDetails.name }}</h3>
+          <p class="f__time">
+            <i></i>最近更新：{{
+              dayjs(songsDetails.updateTime).format('MM月DD日')
+            }}
+            <span
+              >（{{
+                $route.query.frequency
+                  ? $route.query.frequency
+                  : featureList[0] && featureList[0].updateFrequency
+              }}）</span
+            >
+          </p>
+          <div class="f__btn">
+            <a
+              href="javascript:;"
+              class="play"
+              @click="$store.dispatch('getsongsDetails', songsDetails.id)"
+            >
+              <em>
+                <i></i>
+                播放
+              </em>
+            </a>
+            <a
+              href="javascript:;"
+              class="next"
+              @click="
+                $store.dispatch('addSongs', songsDetails.id)
+                $message.success('添加成功')
+              "
+            ></a>
+            <a
+              href="javascript:;"
+              :class="[
+                'collection',
+                collectionListId.includes(songsDetails.id) ? 'already' : ''
+              ]"
+              @click="collection"
+            >
+              <em> ({{ songsDetails.subscribedCount }}) </em>
+            </a>
+            <a
+              href="javascript:;"
+              class="share"
+              @click="
+                $store.commit('setCFDVisible', {
+                  display: true,
+                  component: 'Forward',
+                  songId: songsDetails.id,
+                  shareDetails: songsDetails
+                })
+              "
+            >
+              <em> ({{ songsDetails.shareCount }}) </em>
+            </a>
+            <a
+              href="javascript:;"
+              class="download"
+              @click="
+                $store.commit('setCFDVisible', {
+                  display: true,
+                  component: 'Client'
+                })
+              "
+            >
+              <em> 下载 </em>
+            </a>
+            <a href="javascript:;" class="comment" @click="anchorPoint">
+              <em> ({{ songsDetails.commentCount }}) </em>
+            </a>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="listContent__main" v-if="songsDetails">
-      <div class="main__title">
-        <h3>歌曲列表</h3>
-        <span class="sub">{{ songsDetails.trackCount }}首歌</span>
-        <span class="playCount"
-          >播放：<em>{{ songsDetails.playCount }}</em
-          >次</span
+      <div class="listContent__main" v-if="songsDetails">
+        <div class="main__title">
+          <h3>歌曲列表</h3>
+          <span class="sub">{{ songsDetails.trackCount }}首歌</span>
+          <span class="playCount"
+            >播放：<em>{{ songsDetails.playCount }}</em
+            >次</span
+          >
+        </div>
+        <!-- 表格区域 -->
+        <el-table
+          stripe
+          :data="songsDetails.tracks"
+          border
+          size="mini"
+          style="width: 100%"
         >
-      </div>
-      <!-- 表格区域 -->
-      <el-table
-        stripe
-        :data="songsDetails.tracks"
-        border
-        size="mini"
-        style="width: 100%"
-      >
-        <!-- 索引 -->
-        <el-table-column type="index"> </el-table-column>
-        <!-- 标题 -->
-        <el-table-column label="标题">
-          <template slot-scope="scope">
-            <router-link
-              :to="`/song?id=${scope.row.id}`"
-              class="song__link"
-              v-if="scope.$index < 3"
-            >
-              <el-image :src="scope.row.al.picUrl + '?param=50y50'"></el-image>
-            </router-link>
-            <span
-              class="name"
-              :style="{ marginTop: scope.$index < 3 ? '16px' : 0 }"
-            >
-              <a
-                href="javascript:;"
-                title="播放"
-                @click="$store.dispatch('getSongDetails', scope.row.id)"
-              >
-                <i
-                  :class="[
-                    'play',
-                    currentPlay && currentPlay.id === scope.row.id
-                      ? 'active'
-                      : ''
-                  ]"
-                ></i>
-              </a>
-              <span
-                class="song__name"
-                :style="{ maxWidth: scope.$index < 3 ? '120px' : '210px' }"
-              >
-                <router-link :to="`/song?id=${scope.row.id}`">
-                  <em>{{ scope.row.name }}</em>
-                </router-link>
-                <span v-if="scope.row.tns" class="tips">
-                  -（{{ scope.row.tns[0] }}）
-                </span>
-                <span v-if="scope.row.alia[0] && !scope.row.tns" class="tips">
-                  -（{{ scope.row.alia[0] }}）
-                </span>
-              </span>
+          <!-- 索引 -->
+          <el-table-column type="index"> </el-table-column>
+          <!-- 标题 -->
+          <el-table-column label="标题">
+            <template slot-scope="scope">
               <router-link
-                v-show="scope.row.mv !== 0"
-                :to="`/mv?id=${scope.row.mv}`"
+                :to="`/song?id=${scope.row.id}`"
+                class="song__link"
+                v-if="scope.$index < 3"
               >
-                <i class="mv"></i>
+                <el-image
+                  :src="scope.row.al.picUrl + '?param=50y50'"
+                ></el-image>
               </router-link>
-            </span>
-          </template>
-        </el-table-column>
-        <!-- 时长 -->
-        <el-table-column label="时长" width="100">
-          <template slot-scope="scope">
-            <div class="time__box">
-              <span class="time">{{
-                dayjs(scope.row.dt).format('mm:ss')
-              }}</span>
-              <span class="f clearfix">
-                <a
-                  href="javascript:;"
-                  class="add"
-                  @click="
-                    $store.dispatch('addSong', scope.row.id)
-                    $message.success('添加成功')
-                  "
-                ></a>
-                <a
-                  href="javascript:;"
-                  class="collection"
-                  @click="
-                    $store.commit('setCFDVisible', {
-                      display: true,
-                      component: 'Collection',
-                      songId: scope.row.id
-                    })
-                  "
-                ></a>
-                <a
-                  href="javascript:;"
-                  class="share"
-                  @click="
-                    $store.commit('setCFDVisible', {
-                      display: true,
-                      component: 'Forward',
-                      songId: scope.row.id,
-                      shareDetails: scope.row
-                    })
-                  "
-                ></a>
-                <a
-                  href="javascript:;"
-                  class="download"
-                  @click="
-                    $store.commit('setCFDVisible', {
-                      display: true,
-                      component: 'Client'
-                    })
-                  "
-                ></a>
-              </span>
-            </div>
-          </template>
-        </el-table-column>
-        <!-- 歌手 -->
-        <el-table-column label="歌手" width="130">
-          <template slot-scope="scope">
-            <div class="author">
-              <span v-for="(item, index) in scope.row.ar" :key="index">
-                <router-link :to="`/artist?id=${item.id}`">{{
-                  item.name
-                }}</router-link
-                >{{ index !== scope.row.ar.length - 1 ? '/' : '' }}</span
+              <span
+                class="name"
+                :style="{ marginTop: scope.$index < 3 ? '16px' : 0 }"
               >
-            </div>
-          </template>
-        </el-table-column>
-      </el-table>
-      <!-- 客户端下载 -->
-      <div
-        class="listContent__download"
-        v-if="songsDetails.tracks && songsDetails.tracks.length === 20"
-      >
-        <p>查看更多内容，请下载客户端</p>
-        <router-link to="/download">立即下载</router-link>
-      </div>
-    </div>
-    <div class="listContent__comment" ref="commentRef">
-      <!-- 头部标题区域 -->
-      <div class="comment__head">
-        <h3>评论</h3>
-        <span class="comment__count"
-          >共{{ songsDetails.commentCount }}评论</span
+                <a
+                  href="javascript:;"
+                  title="播放"
+                  @click="$store.dispatch('getSongDetails', scope.row.id)"
+                >
+                  <i
+                    :class="[
+                      'play',
+                      currentPlay && currentPlay.id === scope.row.id
+                        ? 'active'
+                        : ''
+                    ]"
+                  ></i>
+                </a>
+                <span
+                  class="song__name"
+                  :style="{ maxWidth: scope.$index < 3 ? '120px' : '210px' }"
+                >
+                  <router-link :to="`/song?id=${scope.row.id}`">
+                    <em>{{ scope.row.name }}</em>
+                  </router-link>
+                  <span v-if="scope.row.tns" class="tips">
+                    -（{{ scope.row.tns[0] }}）
+                  </span>
+                  <span v-if="scope.row.alia[0] && !scope.row.tns" class="tips">
+                    -（{{ scope.row.alia[0] }}）
+                  </span>
+                </span>
+                <router-link
+                  v-show="scope.row.mv !== 0"
+                  :to="`/mv?id=${scope.row.mv}`"
+                >
+                  <i class="mv"></i>
+                </router-link>
+              </span>
+            </template>
+          </el-table-column>
+          <!-- 时长 -->
+          <el-table-column label="时长" width="100">
+            <template slot-scope="scope">
+              <div class="time__box">
+                <span class="time">{{
+                  dayjs(scope.row.dt).format('mm:ss')
+                }}</span>
+                <span class="f clearfix">
+                  <a
+                    href="javascript:;"
+                    class="add"
+                    @click="
+                      $store.dispatch('addSong', scope.row.id)
+                      $message.success('添加成功')
+                    "
+                  ></a>
+                  <a
+                    href="javascript:;"
+                    class="collection"
+                    @click="
+                      $store.commit('setCFDVisible', {
+                        display: true,
+                        component: 'Collection',
+                        songId: scope.row.id
+                      })
+                    "
+                  ></a>
+                  <a
+                    href="javascript:;"
+                    class="share"
+                    @click="
+                      $store.commit('setCFDVisible', {
+                        display: true,
+                        component: 'Forward',
+                        songId: scope.row.id,
+                        shareDetails: scope.row
+                      })
+                    "
+                  ></a>
+                  <a
+                    href="javascript:;"
+                    class="download"
+                    @click="
+                      $store.commit('setCFDVisible', {
+                        display: true,
+                        component: 'Client'
+                      })
+                    "
+                  ></a>
+                </span>
+              </div>
+            </template>
+          </el-table-column>
+          <!-- 歌手 -->
+          <el-table-column label="歌手" width="130">
+            <template slot-scope="scope">
+              <div class="author">
+                <span v-for="(item, index) in scope.row.ar" :key="index">
+                  <router-link :to="`/artist?id=${item.id}`">{{
+                    item.name
+                  }}</router-link
+                  >{{ index !== scope.row.ar.length - 1 ? '/' : '' }}</span
+                >
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+        <!-- 客户端下载 -->
+        <div
+          class="listContent__download"
+          v-if="songsDetails.tracks && songsDetails.tracks.length === 20"
         >
+          <p>查看更多内容，请下载客户端</p>
+          <router-link to="/download">立即下载</router-link>
+        </div>
       </div>
-      <!-- 评论 -->
-      <Comment :id="songsDetails.id || 0" type="2"></Comment>
+      <div class="listContent__comment" ref="commentRef">
+        <!-- 头部标题区域 -->
+        <div class="comment__head">
+          <h3>评论</h3>
+          <span class="comment__count"
+            >共{{ songsDetails.commentCount }}评论</span
+          >
+        </div>
+        <!-- 评论 -->
+        <Comment :id="songsDetails.id || 0" type="2"></Comment>
+      </div>
     </div>
   </div>
 </template>
@@ -328,6 +335,8 @@ export default {
 </script>
 <style lang="less" scoped>
 .listContent__container {
+  min-height: 700px;
+
   .listContent__header {
     padding: 40px;
     .img {

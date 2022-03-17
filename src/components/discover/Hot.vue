@@ -48,10 +48,7 @@ export default {
   data() {
     return {}
   },
-  created() {
-    // 获取推荐歌单列表
-    this.$store.dispatch('hot/getSongsList', 8)
-  },
+  created() {},
   methods: {},
   components: {
     FloorHeader: () => import('@/components/discover/FloorHeader'),

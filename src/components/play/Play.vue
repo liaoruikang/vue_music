@@ -47,7 +47,14 @@
                 v-for="(item, index) in currentPlay && currentPlay.ar"
                 :key="item.id"
               >
-                <router-link class="" :to="`/artist?id=${item.id}`">
+                <router-link
+                  @click.stop
+                  :to="
+                    currentPlay.djId == 0
+                      ? `/artist?id=${item.id}`
+                      : `/radio?id=${currentPlay.djId}`
+                  "
+                >
                   {{ item.name }}
                 </router-link>
                 <i v-show="index !== currentPlay.ar.length - 1">/</i>
@@ -258,9 +265,15 @@
                       @click.stop="delSongList($event, item.id)"
                     ></a>
                   </div>
-                  <div class="play__author">
-                    <span v-for="(val, index) in item.ar" :key="val.id">
-                      <router-link class="" :to="`/artist?id=${val.id}`">
+                  <div class="play__author" @click.stop>
+                    <span v-for="(val, index) in item.ar" :key="index">
+                      <router-link
+                        :to="
+                          item.djId == 0
+                            ? `/artist?id=${val.id}`
+                            : `/radio?id=${item.djId}`
+                        "
+                      >
                         {{ val.name }}
                       </router-link>
                       <i v-show="index !== item.ar.length - 1">/</i>
@@ -633,7 +646,9 @@ export default {
           .split(',')[5]
       )
       // 当滚动时禁止歌词自动滚动
-      this.isLyric = true
+      if (!this.isLyric) {
+        this.isLyric = true
+      }
       clearTimeout(this.lyricTimer)
       this.lyricTimer = setTimeout(() => {
         this.isLyric = false
@@ -658,7 +673,6 @@ export default {
         let y = this.contentY + speed
         // 限制可移动范围
         if (y >= 0) y = 0
-
         contentEl.style.transform = `translateY(${y}px)`
         barEl.style.top = `${Math.floor(Math.abs(y) * contentZoom)}px`
       }
@@ -792,7 +806,6 @@ export default {
         }
       })
       if (this.isLyric) return
-
       if (y) {
         this.$refs.rightContentRef.style.transform = `translateY(${y}px)`
         this.$refs.rightBarRef.style.top = -y * zoom + 'px'
@@ -1105,7 +1118,7 @@ export default {
 <style lang="less" scoped>
 .play__container {
   position: fixed;
-  z-index: 4;
+  z-index: 9999;
   left: 0;
   width: 100%;
   height: 53px;
@@ -1250,8 +1263,12 @@ export default {
               }
               a {
                 display: inline-block;
+                max-width: 100px;
                 height: 100%;
                 color: #9b9b9b;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
             }
           }

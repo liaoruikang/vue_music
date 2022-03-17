@@ -10,7 +10,7 @@
           class="user__link"
           :to="`/user/home${userId == null ? '' : `?id=${userId}`}`"
         >
-          <img :src="userData.avatarUrl + '?param=80y80'" alt="" />
+          <img :src="userData.avatarUrl + '?param=80y80'" />
         </router-link>
         <div class="info">
           <h4>
@@ -81,12 +81,7 @@ export default {
       isSignIn: false
     }
   },
-  created() {
-    if (this.isLogin) {
-      this.$store.dispatch('user/getUserData', this.userId)
-      this.$store.dispatch('user/getUserLevel')
-    }
-  },
+  created() {},
   methods: {
     login(val) {
       Bus.$emit('Visible', val)

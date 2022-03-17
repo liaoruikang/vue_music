@@ -1,36 +1,31 @@
 <template>
-  <div class="discover__contianer">
-    <!-- 轮播图 -->
-    <Banner :bannerData="bannerList"></Banner>
-    <!-- 主体区域 -->
-    <div class="main w clearfix" ref="mainRef">
-      <div class="main__left">
-        <!-- 热门推荐 -->
-        <Hot :hotList="hotPlaylist"></Hot>
-        <!-- 个性化推荐 -->
-        <Individuation v-if="isLogin"></Individuation>
-        <!-- 新碟上架 -->
-        <NewDisc></NewDisc>
-        <!-- 榜单 -->
-        <List></List>
-      </div>
-      <div class="main__right">
-        <!-- 用户信息区域 -->
-        <Userinfo></Userinfo>
-        <!-- 入驻歌手 -->
-        <InSinger></InSinger>
+  <div class="discover__contianer" v-loading.lock="!isShow">
+    <div class="discover__box" v-if="isShow">
+      <!-- 轮播图 -->
+      <Banner :bannerData="bannerList"></Banner>
+      <!-- 主体区域 -->
+      <div class="main w clearfix" ref="mainRef">
+        <div class="main__left">
+          <!-- 热门推荐 -->
+          <Hot :hotList="hotPlaylist"></Hot>
+          <!-- 个性化推荐 -->
+          <Individuation v-if="isLogin"></Individuation>
+          <!-- 新碟上架 -->
+          <NewDisc></NewDisc>
+          <!-- 榜单 -->
+          <List></List>
+        </div>
+        <div class="main__right">
+          <!-- 用户信息区域 -->
+          <Userinfo></Userinfo>
+          <!-- 入驻歌手 -->
+          <InSinger></InSinger>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-// import Banner from '@/components/discover/Banner'
-// import Hot from '@/components/discover/Hot'
-// import Individuation from '@/components/discover/Individuation'
-// import NewDisc from '@/components/discover/NewDisc'
-// import List from '@/components/discover/List'
-// import Userinfo from '@/components/discover/Userinfo'
-
 // 导入 discoverAPI
 import { bannerListAPI, hotPlaylistAPI } from '@/api/discoverAPI'
 import { mapState } from 'vuex'
@@ -47,6 +42,16 @@ export default {
   created() {
     this.getBannerList()
     this.getHotPlayList()
+    // 获取推荐歌单列表
+    this.$store.dispatch('hot/getSongsList', 8)
+    this.$store.dispatch('insinger/getHotSingerList', 10)
+    this.$store.dispatch('list/getTopList')
+    this.$store.dispatch('newdisc/getNewDiscList')
+    if (this.isLogin) {
+      this.$store.dispatch('individuation/getEverydaySongsList')
+      this.$store.dispatch('user/getUserData', this.userId)
+      this.$store.dispatch('user/getUserLevel')
+    }
   },
   methods: {
     // 获取轮播图列表
@@ -73,13 +78,40 @@ export default {
   },
   computed: {
     ...mapState('user', {
+      userId: 'userId',
       isLogin: 'isLogin'
-    })
+    }),
+    ...mapState('hot', {
+      reSongsList: 'reSongsList'
+    }),
+    ...mapState('list', {
+      topThreeListdetail: 'topThreeListdetail'
+    }),
+    ...mapState('insinger', {
+      hotSingerList: 'hotSingerList'
+    }),
+    ...mapState('newdisc', {
+      newDiscList: 'newDiscList'
+    }),
+    isShow() {
+      if (
+        this.topThreeListdetail.length &&
+        this.reSongsList &&
+        this.newDiscList &&
+        this.hotSingerList
+      ) {
+        return true
+      } else {
+        return false
+      }
+    }
   }
 }
 </script>
 <style lang="less" scoped>
 .discover__contianer {
+  min-width: 982px;
+  min-height: 700px;
   .main {
     position: relative;
     background-color: #fff;

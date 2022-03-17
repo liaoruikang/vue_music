@@ -27,7 +27,7 @@ export const createPlaylistAPI = (name, privacy, type) => {
   } else {
     return new Promise((resolve, reject) => {
       reject(new Error({ message: '请传递参数' }))
-    })
+    }).catch(err => err.message)
   }
 }
 

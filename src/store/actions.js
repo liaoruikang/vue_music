@@ -1,7 +1,8 @@
 import {
   songsDetailsAPI,
   songDetailsAPI,
-  albumDetailsAPI
+  albumDetailsAPI,
+  radioDetailsAPI
 } from '@/api/songDetailsAPI'
 
 export default {
@@ -23,6 +24,17 @@ export default {
     const { data: result } = await albumDetailsAPI(id)
     commit('play/setSongList', result.songs)
     commit('play/setCurrentPlay', result.songs[0])
+  },
+  // 获取电台详情
+  async getRadioDetails({ commit }, id) {
+    const { data: result } = await radioDetailsAPI(id)
+    const { data: res } = await songDetailsAPI(result.program.mainSong.id)
+    res.songs[0].name = result.program.mainSong.name
+    res.songs[0].al.picUrl = result.program.radio.picUrl
+    res.songs[0].ar[0].name = result.program.radio.name
+    res.songs[0].ar[0].id = result.program.radio.id
+    commit('play/setSongList', res.songs)
+    commit('play/setCurrentPlay', res.songs[0])
   },
   // 添加歌曲
   async addSong({ commit }, ids) {

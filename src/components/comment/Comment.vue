@@ -27,7 +27,7 @@
             <router-link
               v-if="item.content.split('(')[1]"
               :to="`/user/home?nickname=${'网易云音乐'}`"
-              >{{ item.content.match(/\([^\s]+\)/g)[0] }}</router-link
+              >{{ item.content.match(/\([^\s]+\)/g) }}</router-link
             >
           </div>
           <div class="time">{{ item.timeStr }}</div>

@@ -9,7 +9,7 @@ export const followsAPI = (uid, limit, offset) => {
     return request.get('user/follows?', { params: { uid } })
   } else {
     return new Promise((resolve, reject) => {
-      reject(new Error({ message: '请传递参数' }))
+      reject(new Error({ message: '请传递参数' })).catch(err => err.message)
     })
   }
 }

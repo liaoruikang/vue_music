@@ -96,9 +96,7 @@ export default {
   data() {
     return {}
   },
-  created() {
-    this.$store.dispatch('list/getTopList')
-  },
+  created() {},
   methods: {
     ...mapActions('collection', {
       shoucangPlaylist: 'shoucangPlaylist'

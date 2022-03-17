@@ -11,3 +11,7 @@ export const songDetailsAPI = (ids) => {
 export const albumDetailsAPI = (id) => {
   return request.get('album', { params: { id } })
 }
+// 获取电台详情
+export const radioDetailsAPI = (id) => {
+  return request.get('dj/program/detail', { params: { id } })
+}

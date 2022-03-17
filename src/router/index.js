@@ -5,7 +5,10 @@ const Discover = () => import(/* webpackChunkName: "Discover" */ '@/views/discov
 const Album = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
 const Artist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Artist')
 const Playlist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Playlist')
-const Djradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Djradio')
+const Djradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/djradio/Djradio')
+const Category = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Category')
+const Rank = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Rank')
+const Rec = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Rec')
 const Toplist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Toplist')
 // 引入My中的组件
 const My = () => import(/* webpackChunkName: "My" */ '@/views/my/My')
@@ -64,7 +67,18 @@ const routes = [
   {
     path: '/discover/djradio',
     component: Djradio,
-    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '', fourTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '', fourTitle: '' },
+    children: [{ path: 'category', component: Category, meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '', fourTitle: '' } }]
+  },
+  {
+    path: '/discover/djradio/rank',
+    component: Rank,
+    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '节目排行榜', fourTitle: '' }
+  },
+  {
+    path: '/discover/djradio/recommend',
+    component: Rec,
+    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '推荐节目', fourTitle: '' }
   },
   {
     path: '/discover/artist',

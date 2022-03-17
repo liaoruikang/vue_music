@@ -36,9 +36,7 @@ export default {
   data() {
     return {}
   },
-  created() {
-    this.$store.dispatch('newdisc/getNewDiscList')
-  },
+  created() {},
   methods: {},
   components: {
     FloorHeader: () => import('./FloorHeader.vue'),

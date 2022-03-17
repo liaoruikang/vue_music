@@ -19,6 +19,7 @@ import forward from './forward'
 import toplist from './toplist'
 import comment from './comment'
 import playlist from './playlist'
+import djradio from './djradio'
 
 Vue.use(Vuex)
 
@@ -38,6 +39,7 @@ export default new Vuex.Store({
     forward,
     toplist,
     comment,
-    playlist
+    playlist,
+    djradio
   }
 })

@@ -1,6 +1,6 @@
 <template>
-  <div class="playlist__container w">
-    <div class="playlist__box" v-if="songClassList && songsList">
+  <div class="playlist__container w" v-loading.lock="!isShow">
+    <div class="playlist__box" v-if="isShow">
       <!-- 头部 -->
       <div class="playlist__head">
         <h2>{{ songsList.cat }}</h2>
@@ -129,6 +129,13 @@ export default {
         )
       }
       return arr
+    },
+    isShow() {
+      if (this.songClassList && this.songsList) {
+        return true
+      } else {
+        return false
+      }
     }
   },
   watch: {
@@ -136,6 +143,15 @@ export default {
       deep: true,
       handler(val) {
         this.getSongsList(val)
+      }
+    },
+    // 更新网页标题
+    songsList: {
+      deep: true,
+      handler(val) {
+        if (val) {
+          this.updateTitle(this.$route.meta, val.cat + '歌单', 3)
+        }
       }
     }
   },
@@ -161,6 +177,7 @@ export default {
   background-color: #fff;
   border: 1px solid #d3d3d3;
   border-width: 0 1px;
+  min-height: 700px;
   .playlist__box {
     padding: 40px;
     .playlist__head {

@@ -48,9 +48,7 @@ export default {
       ]
     }
   },
-  created() {
-    this.$store.dispatch('individuation/getEverydaySongsList')
-  },
+  created() {},
   methods: {},
   components: {
     FloorHeader: () => import('./FloorHeader.vue'),

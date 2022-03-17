@@ -35,9 +35,7 @@ export default {
   data() {
     return {}
   },
-  created() {
-    this.$store.dispatch('insinger/getHotSingerList', 10)
-  },
+  created() {},
   methods: {},
   computed: {
     ...mapState('insinger', {
