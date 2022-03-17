@@ -40,12 +40,7 @@ export default {
       type: Boolean,
       default: false
     }
-  },
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {}
+  }
 }
 </script>
 <style lang="less" scoped>

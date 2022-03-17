@@ -25,12 +25,7 @@ export default {
       type: String,
       default: '#2E7ECB'
     }
-  },
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {}
+  }
 }
 </script>
 <style lang="less" scoped>

@@ -26,15 +26,11 @@
 import Bus from '@/plugin/eventBus'
 export default {
   name: 'client',
-  data() {
-    return {}
-  },
   created() {
     Bus.$on('Visible', (val) => {
       this.$store.commit('setCFDVisible', val)
     })
   },
-  methods: {},
   components: {
     LoginHeader: () =>
       import(

@@ -63,9 +63,6 @@ import LoginBtn from '@/components/login/LoginBtn'
 import LoginHeader from '@/components/login/LoginHeader'
 export default {
   name: 'Login',
-  data() {
-    return {}
-  },
   components: {
     LoginBtn,
     LoginHeader

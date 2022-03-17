@@ -71,12 +71,7 @@
 </template>
 <script>
 export default {
-  name: 'buttom',
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {}
+  name: 'buttom'
 }
 </script>
 <style lang="less" scoped>

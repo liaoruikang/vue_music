@@ -81,7 +81,6 @@ export default {
       isSignIn: false
     }
   },
-  created() {},
   methods: {
     login(val) {
       Bus.$emit('Visible', val)

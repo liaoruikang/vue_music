@@ -45,11 +45,6 @@ export default {
       default: () => []
     }
   },
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {},
   components: {
     FloorHeader: () => import('@/components/discover/FloorHeader'),
     SongsList: () => import('@/components/common/SongsList')

@@ -33,11 +33,6 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'newDisc',
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {},
   components: {
     FloorHeader: () => import('./FloorHeader.vue'),
     Disc: () => import('@/components/common/Disc')

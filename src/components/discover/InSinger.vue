@@ -32,11 +32,6 @@
 import { mapState } from 'vuex'
 export default {
   name: 'InSinger',
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {},
   computed: {
     ...mapState('insinger', {
       hotSingerList: 'hotSingerList'

@@ -42,12 +42,7 @@ export default {
       type: String,
       default: ''
     }
-  },
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {}
+  }
 }
 </script>
 <style lang="less" scoped>

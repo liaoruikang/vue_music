@@ -81,9 +81,6 @@
 import { mapState } from 'vuex'
 export default {
   name: 'djradio',
-  data() {
-    return {}
-  },
   created() {
     this.$store.dispatch('djradio/getDjCatelist')
     this.$store.dispatch('djradio/getRanking', 10)

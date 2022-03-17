@@ -195,7 +195,6 @@ export default {
       isMove: false
     }
   },
-  created() {},
   methods: {
     displayDialog() {
       Bus.$emit('Visible', true)

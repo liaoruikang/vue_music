@@ -71,7 +71,6 @@ export default {
       isDisplay: false
     }
   },
-  created() {},
   methods: {
     timer(el, start, end, or) {
       const times = setInterval(() => {

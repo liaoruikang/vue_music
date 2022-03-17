@@ -32,11 +32,7 @@ export default {
       type: Array,
       default: () => []
     }
-  },
-  data() {
-    return {}
-  },
-  created() {}
+  }
 }
 </script>
 <style lang="less" scoped>

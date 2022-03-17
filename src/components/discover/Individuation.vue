@@ -48,8 +48,6 @@ export default {
       ]
     }
   },
-  created() {},
-  methods: {},
   components: {
     FloorHeader: () => import('./FloorHeader.vue'),
     SongsList: () => import('../common/SongsList.vue')
