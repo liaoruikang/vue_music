@@ -124,7 +124,9 @@
                 >
               </li>
               <li>
-                <router-link class="subNav__link" to="/discover/artist"
+                <router-link
+                  class="subNav__link"
+                  to="/discover/artist/hotSinger"
                   ><em
                     :class="
                       $route.path.includes('/discover/artist') ? 'current' : ''

@@ -161,7 +161,7 @@
             </template>
           </el-table-column>
           <!-- 时长 -->
-          <el-table-column label="时长" width="100">
+          <el-table-column label="时长" width="105">
             <template slot-scope="scope">
               <div class="time__box">
                 <span class="time">{{

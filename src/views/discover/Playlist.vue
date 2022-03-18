@@ -7,7 +7,7 @@
         <a
           href="javascript:;"
           class="playlist__class"
-          @click="isClassList = !isClassList"
+          @click.stop="isClassList = !isClassList"
         >
           <em>选择分类 <i class="el-icon-arrow-down"></i></em>
         </a>
@@ -21,7 +21,7 @@
           >热门</a
         >
         <!-- 分类列表 -->
-        <div class="classList" v-show="isClassList">
+        <div class="classList" v-show="isClassList" @click.stop>
           <div class="classList__head"></div>
           <div class="classList__body">
             <h3>
@@ -112,9 +112,15 @@ export default {
     }
   },
   created() {
+    if (this.$route.query.cat) {
+      this.queryInfo.cat = this.$route.query.cat
+    }
     // 获取分类数据
     this.$store.dispatch('playlist/getSongClassList')
     this.getSongsList(this.queryInfo)
+    window.addEventListener('click', () => {
+      this.isClassList = false
+    })
   },
   computed: {
     ...mapState('playlist', {
@@ -169,6 +175,9 @@ export default {
       import(
         /* webpackChunkName: "playlist"  */ '@/components/common/SongsList'
       )
+  },
+  beforeDestroy() {
+    this.$store.commit('playlist/setSongClassList', null)
   }
 }
 </script>

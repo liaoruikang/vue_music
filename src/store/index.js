@@ -20,6 +20,7 @@ import toplist from './toplist'
 import comment from './comment'
 import playlist from './playlist'
 import djradio from './djradio'
+import artist from './artist'
 
 Vue.use(Vuex)
 
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     toplist,
     comment,
     playlist,
-    djradio
+    djradio,
+    artist
   }
 })

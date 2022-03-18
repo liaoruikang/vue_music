@@ -645,14 +645,16 @@ export default {
           .replace(/[matrix()]+/g, '')
           .split(',')[5]
       )
-      // 当滚动时禁止歌词自动滚动
-      if (!this.isLyric) {
-        this.isLyric = true
+      if (barEl === this.$refs.rightBarRef) {
+        // 当滚动时禁止歌词自动滚动
+        if (!this.isLyric) {
+          this.isLyric = true
+        }
+        clearTimeout(this.lyricTimer)
+        this.lyricTimer = setTimeout(() => {
+          this.isLyric = false
+        }, 2000)
       }
-      clearTimeout(this.lyricTimer)
-      this.lyricTimer = setTimeout(() => {
-        this.isLyric = false
-      }, 2000)
       // 移动速度
       let speed = contentEl.children.length / 2
       speed = contentEl.children.length > 50 ? (speed += 20) : speed

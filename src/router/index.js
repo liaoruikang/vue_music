@@ -3,7 +3,8 @@ import VueRouter from 'vue-router'
 // 引入discover中的组件
 const Discover = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Discover')
 const Album = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
-const Artist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Artist')
+const Artist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/artist/Artist')
+const HotSinger = () => import(/* webpackChunkName: "artist" */ '@/views/discover/artist/HotSinger')
 const Playlist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Playlist')
 const Djradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/djradio/Djradio')
 const Category = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Category')
@@ -83,7 +84,10 @@ const routes = [
   {
     path: '/discover/artist',
     component: Artist,
-    meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '', fourTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '', fourTitle: '' },
+    children: [
+      { path: 'hotSinger', component: HotSinger, meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '热门歌手', fourTitle: '' } }
+    ]
   },
   {
     path: '/discover/album',
