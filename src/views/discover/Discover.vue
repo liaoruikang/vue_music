@@ -47,11 +47,6 @@ export default {
     this.$store.dispatch('insinger/getHotSingerList', 10)
     this.$store.dispatch('list/getTopList')
     this.$store.dispatch('newdisc/getNewDiscList')
-    if (this.isLogin) {
-      this.$store.dispatch('individuation/getEverydaySongsList')
-      this.$store.dispatch('user/getUserData', this.userId)
-      this.$store.dispatch('user/getUserLevel')
-    }
   },
   methods: {
     // 获取轮播图列表
@@ -75,6 +70,18 @@ export default {
     List: () => import('@/components/discover/List'),
     Userinfo: () => import('@/components/discover/Userinfo'),
     InSinger: () => import('@/components/discover/InSinger')
+  },
+  watch: {
+    isLogin: {
+      immediate: true,
+      handler(val) {
+        if (val) {
+          this.$store.dispatch('individuation/getEverydaySongsList')
+          this.$store.dispatch('user/getUserData', this.userId)
+          this.$store.dispatch('user/getUserLevel')
+        }
+      }
+    }
   },
   computed: {
     ...mapState('user', {

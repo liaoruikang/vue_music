@@ -13,6 +13,10 @@ export default {
   },
   // 写入推荐分类数据
   setRecommendCategory(state, val) {
+    if (!val) {
+      state.recommendCategory = val
+      return
+    }
     val = val.filter(item => {
       if ('音乐推荐,生活,情感,创作翻唱,知识'.includes(item.categoryName)) {
         return item

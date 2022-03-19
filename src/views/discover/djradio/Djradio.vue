@@ -111,6 +111,11 @@ export default {
       import(/* webpackChunkName: 'djradio' */ '@/components/djradio/Ranking'),
     Radio: () =>
       import(/* webpackChunkName: 'djradio' */ '@/components/djradio/Radio')
+  },
+  beforeDestroy() {
+    this.$store.commit('djradio/setDjCatelist', null)
+    this.$store.commit('djradio/setRecommendCategory', null)
+    this.$store.commit('djradio/setRecommendDjList', null)
   }
 }
 </script>

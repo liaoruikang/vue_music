@@ -3,11 +3,7 @@
     <h2>{{ $route.query.name }}</h2>
     <div class="cat">
       <ul class="clearfix">
-        <li
-          v-for="(item, index) in catList"
-          :key="index"
-          @click="$store.commit('artist/setSingerList', null)"
-        >
+        <li v-for="(item, index) in catList" :key="index">
           <router-link
             :class="
               $route.query.initial
@@ -120,6 +116,7 @@ export default {
         this.queryInfo.initial = val.initial
         this.queryInfo.type = val.type
         this.queryInfo.area = val.area
+        this.$store.commit('artist/setSingerList', null)
         this.$store.dispatch('artist/getSingerList', this.queryInfo)
       }
     }
@@ -144,6 +141,9 @@ export default {
         return false
       }
     }
+  },
+  beforeDestroy() {
+    this.$store.commit('artist/setSingerList', null)
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <div class="in__singer">
       <h4>
         <span>热门歌手</span>
-        <router-link to="/discover/artist">查看全部></router-link>
+        <router-link to="/discover/artist/hotSinger">查看全部></router-link>
       </h4>
       <ul>
         <li v-for="item in hotSingerList" :key="item.id">

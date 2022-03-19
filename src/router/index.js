@@ -114,7 +114,7 @@ router.beforeEach((to, from, next) => {
   const title = (to.meta.fourTitle === '' ? '' : to.meta.fourTitle + ' - ') + (to.meta.threeTitle === '' ? '' : to.meta.threeTitle + ' - ') + (to.meta.twoTitle === '' ? '' : to.meta.twoTitle + ' - ') + to.meta.oneTitle
   document.querySelector('title').innerHTML = title
   const appEl = document.querySelector('.app__container')
-  if (appEl) {
+  if (appEl && from.path !== to.path) {
     document.querySelector('.app__container').scrollTop = 0
   }
   next()

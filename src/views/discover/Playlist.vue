@@ -178,6 +178,7 @@ export default {
   },
   beforeDestroy() {
     this.$store.commit('playlist/setSongClassList', null)
+    this.$store.commit('playlist/setSongsList', null)
   }
 }
 </script>

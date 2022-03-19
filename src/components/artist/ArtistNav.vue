@@ -2,7 +2,7 @@
   <div class="artistNav__container">
     <h3>{{ hot.title }}</h3>
     <ul>
-      <li @click="$store.commit('artist/setSingerList', null)">
+      <li>
         <router-link
           :class="!$route.query.area ? 'active' : null"
           :to="`/discover/artist/hotSinger`"
@@ -15,10 +15,7 @@
       <li
         v-for="(val, i) in item.list"
         :key="i"
-        @click="
-          updateTitle($route.meta, val.name, 3)
-          $store.commit('artist/setSingerList', null)
-        "
+        @click="updateTitle($route.meta, val.name, 3)"
       >
         <router-link
           :class="

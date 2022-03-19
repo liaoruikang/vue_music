@@ -112,6 +112,9 @@ export default {
         this.getComment(this.queryInfo)
       }
     }
+  },
+  beforeDestroy() {
+    this.$store.commit('comment/setComment', null)
   }
 }
 </script>
