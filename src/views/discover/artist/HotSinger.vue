@@ -67,7 +67,7 @@ export default {
     })
   },
   beforeDestroy() {
-    this.$store.commit('artist/reomveHotSingerList')
+    this.$store.commit('artist/reomveHotSingerList', null)
   }
 }
 </script>

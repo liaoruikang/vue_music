@@ -70,6 +70,20 @@ import { loginStateAPI, logoutAPI } from '@/api/loginAPI'
 import Bus from '@/plugin/eventBus'
 import { mapState } from 'vuex'
 
+import Login from '@/components/login/Login.vue'
+import LoginPhone from '@/components/login/LoginPhone.vue'
+import LoginEmail from '@/components/login/LoginEmail.vue'
+import LoginQrCode from '@/components/login/LoginQrCode.vue'
+import Register from '@/components/login/Register.vue'
+import ResetPassword from '@/components/login/ResetPassword.vue'
+import Header from '@/components/header/Header'
+import Bottom from '@/components/bottom/Bottom'
+import Play from '@/components/play/Play'
+import LoginHeader from '@/components/login/LoginHeader'
+import Collection from '@/components/collection/Collection'
+import Client from '@/components/client/Client'
+import Forward from '@/components/forward/Forward'
+
 export default {
   name: 'App',
   data() {
@@ -123,37 +137,51 @@ export default {
     this.loginState()
   },
   components: {
-    Login: () =>
-      import(/* webpackChunkName: "Login" */ '@/components/login/Login'),
-    LoginPhone: () =>
-      import(/* webpackChunkName: "Login" */ '@/components/login/LoginPhone'),
-    LoginEmail: () =>
-      import(/* webpackChunkName: "Login" */ '@/components/login/LoginEmail'),
-    LoginQrCode: () =>
-      import(/* webpackChunkName: "Login" */ '@/components/login/LoginQrCode'),
-    Register: () =>
-      import(/* webpackChunkName: "Login" */ '@/components/login/Register'),
-    ResetPassword: () =>
-      import(
-        /* webpackChunkName: "Login" */ '@/components/login/ResetPassword'
-      ),
-    Header: () =>
-      import(/* webpackChunkName: "Header" */ '@/components/header/Header'),
-    Bottom: () =>
-      import(/* webpackChunkName: "Button" */ '@/components/bottom/Bottom'),
-    Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/play/Play'),
-    LoginHeader: () =>
-      import(
-        /* webpackChunkName: "loginHeader"  */ '@/components/login/LoginHeader'
-      ),
-    Collection: () =>
-      import(
-        /* webpackChunkName: "Collection" */ '@/components/collection/Collection'
-      ),
-    Client: () =>
-      import(/* webpackChunkName: "Client" */ '@/components/client/Client'),
-    Forward: () =>
-      import(/* webpackChunkName: "Forward" */ '@/components/forward/Forward')
+    // Login: () =>
+    //   import(/* webpackChunkName: "Login" */ '@/components/login/Login'),
+    // LoginPhone: () =>
+    //   import(/* webpackChunkName: "Login" */ '@/components/login/LoginPhone'),
+    // LoginEmail: () =>
+    //   import(/* webpackChunkName: "Login" */ '@/components/login/LoginEmail'),
+    // LoginQrCode: () =>
+    //   import(/* webpackChunkName: "Login" */ '@/components/login/LoginQrCode'),
+    // Register: () =>
+    //   import(/* webpackChunkName: "Login" */ '@/components/login/Register'),
+    // ResetPassword: () =>
+    //   import(
+    //     /* webpackChunkName: "Login" */ '@/components/login/ResetPassword'
+    //   ),
+    // Header: () =>
+    //   import(/* webpackChunkName: "Header" */ '@/components/header/Header'),
+    // Bottom: () =>
+    //   import(/* webpackChunkName: "Button" */ '@/components/bottom/Bottom'),
+    // Play: () => import(/* webpackChunkName: "Pbay" */ '@/components/play/Play'),
+    // LoginHeader: () =>
+    //   import(
+    //     /* webpackChunkName: "loginHeader"  */ '@/components/login/LoginHeader'
+    //   ),
+    // Collection: () =>
+    //   import(
+    //     /* webpackChunkName: "Collection" */ '@/components/collection/Collection'
+    //   ),
+    // Client: () =>
+    //   import(/* webpackChunkName: "Client" */ '@/components/client/Client'),
+    // Forward: () =>
+    //   import(/* webpackChunkName: "Forward" */ '@/components/forward/Forward')
+
+    Login,
+    LoginPhone,
+    LoginEmail,
+    LoginQrCode,
+    Register,
+    ResetPassword,
+    Header,
+    Bottom,
+    Play,
+    LoginHeader,
+    Collection,
+    Client,
+    Forward
   },
   watch: {
     loginDialogVisible() {

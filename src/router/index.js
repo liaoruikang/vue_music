@@ -21,6 +21,7 @@ const Download = () => import(/* webpackChunkName: "Download" */ '@/views/downlo
 const Home = () => import(/* webpackChunkName: "Home" */ '@/views/user/Home')
 // 引入Update中的组件
 const Update = () => import(/* webpackChunkName: "Update" */ '@/views/user/Update')
+const Found = () => import(/* webpackChunkName: "found" */ '@/views/found/Found')
 
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
@@ -103,6 +104,11 @@ const routes = [
     path: '/user/update',
     component: Update,
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+  },
+  {
+    path: '*',
+    component: Found,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   }
 ]
 
@@ -118,6 +124,15 @@ router.beforeEach((to, from, next) => {
     document.querySelector('.app__container').scrollTop = 0
   }
   next()
+})
+
+router.onError((error) => {
+  const pattern = /Loading chunk (\d)+ failed/g
+  const isChunkLoadFailed = error.message.match(pattern)
+  const targetPath = router.history.pending.fullPath
+  if (isChunkLoadFailed) {
+    router.replace(targetPath)
+  }
 })
 
 // 定义全局更新标题方法
