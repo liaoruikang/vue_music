@@ -8,7 +8,7 @@
       <el-row class="collection__list">
         <el-row
           class="collection__item"
-          v-for="item in newPlayList"
+          v-for="item in uPlayList"
           :key="item.id"
           @click.native="add(item.id)"
         >
@@ -50,7 +50,7 @@
 </template>
 <script>
 import Bus from '@/plugin/eventBus'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 export default {
   name: 'collection',
   data() {
@@ -96,6 +96,7 @@ export default {
     })
     // 获取用户歌单
     this.$store.dispatch('collection/getUserPlayList', this.userId)
+    this.isAdd = this.$store.state.isAdd
   },
   methods: {
     async add(pid) {
@@ -114,6 +115,13 @@ export default {
         this.$message.error(result.body.message)
       } else {
         this.$message.success('添加成功')
+        if (this.$route.path.includes('/my')) {
+          this.$store.dispatch('collection/getUserPlayList', this.userId)
+          this.$store.dispatch('toplist/getSongsDetails', {
+            id: pid,
+            ist: true
+          })
+        }
       }
       this.$store.commit('setCFDVisible', { display: false, component: null })
     },
@@ -126,6 +134,11 @@ export default {
             this.playlistForm
           )
           if (result.code !== 200) return this.$message.error(result.message)
+          if (this.$store.state.isAdd) {
+            this.cancel()
+            this.$store.dispatch('collection/getUserPlayList', this.userId)
+            return this.$message.success('新建歌单成功')
+          }
           this.add(result.id)
         }
       })
@@ -146,22 +159,12 @@ export default {
       )
   },
   computed: {
-    ...mapState('collection', {
-      userPlayList: 'userPlayList'
+    ...mapGetters('collection', {
+      uPlayList: 'uPlayList'
     }),
     ...mapState('user', {
       userId: 'userId'
-    }),
-    newPlayList() {
-      if (this.userPlayList.length === 0) return null
-      const arr = []
-      this.userPlayList.playlist.forEach((item) => {
-        if (item.creator.userId === this.userId) {
-          arr.push(item)
-        }
-      })
-      return arr
-    }
+    })
   }
 }
 </script>

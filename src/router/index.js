@@ -13,8 +13,8 @@ const Rec = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djr
 const Toplist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Toplist')
 // 引入My中的组件
 const My = () => import(/* webpackChunkName: "My" */ '@/views/my/My')
-// 引入Friend中的组件
-const Friend = () => import(/* webpackChunkName: "Friend" */ '@/views/friend/Friend')
+const SingerEdit = () => import(/* webpackChunkName: "My" */ '@/views/my/SingerEdit')
+const Cover = () => import(/* webpackChunkName: "My" */ '@/views/my/Cover')
 // 引入Download中的组件
 const Download = () => import(/* webpackChunkName: "Download" */ '@/views/download/Download')
 // 引入Home中的组件
@@ -41,21 +41,27 @@ const routes = [
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
-    path: '/My',
+    path: '/my',
     component: My,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' },
+    children: [
+      {
+        path: 'edit',
+        component: SingerEdit,
+        meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' },
+        children: [{
+          path: 'cover',
+          component: Cover,
+          meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+        }]
+      }
+    ]
   },
   {
-    path: '/Friend',
-    component: Friend,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
-  },
-  {
-    path: '/Download',
+    path: '/download',
     component: Download,
     meta: { oneTitle: '下载网易云音乐iPhone、iPad、Mac、Android、WP、PC版客户端', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
-
   {
     path: '/discover/toplist',
     component: Toplist,

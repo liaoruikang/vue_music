@@ -11,11 +11,18 @@
       @logout="logout"
     ></Header>
     <!-- 路由占位符 -->
-    <keep-alive include="toplist">
-      <router-view></router-view>
-    </keep-alive>
+    <div class="router w">
+      <keep-alive include="toplist">
+        <router-view x :style="fixed"></router-view>
+      </keep-alive>
+    </div>
     <!-- 底部区域 -->
-    <Bottom></Bottom>
+    <Bottom
+      v-if="
+        !$route.path.match(/^\/my$|^\/my\/edit$|^\/my\/edit\/cover$/g) ||
+        !isLogin
+      "
+    ></Bottom>
     <!-- 登录对话框 -->
     <el-dialog
       :close-on-click-modal="false"
@@ -83,6 +90,7 @@ import LoginHeader from '@/components/login/LoginHeader'
 import Collection from '@/components/collection/Collection'
 import Client from '@/components/client/Client'
 import Forward from '@/components/forward/Forward'
+import Tags from '@/components/tags/Tags'
 
 export default {
   name: 'App',
@@ -181,7 +189,8 @@ export default {
     LoginHeader,
     Collection,
     Client,
-    Forward
+    Forward,
+    Tags
   },
   watch: {
     loginDialogVisible() {
@@ -249,7 +258,22 @@ export default {
     }
   },
   computed: {
-    ...mapState(['CFDVisible', 'displayWho'])
+    ...mapState(['CFDVisible', 'displayWho']),
+    fixed() {
+      const path = this.$route.path
+      if (
+        path === '/my' ||
+        path === '/download' ||
+        path === '/my/edit' ||
+        path === '/my/edit/cover'
+      ) {
+        return {
+          marginTop: '75px'
+        }
+      } else {
+        return null
+      }
+    }
   }
 }
 </script>
@@ -277,5 +301,9 @@ export default {
 }
 /deep/ .cfd__dialog {
   width: auto !important;
+}
+.router {
+  min-height: 700px;
+  background-color: #fff;
 }
 </style>

@@ -5,8 +5,10 @@ export default {
   // Collection 收藏
   // Forward 转发
   // Client 下载
+  // Tags 标签
   displayWho: null,
   // 将要被添加到歌单的歌曲id
-  songId: null
-
+  songId: null,
+  isAdd: false,
+  tags: null
 }

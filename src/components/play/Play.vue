@@ -87,9 +87,9 @@
             title="收藏"
             @click="
               $store.commit('setCFDVisible', {
-                display: true,
+                display: currentPlay ? true : false,
                 component: 'Collection',
-                songId: currentPlay.id
+                songId: currentPlay && currentPlay.id
               })
             "
           ></a>
@@ -98,10 +98,10 @@
             title="转发"
             @click="
               $store.commit('setCFDVisible', {
-                display: true,
+                display: currentPlay ? true : false,
                 component: 'forward',
-                songId: currentPlay.id,
-                shareDetails: currentPlay
+                songId: currentPlay && currentPlay.id,
+                shareDetails: currentPlay && currentPlay
               })
             "
           ></a>
@@ -192,9 +192,11 @@
                   <p class="tips"><i></i>你还没有添加任何歌曲</p>
                   <p class="tips">
                     去首页
-                    <router-link to="/">发现音乐</router-link>
+                    <a href="javascript:;" @click="href('/')">发现音乐</a>
                     ，或在
-                    <router-link to="/my">我的音乐</router-link>
+                    <a href="javascript:;" @click="href('/my?id=singer')"
+                      >我的音乐</a
+                    >
                     收听自己收藏的歌单。
                   </p>
                 </template>
@@ -453,7 +455,7 @@ export default {
     document.addEventListener('mousemove', (e) => {
       if (!this.isLock) {
         clearInterval(this.delayedTimer)
-        if (window.innerHeight - e.clientY < 85) {
+        if (window.innerHeight - e.clientY < 65) {
           this.show()
         } else {
           this.delayedTimer = setTimeout(() => {
@@ -502,6 +504,11 @@ export default {
     this.audioEl.volume = this.volume / 100
   },
   methods: {
+    // 跳转
+    href(val) {
+      sessionStorage.setItem('defaultActive', val)
+      this.$router.push(val)
+    },
     show() {
       if (this.ishide) return
       clearInterval(this.showTimer)
@@ -663,7 +670,7 @@ export default {
 
       // 获取进度条区域与内容区域的缩放比例
       const contentZoom = scrollEl.offsetHeight / contentEl.offsetHeight
-      if (e.wheelDelta === -120) {
+      if (e.wheelDelta <= -120) {
         // 当前要移动的距离
         let y = this.contentY - speed
         // 限制可移动范围
@@ -887,6 +894,7 @@ export default {
       console.log(e)
     },
     collection() {
+      if (!this.songList.length) return
       let ids = ''
       this.songList.forEach((item) => (ids += item.id + ','))
       ids = ids.substr(0, ids.length - 1)

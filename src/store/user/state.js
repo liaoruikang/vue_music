@@ -1,6 +1,6 @@
 export default {
   // 是否登录
-  isLogin: false,
+  isLogin: null,
   // 用户id
   userId: null,
   // 会员信息

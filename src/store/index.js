@@ -22,6 +22,7 @@ import playlist from './playlist'
 import djradio from './djradio'
 import artist from './artist'
 import album from './album'
+import my from './my'
 
 Vue.use(Vuex)
 
@@ -44,6 +45,7 @@ export default new Vuex.Store({
     playlist,
     djradio,
     artist,
-    album
+    album,
+    my
   }
 })

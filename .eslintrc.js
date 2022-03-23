@@ -19,6 +19,6 @@ module.exports = {
       }
     ],
     quotes: ['error', 'single', { allowTemplateLiterals: true }],
-    'no-unused-vars': ["warn", { "args": "after-used" }],
+    'no-unused-vars': ["warn", { "args": "none" }],
   }
 }

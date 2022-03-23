@@ -1,5 +1,5 @@
 <template>
-  <div class="header__container">
+  <div class="header__container" :style="fixed">
     <!-- 头部区域 -->
     <header :style="{ marginBottom: isfind == 1 ? '36px' : '5px' }">
       <div class="menu">
@@ -9,7 +9,7 @@
         </h1>
         <!-- 路由导航区域 -->
         <el-menu
-          :default-active="isfind === 1 ? '/' : $route.path"
+          :default-active="defaultActive"
           mode="horizontal"
           router
           background-color="transparent"
@@ -19,9 +19,15 @@
           <el-menu-item
             v-for="(item, index) in navList"
             :key="index"
-            v-html="item.navItem"
+            v-text="item.navItem"
             :index="item.path"
-            @click="item.path == '/' ? (isfind = 1) : (isfind = 0)"
+            @click="
+              setDefaultActive(item.path)
+              item.path == '/' ? (isfind = 1) : (isfind = 0)
+              item.path == '/musician' || item.path == '/shoppingmall'
+                ? href(item.path)
+                : null
+            "
           ></el-menu-item>
         </el-menu>
         <div class="right__box">
@@ -165,30 +171,23 @@ export default {
       default: ''
     }
   },
+  created() {
+    this.defaultActive = sessionStorage.getItem('defaultActive') || '/'
+  },
   data() {
     return {
-      // 默认激活的菜单
-      activeIndex: '/',
+      defaultActive: null,
       // 导航列表
       navList: [
         { path: '/', navItem: '发现音乐' },
-        { path: '/my', navItem: '我的音乐' },
-        { path: '/friend', navItem: '关注' },
+        { path: '/my?id=singer', navItem: '我的音乐' },
         {
-          path: '',
-          navItem: `<a
-              style="display: inline-block; width: 100%; height: 70px"
-              href="https://music.163.com/store/product"
-              >商城</a
-            >`
+          path: '/shoppingmall',
+          navItem: '商城'
         },
         {
-          path: '',
-          navItem: `<a
-              style="display: inline-block; width: 100%; height: 70px"
-              href="https://music.163.com/st/musician"
-              >音乐人</a
-            >`
+          path: '/musician',
+          navItem: '音乐人'
         },
         { path: '/download', navItem: '下载客户端' }
       ],
@@ -200,6 +199,18 @@ export default {
   methods: {
     displayDialog() {
       Bus.$emit('Visible', true)
+    },
+    href(val) {
+      this.$router.push(this.$route.fullPath)
+      this.setDefaultActive(this.$route.fullPath)
+      if (val === '/shoppingmall') {
+        window.location.href = 'https://music.163.com/store/product'
+      } else {
+        window.location.href = 'https://music.163.com/st/musician'
+      }
+    },
+    setDefaultActive(val) {
+      sessionStorage.setItem('defaultActive', val)
     }
   },
   computed: {
@@ -208,11 +219,10 @@ export default {
         // this.$route.path === '/' ||
         //   this.$route.path.match(/^\/[\S]+\//) !== null ||
         //   this.$route.path === '/discover'
-        if (
-          this.$route.path.match(
-            /^\/my|\/friend|\/download|\/user\/home|\/user\/update/
-          ) === null
-        ) {
+        const path = sessionStorage.getItem('defaultActive') || '/'
+        const reg =
+          /^\/my|\/friend|\/download|\/user|\/home|\/user|\/update|\/musician|\/shoppingmall/
+        if (this.$route.path && path.match(reg) === null) {
           return 1
         } else {
           return 0
@@ -221,6 +231,31 @@ export default {
       set(value) {
         return value
       }
+    },
+    fixed() {
+      const path = this.$route.path
+      if (
+        path === '/my' ||
+        path === '/download' ||
+        path === '/my/edit' ||
+        path === '/my/edit/cover'
+      ) {
+        return {
+          position: 'fixed',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: 'calc(100% - 17px)',
+          marginLeft: '-8px',
+          'z-index': 2001
+        }
+      } else {
+        return null
+      }
+    }
+  },
+  watch: {
+    isfind() {
+      this.defaultActive = sessionStorage.getItem('defaultActive')
     }
   }
 }

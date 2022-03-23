@@ -47,7 +47,7 @@
             >
               <dt>
                 <i :class="`i${index - 0 + 1}`"></i>
-                语种
+                {{ item }}
               </dt>
               <dd>
                 <strong v-for="(val, i) in newClass[index]" :key="i"
