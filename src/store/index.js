@@ -23,6 +23,7 @@ import djradio from './djradio'
 import artist from './artist'
 import album from './album'
 import my from './my'
+import search from './search'
 
 Vue.use(Vuex)
 
@@ -46,6 +47,7 @@ export default new Vuex.Store({
     djradio,
     artist,
     album,
-    my
+    my,
+    search
   }
 })

@@ -101,7 +101,8 @@
                 display: currentPlay ? true : false,
                 component: 'forward',
                 songId: currentPlay && currentPlay.id,
-                shareDetails: currentPlay && currentPlay
+                shareDetails: currentPlay && currentPlay,
+                type: 'song'
               })
             "
           ></a>
@@ -249,7 +250,8 @@
                           display: true,
                           component: 'Forward',
                           songId: item.id,
-                          shareDetails: item
+                          shareDetails: item,
+                          type: 'song'
                         })
                       "
                     ></a>
@@ -891,7 +893,10 @@ export default {
     },
     // audio停止事件
     onstalled(e) {
-      console.log(e)
+      this.$notify.error({
+        title: '错误',
+        message: '播放出错'
+      })
     },
     collection() {
       if (!this.songList.length) return

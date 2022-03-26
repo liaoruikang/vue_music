@@ -1,13 +1,12 @@
 export default {
-  shareName({ shareDetails }) {
-    if (shareDetails === null) {
-      return shareDetails
-    } else if (shareDetails.tracks) {
+  shareName({ shareDetails, type }) {
+    if (shareDetails === null) return shareDetails
+    if (type === 'playlist') {
       return {
         content: `歌单：${shareDetails.name} by ${shareDetails.creator.nickname}`,
-        type: 'playlist'
+        type
       }
-    } else if (shareDetails.ar) {
+    } else if (type === 'song') {
       let ar = ''
       shareDetails.ar.forEach(item => {
         ar = ar + item.name + '/'
@@ -15,7 +14,7 @@ export default {
       ar = ar.substr(0, ar.length - 1)
       return {
         content: `单曲：${shareDetails.name} - ${ar}`,
-        type: 'song'
+        type
       }
     } else {
       return {

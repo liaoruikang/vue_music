@@ -2,6 +2,7 @@
   <div
     class="my__container w"
     :style="{ minHeight: isLogin ? '860px' : '700px' }"
+    v-loading="!isShow"
   >
     <div class="my__login" v-if="!isLogin && isLogin != null">
       <div class="login__box">
@@ -60,7 +61,10 @@ export default {
       songsDetails: 'songsDetails'
     }),
     isShow() {
-      if (this.uPlayList && this.cPlayList && this.mySinger) {
+      if (
+        !this.isLogin ||
+        (this.uPlayList && this.cPlayList && this.mySinger && this.songsDetails)
+      ) {
         return true
       } else {
         return false
@@ -106,6 +110,10 @@ export default {
           })
         }
       }
+    },
+    mounted() {
+      console.log(1)
+      this.$router.push('/my?id=singer')
     }
   }
 }

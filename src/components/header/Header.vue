@@ -22,7 +22,6 @@
             v-text="item.navItem"
             :index="item.path"
             @click="
-              setDefaultActive(item.path)
               item.path == '/' ? (isfind = 1) : (isfind = 0)
               item.path == '/musician' || item.path == '/shoppingmall'
                 ? href(item.path)
@@ -33,8 +32,21 @@
         <div class="right__box">
           <!-- 搜索 -->
           <div class="search">
-            <el-input v-model="searchVal" placeholder="音乐/视频/电台/用户">
+            <el-input
+              v-model="searchForm.keywords"
+              placeholder="音乐/视频/电台/用户"
+              @mouseup.native.stop
+              @keydown.native="onDown"
+              @focus="getHeadProposalList(searchForm)"
+            >
             </el-input>
+            <!-- 搜索建议 -->
+            <Proposal
+              v-if="$route.path != '/search'"
+              :proposalList="headProposalList"
+              :keywords="searchForm.keywords"
+              :type="searchForm.type"
+            ></Proposal>
           </div>
           <!-- 创造者中心 -->
           <div class="alc">
@@ -80,7 +92,6 @@
             </div>
           </div>
         </div>
-
         <!-- 底部子菜单 -->
         <div class="btm__nav">
           <div class="sub__nav" v-show="isfind == 1">
@@ -160,6 +171,8 @@
 </template>
 <script>
 import Bus from '@/plugin/eventBus'
+import Proposal from '@/components/search/Proposal'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
   props: {
     isLogin: {
@@ -171,16 +184,12 @@ export default {
       default: ''
     }
   },
-  created() {
-    this.defaultActive = sessionStorage.getItem('defaultActive') || '/'
-  },
   data() {
     return {
-      defaultActive: null,
       // 导航列表
       navList: [
         { path: '/', navItem: '发现音乐' },
-        { path: '/my?id=singer', navItem: '我的音乐' },
+        { path: '/my', navItem: '我的音乐' },
         {
           path: '/shoppingmall',
           navItem: '商城'
@@ -192,25 +201,34 @@ export default {
         { path: '/download', navItem: '下载客户端' }
       ],
       // 搜索数据
-      searchVal: '',
+      searchForm: {
+        keywords: '',
+        type: 1
+      },
       isMove: false
     }
   },
   methods: {
+    ...mapActions('search', {
+      getHeadProposalList: 'getHeadProposalList'
+    }),
+    ...mapMutations('search', {
+      removeHeadProposalList: 'removeHeadProposalList'
+    }),
     displayDialog() {
       Bus.$emit('Visible', true)
     },
     href(val) {
       this.$router.push(this.$route.fullPath)
-      this.setDefaultActive(this.$route.fullPath)
       if (val === '/shoppingmall') {
         window.location.href = 'https://music.163.com/store/product'
       } else {
         window.location.href = 'https://music.163.com/st/musician'
       }
     },
-    setDefaultActive(val) {
-      sessionStorage.setItem('defaultActive', val)
+    onDown(e) {
+      Bus.$emit('keydown', { e, keywords: this.searchForm.keywords })
+      if (e.keyCode === 13) this.searchForm.keywords = ''
     }
   },
   computed: {
@@ -219,10 +237,10 @@ export default {
         // this.$route.path === '/' ||
         //   this.$route.path.match(/^\/[\S]+\//) !== null ||
         //   this.$route.path === '/discover'
-        const path = sessionStorage.getItem('defaultActive') || '/'
+        // const path = sessionStorage.getItem('defaultActive') || '/'
         const reg =
-          /^\/my|\/friend|\/download|\/user|\/home|\/user|\/update|\/musician|\/shoppingmall/
-        if (this.$route.path && path.match(reg) === null) {
+          /\/my|\/friend|\/download|\/user\/home|\/user\/update|\/musician|\/shoppingmall|\/search/
+        if (!this.defaultActive.match(reg)) {
           return 1
         } else {
           return 0
@@ -244,19 +262,55 @@ export default {
           position: 'fixed',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: 'calc(100% - 17px)',
+          width: 'calc(100% - 16px)',
           marginLeft: '-8px',
           'z-index': 2001
         }
       } else {
         return null
       }
-    }
+    },
+    defaultActive() {
+      if (this.$route.path) {
+        let hash = location.hash.replace('#', '').split('?')[0]
+        if (hash.includes('discover')) {
+          hash = '/'
+        } else if (hash.includes('my')) {
+          hash = '/my'
+        }
+        return hash
+      } else {
+        let hash = location.hash.replace('#', '').split('?')[0]
+        if (hash.includes('discover')) {
+          hash = '/'
+        } else if (hash.includes('my')) {
+          hash = '/my'
+        }
+        return hash
+      }
+    },
+    ...mapState('search', {
+      headProposalList: 'headProposalList'
+    })
   },
   watch: {
-    isfind() {
-      this.defaultActive = sessionStorage.getItem('defaultActive')
+    searchForm: {
+      deep: true,
+      handler(val) {
+        if (val.keywords) {
+          // 节流阀
+          clearTimeout(this.throttleTimer)
+          this.throttleTimer = setTimeout(() => {
+            this.getHeadProposalList(this.searchForm)
+          }, 100)
+        } else {
+          this.removeHeadProposalList()
+        }
+      }
     }
+  },
+  components: {
+    Proposal
   }
 }
 </script>
@@ -370,6 +424,7 @@ header {
         }
       }
       .search {
+        position: relative;
         float: left;
         width: 158px;
         background-color: #fff;
@@ -380,6 +435,12 @@ header {
           background: url('../../assets/uploads/topbar.png') no-repeat;
           background-position: 0 -101px;
           padding-left: 30px;
+        }
+        /deep/ .proposal__container {
+          position: absolute;
+          z-index: 99999;
+          top: 40px;
+          width: 240px;
         }
       }
     }

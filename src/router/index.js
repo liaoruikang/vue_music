@@ -22,6 +22,7 @@ const Home = () => import(/* webpackChunkName: "Home" */ '@/views/user/Home')
 // 引入Update中的组件
 const Update = () => import(/* webpackChunkName: "Update" */ '@/views/user/Update')
 const Found = () => import(/* webpackChunkName: "found" */ '@/views/found/Found')
+const Search = () => import(/* webpackChunkName: "search" */ '@/views/search/Search')
 
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
@@ -112,6 +113,11 @@ const routes = [
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
+    path: '/search',
+    component: Search,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+  },
+  {
     path: '*',
     component: Found,
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
@@ -129,16 +135,10 @@ router.beforeEach((to, from, next) => {
   if (appEl && from.path !== to.path) {
     document.querySelector('.app__container').scrollTop = 0
   }
-  next()
-})
-
-router.onError((error) => {
-  const pattern = /Loading chunk (\d)+ failed/g
-  const isChunkLoadFailed = error.message.match(pattern)
-  const targetPath = router.history.pending.fullPath
-  if (isChunkLoadFailed) {
-    router.replace(targetPath)
+  if (to.fullPath === '/my') {
+    next('/my?id=singer')
   }
+  next()
 })
 
 // 定义全局更新标题方法

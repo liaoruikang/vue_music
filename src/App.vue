@@ -11,7 +11,7 @@
       @logout="logout"
     ></Header>
     <!-- 路由占位符 -->
-    <div class="router w">
+    <div class="router">
       <keep-alive include="toplist">
         <router-view x :style="fixed"></router-view>
       </keep-alive>
@@ -91,6 +91,7 @@ import Collection from '@/components/collection/Collection'
 import Client from '@/components/client/Client'
 import Forward from '@/components/forward/Forward'
 import Tags from '@/components/tags/Tags'
+import Linux from '@/components/download/Linux'
 
 export default {
   name: 'App',
@@ -141,7 +142,6 @@ export default {
       this.userData = data
       this.$store.commit('user/setUserId', data.userId)
     })
-
     this.loginState()
   },
   components: {
@@ -176,7 +176,6 @@ export default {
     //   import(/* webpackChunkName: "Client" */ '@/components/client/Client'),
     // Forward: () =>
     //   import(/* webpackChunkName: "Forward" */ '@/components/forward/Forward')
-
     Login,
     LoginPhone,
     LoginEmail,
@@ -190,7 +189,8 @@ export default {
     Collection,
     Client,
     Forward,
-    Tags
+    Tags,
+    Linux
   },
   watch: {
     loginDialogVisible() {
@@ -304,6 +304,6 @@ export default {
 }
 .router {
   min-height: 700px;
-  background-color: #fff;
+  background: #f5f5f5;
 }
 </style>

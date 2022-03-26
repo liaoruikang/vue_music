@@ -5,5 +5,8 @@ export default {
   // 写入用户好友数据
   setFollows(state, val) {
     state.follows = val
+  },
+  setType(state, val) {
+    state.type = val
   }
 }

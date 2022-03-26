@@ -64,7 +64,8 @@
                   display: true,
                   component: 'Forward',
                   songId: songsDetails.id,
-                  shareDetails: songsDetails
+                  shareDetails: songsDetails,
+                  type: 'playlist'
                 })
               "
             >

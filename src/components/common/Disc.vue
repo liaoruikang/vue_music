@@ -98,6 +98,9 @@ export default {
     }
   }
   .disc__author {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     a {
       color: #333;
     }

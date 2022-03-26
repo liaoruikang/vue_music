@@ -5,6 +5,7 @@ export default {
     if (val.songId) state.songId = val.songId
     if (val.isAdd) state.isAdd = val.isAdd
     if (val.shareDetails) this.commit('forward/setShareDetails', val.shareDetails)
+    if (val.type) this.commit('forward/setType', val.type)
     if (val.tags) state.tags = val.tags
   }
 }

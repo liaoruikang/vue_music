@@ -5,10 +5,14 @@
       <a href="javascript:;" @click.stop="$emit('playClick')" class="play"></a>
     </router-link>
     <p class="disc__name">
-      <router-link :to="`/album?id=${id}`">{{ name }}</router-link>
+      <router-link :to="`/album?id=${id}`" v-highlight="keywords">{{
+        name
+      }}</router-link>
     </p>
     <p class="disc__author">
-      <router-link :to="`/artist?id=${authorId}`">{{ author }}</router-link>
+      <router-link :to="`/artist?id=${authorId}`" v-highlight="keywords">{{
+        author
+      }}</router-link>
     </p>
   </div>
 </template>
@@ -39,6 +43,10 @@ export default {
     lazy: {
       type: Boolean,
       default: false
+    },
+    keywords: {
+      type: String,
+      default: ''
     }
   }
 }
@@ -98,6 +106,9 @@ export default {
     }
   }
   .disc__author {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     a {
       color: #333;
     }

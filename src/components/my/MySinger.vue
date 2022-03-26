@@ -23,11 +23,6 @@
 import { mapState } from 'vuex'
 export default {
   name: 'mySinger',
-  data() {
-    return {}
-  },
-  created() {},
-  methods: {},
   computed: {
     ...mapState('my', {
       mySinger: 'mySinger'

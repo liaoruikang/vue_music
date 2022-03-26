@@ -110,14 +110,14 @@ export default {
           image.height = size
           canvasEl.setAttribute('width', image.width + 'px')
           canvasEl.setAttribute('height', image.height + 'px')
-          this.ratio *= 100
-          this.ratio /= 99.5
-          const left = (this.clipRight - clipEl.offsetLeft) / this.ratio
-          const top = (this.clipBottom - clipEl.offsetTop) / this.ratio
+          const left =
+            (this.clipRight - clipEl.offsetLeft) / this.ratio.widthRatio
+          const top =
+            (this.clipBottom - clipEl.offsetTop) / this.ratio.heightRatio
           context.drawImage(
             image,
-            this.clipLeft / this.ratio,
-            this.clipTop / this.ratio,
+            this.clipLeft / this.ratio.widthRatio,
+            this.clipTop / this.ratio.heightRatio,
             left,
             top,
             0,
@@ -155,9 +155,13 @@ export default {
     zoomImg(imgWidth, imgHeight, maxWidth, maxHeight) {
       const widthRatio = maxWidth / imgWidth
       const heightRatio = maxHeight / imgHeight
+      this.ratio = {
+        widthRatio,
+        heightRatio
+      }
       let ratio
       widthRatio < heightRatio ? (ratio = widthRatio) : (ratio = heightRatio)
-      this.ratio = ratio
+
       const currentImg = {
         width: parseInt(imgWidth * ratio),
         height: parseInt(imgHeight * ratio)
