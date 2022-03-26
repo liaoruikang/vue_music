@@ -377,15 +377,15 @@
               </div>
               <div class="lyric">
                 <p
-                  v-for="(val, index) in item.lyrics.slice(0, 4)"
-                  :key="index"
+                  v-for="(val, i) in item.lyrics.slice(0, 4)"
+                  :key="i"
                   v-html="val"
                 ></p>
                 <el-collapse-transition>
                   <div class="open" v-if="item.isOpen">
                     <p
-                      v-for="(val, index) in item.lyrics.slice(4)"
-                      :key="index"
+                      v-for="(val, i) in item.lyrics.slice(4)"
+                      :key="i"
                       v-html="val"
                     ></p>
                   </div>
