@@ -14,3 +14,7 @@ export const vipDataAPI = () => {
   const timestamp = new Date().getTime()
   return request.get('/vip/info', { params: { timestamp } })
 }
+// 获取用户播放记录
+export const recordAPI = (uid, type) => {
+  return request.get('user/record', { params: { uid, type } })
+}

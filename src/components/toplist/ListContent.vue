@@ -196,7 +196,8 @@
                         display: true,
                         component: 'Forward',
                         songId: scope.row.id,
-                        shareDetails: scope.row
+                        shareDetails: scope.row,
+                        type: 'song'
                       })
                     "
                   ></a>

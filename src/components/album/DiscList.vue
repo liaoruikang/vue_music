@@ -15,7 +15,7 @@
     </FloorHeader>
     <!-- 专辑列表 -->
     <div class="discList__box" v-loading.lock="!isShow">
-      <div v-if="isShow">
+      <div class="disc" v-if="isShow">
         <LargeDisc
           v-for="item in discList.albums"
           :key="item.id"
@@ -69,7 +69,7 @@ export default {
 <style lang="less" scoped>
 .discList__box {
   min-height: 500px;
-  div {
+  .disc {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

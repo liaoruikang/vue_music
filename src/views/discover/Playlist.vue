@@ -355,7 +355,6 @@ export default {
       display: flex;
       flex-wrap: wrap;
       justify-content: left;
-      text-align: center;
       .songsList__container {
         margin: 0 20px;
       }

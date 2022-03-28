@@ -84,7 +84,8 @@
                     display: true,
                     component: 'Forward',
                     songId: list.id,
-                    shareDetails: list
+                    shareDetails: list,
+                    type: 'playlist'
                   })
               "
             >
@@ -378,9 +379,13 @@ export default {
     padding: 40px;
     .head__left {
       position: relative;
-      width: 208px;
-      height: 208px;
+      width: 200px;
+      height: 200px;
       padding: 4px;
+      .el-image {
+        width: 100%;
+        height: 100%;
+      }
     }
     .head__left::before {
       content: '';

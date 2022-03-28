@@ -8,5 +8,7 @@ export default {
   // 用户信息
   userData: {},
   // 用户等级信息
-  userLevel: null
+  userLevel: null,
+  // 用户播放记录
+  record: null
 }

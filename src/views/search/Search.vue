@@ -123,7 +123,7 @@
                 ></a>
               </div>
               <div class="singer">
-                <em v-for="(val, index) in item.ar" :key="val.id">
+                <em v-for="(val, i) in item.ar" :key="i">
                   <router-link
                     :to="`/artist?id=${val.id}`"
                     :title="val.name"
@@ -131,7 +131,7 @@
                   >
                     {{ val.name }}
                   </router-link>
-                  {{ index !== item.ar.length - 1 ? '/' : '' }}
+                  {{ i !== item.ar.length - 1 ? '/' : '' }}
                 </em>
               </div>
               <div class="album">

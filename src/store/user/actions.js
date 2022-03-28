@@ -1,4 +1,4 @@
-import { userInfoAPI, userLevelAPI, vipDataAPI } from '@/api/userAPI'
+import { userInfoAPI, userLevelAPI, vipDataAPI, recordAPI } from '@/api/userAPI'
 export default {
   // 获取用户信息
   async getUserData({ commit }, id) {
@@ -14,5 +14,11 @@ export default {
   async getVipData({ commit }) {
     const { data: result } = await vipDataAPI()
     commit('setVipData', result.data)
+  },
+  // 获取用户播放记录
+  async getRecord({ commit }, val) {
+    const { data: result } = await recordAPI(val.uid, val.type).catch(err => err.response)
+    if (result.code !== 200) return
+    commit('setRecord', result)
   }
 }

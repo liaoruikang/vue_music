@@ -26,7 +26,7 @@
             />:&nbsp;{{ item.content.split('(')[0] }}
             <router-link
               v-if="item.content.split('(')[1]"
-              :to="`/user/home?nickname=${'网易云音乐'}`"
+              :to="`/user/home?id=${userId}`"
               >{{ item.content.match(/\([^\s]+\)/g) }}</router-link
             >
           </div>
@@ -100,6 +100,9 @@ export default {
   computed: {
     ...mapState('comment', {
       comment: 'comment'
+    }),
+    ...mapState('user', {
+      userId: 'userId'
     }),
     total() {
       return this.comment.totalCount

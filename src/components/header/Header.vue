@@ -68,12 +68,7 @@
               <img :src="userImg + '?param=30y30'" alt="" />
               <ul class="login__nav" v-show="isMove === true">
                 <li>
-                  <router-link
-                    :to="`/user/home${
-                      $store.state.userId == null
-                        ? ''
-                        : `?id=${$store.state.userId}`
-                    }`"
+                  <router-link :to="`/user/home?id=${userId}`"
                     ><i class="el-icon-user"></i>我的主页</router-link
                   >
                 </li>
@@ -291,6 +286,9 @@ export default {
     },
     ...mapState('search', {
       headProposalList: 'headProposalList'
+    }),
+    ...mapState('user', {
+      userId: 'userId'
     })
   },
   watch: {
@@ -373,11 +371,11 @@ header {
             position: absolute;
             top: 64px;
             left: -54px;
-            z-index: 3;
+            z-index: 99999;
             width: 158px;
             background: #2b2b2b;
             border-radius: 4px;
-            box-shadow: 0 8px 24px 0 rgb(0 0 0 / 50%);
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
             li {
               text-align: left;
               i {

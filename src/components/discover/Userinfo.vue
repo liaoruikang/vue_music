@@ -50,19 +50,15 @@
         </div>
       </div>
       <div class="buttom">
-        <router-link
-          :to="`/user/event${userId == null ? '' : `?id=${userId}`}`"
-        >
+        <router-link :to="$route.fullPath">
           <p>{{ userData.eventCount }}</p>
           <span>动态</span>
         </router-link>
-        <router-link
-          :to="`/user/follows${userId == null ? '' : `?id=${userId}`}`"
-        >
+        <router-link :to="$route.fullPath">
           <p>{{ userData.follows }}</p>
           <span>关注</span></router-link
         >
-        <router-link :to="`/user/fans${userId == null ? '' : `?id=${userId}`}`">
+        <router-link :to="$route.fullPath">
           <p>{{ userData.followeds }}</p>
           <span>粉丝</span></router-link
         >

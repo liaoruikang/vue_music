@@ -214,6 +214,15 @@
                     $event
                   )
                 "
+                @DOMMouseScroll="
+                  scroll(
+                    $refs.contentRef,
+                    $refs.scrollRef,
+                    $refs.barRef,
+                    $refs.tableRef,
+                    $event
+                  )
+                "
               >
                 <li
                   :class="
@@ -322,6 +331,15 @@
                     $event
                   )
                 "
+                @DOMMouseScroll="
+                  scroll(
+                    $refs.rightContentRef,
+                    $refs.rightScrollRef,
+                    $refs.rightBarRef,
+                    $refs.rightBoxRef,
+                    $event
+                  )
+                "
               >
                 <p
                   :class="item.className"
@@ -380,6 +398,7 @@
       @timeupdate="onTimeupdate"
       :src="url"
       @ended="onEnded()"
+      @error="onError()"
       @stalled="onstalled"
     ></audio>
   </div>
@@ -669,10 +688,9 @@ export default {
       speed = contentEl.children.length > 50 ? (speed += 20) : speed
       // 获取最大移动距离
       const contentMax = contentEl.offsetHeight - tableRef.offsetHeight
-
       // 获取进度条区域与内容区域的缩放比例
       const contentZoom = scrollEl.offsetHeight / contentEl.offsetHeight
-      if (e.wheelDelta <= -120) {
+      if (e.wheelDelta <= -120 || e.detail === 2) {
         // 当前要移动的距离
         let y = this.contentY - speed
         // 限制可移动范围
@@ -884,6 +902,12 @@ export default {
         }
       }
     },
+    onError() {
+      this.$notify.error({
+        title: '错误',
+        message: '播放出错'
+      })
+    },
     // 点击歌词跳转按钮 跳转到指定进度
     jump(time) {
       this.audioEl.currentTime = time
@@ -892,7 +916,7 @@ export default {
       })
     },
     // audio停止事件
-    onstalled(e) {
+    onstalled() {
       this.$notify.error({
         title: '错误',
         message: '播放出错'
@@ -922,11 +946,10 @@ export default {
           ) {
             this.$refs.barRef.style = 'height:0;border:0'
           } else {
-            let h =
+            const h =
               (this.$refs.tableRef.offsetHeight *
                 this.$refs.tableRef.offsetHeight) /
               this.$refs.contentRef.offsetHeight
-            h = h < 20 ? 20 : h
             this.$refs.barRef.style.height = h + 'px'
           }
           if (
@@ -974,11 +997,10 @@ export default {
             this.$refs.barRef.style = 'height:0;border:0'
             this.$refs.contentRef.style.transform = 'translateY(0)'
           } else {
-            let h =
+            const h =
               (this.$refs.tableRef.offsetHeight *
                 this.$refs.tableRef.offsetHeight) /
               this.$refs.contentRef.offsetHeight
-            h = h < 20 ? 20 : h
             this.$refs.barRef.style.height = h + 'px'
           }
           if (
