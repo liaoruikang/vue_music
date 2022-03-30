@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 // 引入discover中的组件
 const Discover = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Discover')
 const Album = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
-const Artist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/artist/Artist')
+const Dartist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/artist/Artist')
 const HotSinger = () => import(/* webpackChunkName: "artist" */ '@/views/discover/artist/HotSinger')
 const Playlist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Playlist')
 const Djradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/djradio/Djradio')
@@ -23,6 +23,10 @@ const Home = () => import(/* webpackChunkName: "Home" */ '@/views/user/Home')
 const Update = () => import(/* webpackChunkName: "Update" */ '@/views/user/Update')
 const Found = () => import(/* webpackChunkName: "found" */ '@/views/found/Found')
 const Search = () => import(/* webpackChunkName: "search" */ '@/views/search/Search')
+const Artist = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Artist')
+const Aalbum = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Aalbum')
+const Amv = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Amv')
+const Adesc = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Adesc')
 
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
@@ -91,7 +95,7 @@ const routes = [
   },
   {
     path: '/discover/artist',
-    component: Artist,
+    component: Dartist,
     meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '', fourTitle: '' },
     children: [
       { path: 'hotSinger', component: HotSinger, meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '热门歌手', fourTitle: '' } }
@@ -118,6 +122,38 @@ const routes = [
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
+    path: '/shoppingmall',
+    redirect: '/'
+  },
+  {
+    path: '/musician',
+    redirect: '/'
+  },
+  {
+    path: '/artist',
+    component: Artist,
+    meta: { oneTitle: '网易云音乐', twoTitle: '歌手', threeTitle: '', fourTitle: '' },
+    children: [{
+      path: 'album',
+      component: Aalbum,
+      meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+
+    },
+    {
+      path: 'mv',
+      component: Amv,
+      meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+
+    },
+    {
+      path: 'desc',
+      component: Adesc,
+      meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+
+    }]
+  },
+
+  {
     path: '*',
     component: Found,
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
@@ -136,7 +172,7 @@ router.beforeEach((to, from, next) => {
     document.querySelector('.app__container').scrollTop = 0
   }
   if (to.fullPath === '/my') {
-    next('/my?id=singer')
+    return next('/my?id=singer')
   }
   next()
 })

@@ -14,13 +14,13 @@ export default {
 <style lang="less" scoped>
 .found__container {
   position: relative;
-  height: 650px;
+  height: 700px;
   background-color: #fff;
   border: 1px solid #d3d3d3;
   border-width: 0 1px;
   .found__box {
     position: absolute;
-    top: 35%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;

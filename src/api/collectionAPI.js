@@ -9,7 +9,9 @@ export const userPlayListAPI = (uid) => {
 
 // 添加或删除歌单歌曲
 export const playlistTarcksAPI = (op, pid, tracks) => {
-  return request.get('/playlist/tracks', { params: { op, pid, tracks } })
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('/playlist/tracks', { params: { op, pid, tracks, timestamp } })
 }
 
 // 建新歌单
@@ -33,5 +35,7 @@ export const createPlaylistAPI = (name, privacy, type) => {
 
 // 收藏/取消收藏歌单
 export const shoucangPlaylistAPI = (t, id) => {
-  return request.get('playlist/subscribe', { params: { t, id } })
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('playlist/subscribe', { params: { t, id, timestamp } })
 }

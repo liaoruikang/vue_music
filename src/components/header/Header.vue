@@ -94,11 +94,7 @@
               <li>
                 <router-link class="subNav__link" to="/discover"
                   ><em
-                    :class="
-                      $route.path == '/discover' || $route.path == '/'
-                        ? 'current'
-                        : ''
-                    "
+                    :class="hash == '/discover' || hash == '/' ? 'current' : ''"
                     >推荐</em
                   ></router-link
                 >
@@ -106,9 +102,7 @@
               <li>
                 <router-link class="subNav__link" to="/discover/toplist"
                   ><em
-                    :class="
-                      $route.path.includes('/discover/toplist') ? 'current' : ''
-                    "
+                    :class="hash.includes('/discover/toplist') ? 'current' : ''"
                     >排行榜</em
                   ></router-link
                 >
@@ -117,9 +111,7 @@
                 <router-link class="subNav__link" to="/discover/playlist"
                   ><em
                     :class="
-                      $route.path.includes('/discover/playlist')
-                        ? 'current'
-                        : ''
+                      hash.includes('/discover/playlist') ? 'current' : ''
                     "
                     >歌单</em
                   ></router-link
@@ -128,9 +120,7 @@
               <li>
                 <router-link class="subNav__link" to="/discover/djradio"
                   ><em
-                    :class="
-                      $route.path.includes('/discover/djradio') ? 'current' : ''
-                    "
+                    :class="hash.includes('/discover/djradio') ? 'current' : ''"
                     >主播电台</em
                   ></router-link
                 >
@@ -140,9 +130,7 @@
                   class="subNav__link"
                   to="/discover/artist/hotSinger"
                   ><em
-                    :class="
-                      $route.path.includes('/discover/artist') ? 'current' : ''
-                    "
+                    :class="hash.includes('/discover/artist') ? 'current' : ''"
                     >歌手</em
                   ></router-link
                 >
@@ -150,9 +138,7 @@
               <li>
                 <router-link class="subNav__link" to="/discover/album"
                   ><em
-                    :class="
-                      $route.path.includes('/discover/album') ? 'current' : ''
-                    "
+                    :class="hash.includes('/discover/album') ? 'current' : ''"
                     >新碟上架</em
                   ></router-link
                 >
@@ -216,9 +202,9 @@ export default {
     href(val) {
       this.$router.push(this.$route.fullPath)
       if (val === '/shoppingmall') {
-        window.location.href = 'https://music.163.com/store/product'
+        location.href = 'https://music.163.com/store/product'
       } else {
-        window.location.href = 'https://music.163.com/st/musician'
+        location.href = 'https://music.163.com/st/musician'
       }
     },
     onDown(e) {
@@ -227,6 +213,10 @@ export default {
     }
   },
   computed: {
+    hash() {
+      if (!this.$route.path) return null
+      return location.hash.replace('#', '').split('?')[0]
+    },
     isfind: {
       get() {
         // this.$route.path === '/' ||
@@ -272,6 +262,10 @@ export default {
           hash = '/'
         } else if (hash.includes('my')) {
           hash = '/my'
+        } else if (hash.includes('shoppingmall')) {
+          hash = '/'
+        } else if (hash.includes('musician')) {
+          hash = '/'
         }
         return hash
       } else {
@@ -280,6 +274,10 @@ export default {
           hash = '/'
         } else if (hash.includes('my')) {
           hash = '/my'
+        } else if (hash.includes('shoppingmall')) {
+          hash = '/'
+        } else if (hash.includes('musician')) {
+          hash = '/'
         }
         return hash
       }

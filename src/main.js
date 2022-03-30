@@ -48,7 +48,9 @@ Vue.filter('number_ch', (value) => {
 // 获取关键字指令
 Vue.directive('highlight', {
   inserted(el, binding) {
-    const keywords = binding.value
+    let keywords = binding.value
+    // 对非法正则处理
+    keywords = keywords.replace(/\\|\.|\?|<|>|\[|\]|\|/g, '')
     let text = el.innerText
     if (!keywords.trim()) return
     const reg = new RegExp(`(?<![<>])${keywords}(?![<>])`, 'gi')
