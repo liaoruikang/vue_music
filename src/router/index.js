@@ -6,6 +6,7 @@ const Album = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/
 const Dartist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/artist/Artist')
 const HotSinger = () => import(/* webpackChunkName: "artist" */ '@/views/discover/artist/HotSinger')
 const Playlist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Playlist')
+const Dplaylist = () => import(/* webpackChunkName: "playlist" */ '@/views/playlist/Playlist')
 const Djradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/djradio/Djradio')
 const Category = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Category')
 const Rank = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Rank')
@@ -75,6 +76,11 @@ const routes = [
   {
     path: '/discover/playlist',
     component: Playlist,
+    meta: { oneTitle: '网易云音乐', twoTitle: '歌单', threeTitle: '', fourTitle: '' }
+  },
+  {
+    path: '/playlist',
+    component: Dplaylist,
     meta: { oneTitle: '网易云音乐', twoTitle: '歌单', threeTitle: '', fourTitle: '' }
   },
   {

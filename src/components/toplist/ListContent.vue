@@ -286,13 +286,14 @@ export default {
     // 锚点跳转到评论区
     anchorPoint() {
       const maxScroll = this.$refs.commentRef.offsetTop
-      let scroll = 0
+      const appEl = document.querySelector('.app__container')
+      let scroll = appEl.scrollTop
       this.timer = setInterval(() => {
         scroll += Math.ceil(
           (maxScroll - document.querySelector('.app__container').scrollTop) / 15
         )
         if (scroll >= maxScroll) return clearInterval(this.timer)
-        document.querySelector('.app__container').scrollTop = scroll
+        appEl.scrollTop = scroll
       }, 10)
     }
   },

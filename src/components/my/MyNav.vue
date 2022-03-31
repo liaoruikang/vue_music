@@ -214,6 +214,9 @@ export default {
             flex: 1;
             padding-left: 10px;
             line-height: 18px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
             p {
               margin-top: 6px;
               color: #999;

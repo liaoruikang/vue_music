@@ -1077,6 +1077,7 @@ export default {
                 .split(',')[5]
             )
           }
+
           if (
             topCurrentDOM.offsetTop === 0 &&
             currentDOM.offsetTop + 28 - this.$refs.tableRef.offsetHeight ===
@@ -1090,6 +1091,7 @@ export default {
           ) {
             y = 0
           }
+
           this.$refs.contentRef.style.transform = `translateY(${y}px)`
           this.$refs.barRef.style.top = `${Math.floor(
             Math.abs(y) * contentZoom
@@ -1290,8 +1292,10 @@ export default {
           .play__author {
             float: left;
             margin-left: 15px;
+            width: 300px;
+            height: 16px;
+            overflow: hidden;
             span {
-              float: left;
               height: 14px;
               color: #9b9b9b;
               i {
@@ -1300,12 +1304,8 @@ export default {
               }
               a {
                 display: inline-block;
-                max-width: 100px;
                 height: 100%;
                 color: #9b9b9b;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
               }
             }
           }
