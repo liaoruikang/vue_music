@@ -1,30 +1,16 @@
 <template>
-  <div class="playlist__container w clearfix">
-    <div class="playlist__left">
+  <div class="song__container w clearfix">
+    <div class="song__left">
       <div class="left__box">
-        <!-- 内容区域 -->
-        <playlistContent></playlistContent>
+        <SongContent></SongContent>
       </div>
     </div>
-    <div class="playlist__right" v-if="subscribers && related">
-      <div class="playlist__box">
-        <div class="playlist__beSimilar">
-          <h3>喜欢这个歌单的人</h3>
+    <div class="song__right" v-if="simiSong && simiPlaylist">
+      <div class="right__box">
+        <div class="simi" v-if="simiPlaylist.playlists.length">
+          <h3>包含这首歌的歌单</h3>
           <ul>
-            <li v-for="item in subscribers.subscribers" :key="item.id">
-              <router-link :to="`/user/home?id=${item.userId}`">
-                <el-image
-                  :src="item.avatarUrl + '?param=40y40'"
-                  :title="item.nickname"
-                ></el-image>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-        <div class="playlist__hot">
-          <h3>热门歌单</h3>
-          <ul>
-            <li v-for="item in related.playlists" :key="item.id">
+            <li v-for="item in simiPlaylist.playlists" :key="item.id">
               <router-link :to="`/playlist?id=${item.id}`">
                 <el-image :src="item.coverImgUrl + '?param=50y50'"></el-image>
               </router-link>
@@ -44,7 +30,41 @@
             </li>
           </ul>
         </div>
-        <div class="playlist__client">
+        <div class="beSimilar">
+          <h3>相似歌曲</h3>
+          <ul>
+            <li class="clearfix" v-for="item in simiSong.songs" :key="item.id">
+              <div class="text">
+                <div class="name">
+                  <router-link :to="`/song?id=${item.id}`">{{
+                    item.name
+                  }}</router-link>
+                </div>
+                <div class="artist">
+                  <span v-for="(val, i) in item.artists" :key="val.id">
+                    <router-link :to="`/artist?id=${val.id}`">{{
+                      val.name
+                    }}</router-link
+                    >{{ i !== item.artists.length - 1 ? '/' : '' }}</span
+                  >
+                </div>
+              </div>
+              <div class="f">
+                <a
+                  href="javascript:;"
+                  class="play"
+                  @click="$store.dispatch('getSongDetails', item.id)"
+                ></a>
+                <a
+                  href="javascript:;"
+                  class="add"
+                  @click="$store.dispatch('addSong', item.id)"
+                ></a>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="right__client">
           <h3>网易云音乐多端下载</h3>
           <ul>
             <li>
@@ -69,71 +89,70 @@
   </div>
 </template>
 <script>
-import playlistContent from '@/components/playlist/playlistContent'
-import { mapMutations, mapActions, mapState } from 'vuex'
+import SongContent from '@/components/song/SongContent'
+import { mapActions, mapMutations, mapState } from 'vuex'
 export default {
-  name: 'playlist',
+  name: 'song',
   data() {
     return {}
   },
   methods: {
-    ...mapMutations('playlist', {
-      removeAll: 'removeAll'
+    ...mapActions('song', {
+      getSongDetail: 'getSongDetail',
+      getLyric: 'getLyric',
+      getSimiSong: 'getSimiSong',
+      getSimiPlaylist: 'getSimiPlaylist'
     }),
-    ...mapActions('playlist', {
-      getSubscribers: 'getSubscribers',
-      getPlaylist: 'getPlaylist',
-      getRelated: 'getRelated'
+    ...mapMutations('song', {
+      removeAll: 'removeAll'
     })
   },
   components: {
-    playlistContent
-  },
-  beforeDestroy() {
-    this.removeAll()
+    SongContent
   },
   computed: {
     id() {
       return this.$route.query.id
     },
-    ...mapState('playlist', {
-      subscribers: 'subscribers',
-      related: 'related',
-      songsDetail: 'songsDetail'
+    ...mapState('song', {
+      simiSong: 'simiSong',
+      simiPlaylist: 'simiPlaylist'
     })
   },
   watch: {
     id: {
       immediate: true,
       handler(val) {
-        this.getPlaylist({ id: val, ist: true })
-        this.getSubscribers({ id: val, limit: 8 })
-        this.getRelated(val)
+        if (!val) return
+        this.getSimiSong(val)
+        this.getSongDetail(val)
+        this.getLyric(val)
+        this.getSimiPlaylist(val)
       }
-    },
-    songsDetail(val) {
-      this.updateTitle(this.$route.meta, val.playlist.name, 3)
     }
+  },
+  beforeDestroy() {
+    this.removeAll()
   }
 }
 </script>
 <style lang="less" scoped>
-.playlist__container {
+.song__container {
   background: url('../../assets/uploads/wrap4.png') repeat-y center 0;
   min-height: 700px;
-  .playlist__left {
+  .song__left {
     float: left;
     width: 100%;
     margin-right: -270px;
     .left__box {
-      padding: 47px 30px 40px 39px;
+      padding: 40px 30px 40px 39px;
       margin-right: 270px;
     }
   }
-  .playlist__right {
+  .song__right {
     float: right;
     width: 270px;
-    .playlist__box {
+    .right__box {
       padding: 20px 40px 40px 30px;
       h3 {
         height: 23px;
@@ -142,32 +161,7 @@ export default {
         color: #333;
         font-size: 12px;
       }
-      .playlist__beSimilar {
-        ul {
-          display: flex;
-          flex-wrap: wrap;
-          li {
-            width: 40px;
-            height: 40px;
-            margin: 5px;
-            a:hover {
-              text-decoration: underline;
-            }
-            .el-image {
-              width: 40px;
-              height: 40px;
-            }
-            p {
-              margin-top: 2px;
-              text-align: center;
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-          }
-        }
-      }
-      .playlist__hot {
+      .simi {
         margin-top: 20px;
         ul {
           li {
@@ -215,7 +209,49 @@ export default {
           }
         }
       }
-      .playlist__client {
+      .beSimilar {
+        margin-top: 20px;
+        ul {
+          li {
+            margin-top: 10px;
+            .text {
+              float: left;
+              width: 156px;
+              line-height: 16px;
+              a:hover {
+                text-decoration: underline;
+              }
+              .artist {
+                a {
+                  color: #999;
+                }
+              }
+            }
+            .f {
+              float: right;
+              a {
+                float: left;
+                margin-top: 10px;
+                width: 10px;
+                height: 11px;
+                opacity: 0.7;
+                background: url('../../assets/uploads/icon2.png') no-repeat 0 -99999999px;
+              }
+              a:hover {
+                opacity: 1;
+              }
+              .play {
+                background-position: -69px -455px;
+                margin-right: 16px;
+              }
+              .add {
+                background-position: -87px -454px;
+              }
+            }
+          }
+        }
+      }
+      .right__client {
         margin-top: 20px;
         ul {
           height: 65px;

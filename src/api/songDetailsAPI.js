@@ -7,7 +7,9 @@ export const songsDetailsAPI = (id, ist) => {
 }
 // 获取歌曲详情
 export const songDetailsAPI = (ids) => {
-  return request.get('song/detail', { params: { ids } })
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('song/detail', { params: { ids, timestamp } })
 }
 // 获取专辑详情
 export const albumDetailsAPI = (id) => {
@@ -16,4 +18,8 @@ export const albumDetailsAPI = (id) => {
 // 获取电台详情
 export const radioDetailsAPI = (id) => {
   return request.get('dj/program/detail', { params: { id } })
+}
+// 获取相似音乐
+export const simiSongAPI = (id) => {
+  return request.get('simi/song', { params: { id } })
 }

@@ -21,9 +21,7 @@
               :to="`/user/home?id=${item.user.userId}`"
               >{{ item.user.nickname }}</router-link
             >
-            <img
-              src="https://p6.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4213922957/d393/4206/8928/a082dd9a7e7bb69e84b138b8df7bbcd0.png"
-            />:&nbsp;{{ item.content.split('(')[0] }}
+            &nbsp;：{{ item.content.split('(')[0] }}
             <router-link
               v-if="item.content.split('(')[1]"
               :to="`/user/home?id=${userId}`"
@@ -113,6 +111,14 @@ export default {
       if (val) {
         this.queryInfo.id = val
         this.getComment(this.queryInfo)
+      }
+    },
+    comment: {
+      deep: true,
+      handler(val) {
+        if (val) {
+          this.$emit('commentCount', val.totalCount)
+        }
       }
     }
   },

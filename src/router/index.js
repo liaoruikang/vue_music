@@ -29,6 +29,8 @@ const Aalbum = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Aal
 const Amv = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Amv')
 const Adesc = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Adesc')
 
+const Song = () => import(/* webpackChunkName: "song" */ '@/views/song/Song')
+
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
@@ -158,7 +160,11 @@ const routes = [
 
     }]
   },
-
+  {
+    path: '/song',
+    component: Song,
+    meta: { oneTitle: '网易云音乐', twoTitle: '单曲', threeTitle: '', fourTitle: '' }
+  },
   {
     path: '*',
     component: Found,

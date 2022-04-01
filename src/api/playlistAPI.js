@@ -19,3 +19,8 @@ export const subscribersAPI = (id, limit, offset) => {
 export const relatedAPI = (id) => {
   return request('related/playlist', { params: { id } })
 }
+
+// 获取歌曲相似歌单
+export const simiPlaylistAPI = (id) => {
+  return request.get('simi/playlist', { params: { id } })
+}

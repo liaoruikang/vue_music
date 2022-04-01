@@ -24,6 +24,7 @@ import artist from './artist'
 import album from './album'
 import my from './my'
 import search from './search'
+import song from './song'
 
 Vue.use(Vuex)
 
@@ -48,6 +49,7 @@ export default new Vuex.Store({
     artist,
     album,
     my,
-    search
+    search,
+    song
   }
 })
