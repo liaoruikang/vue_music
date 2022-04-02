@@ -15,7 +15,6 @@ export default {
     })
     val.songsId = val.songsId.substr(0, val.songsId.length - 1)
     state.albumDetail = val
-    console.log(state.albumDetail)
   },
   removeAll(state) {
     state.albumDetail = null
