@@ -254,6 +254,7 @@
 </template>
 <script>
 import { mapState, mapActions } from 'vuex'
+import Bus from '@/plugin/eventBus'
 export default {
   name: 'listContent',
   data() {
@@ -270,6 +271,10 @@ export default {
     }),
     // 收藏歌单
     async collection() {
+      if (!this.isLogin) {
+        Bus.$emit('Visible', true)
+        return
+      }
       // 判断歌单是否已收藏
       if (this.collectionListId.includes(this.songsDetails.id)) return
 

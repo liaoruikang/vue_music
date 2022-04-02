@@ -226,7 +226,8 @@ export default {
       getFollows: 'getFollows',
       shareSong: 'shareSong',
       privateSong: 'privateSong',
-      privateSongs: 'privateSongs'
+      privateSongs: 'privateSongs',
+      privateAlbum: 'privateAlbum'
     }),
     // 将好友名称添加到输入框中
     getAtName(val) {
@@ -321,6 +322,15 @@ export default {
           })
         } else if (this.shareName.type === 'song') {
           const { data: result } = await this.privateSong(this.privateForm)
+          if (result.code !== 200) return this.$message.error(result.message)
+          this.$message.success('分享成功')
+          this.$store.commit('setCFDVisible', {
+            display: false,
+            component: null,
+            songId: null
+          })
+        } else if (this.shareName.type === 'album') {
+          const { data: result } = await this.privateAlbum(this.privateForm)
           if (result.code !== 200) return this.$message.error(result.message)
           this.$message.success('分享成功')
           this.$store.commit('setCFDVisible', {
@@ -477,6 +487,9 @@ export default {
         margin: auto;
         border-top: 1px solid #e5e5e5;
         line-height: 45px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
     }
     .share__f {

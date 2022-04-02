@@ -1,51 +1,30 @@
 <template>
-  <div class="playlistContent__container">
-    <div class="playlistContent__head" v-if="songsDetail">
+  <div class="albumContent__container" v-loading="!albumDetail">
+    <div class="albumContent__head" v-if="albumDetail">
       <div class="head__left">
-        <el-image
-          :src="songsDetail.playlist.coverImgUrl + '?param=200y200'"
-        ></el-image>
+        <el-image :src="albumDetail.album.picUrl"></el-image>
       </div>
       <div class="head__right">
         <div class="name">
-          <h2><i></i>{{ songsDetail.playlist.name }}</h2>
+          <h2><i></i>{{ albumDetail.album.name }}</h2>
         </div>
-        <div class="author">
-          <el-image
-            :src="songsDetail.playlist.creator.avatarUrl + '?param=35y35'"
-          ></el-image>
-          <router-link
-            class="author__name"
-            :to="`/user/home?id=${songsDetail.playlist.creator.userId}`"
-          >
-            {{ songsDetail.playlist.creator.nickname }}
-          </router-link>
-          <img
-            v-if="songsDetail.playlist.creator.avatarDetail"
-            style="
-              height: 13px;
-              width: 13px;
-              display: inline-block;
-              vertical-align: middle;
-              margin-right: 5px;
-              margin-top: -2px;
-            "
-            :src="songsDetail.playlist.creator.avatarDetail.identityIconUrl"
-          />
-          <span class="createTime"
-            >{{
-              dayjs(songsDetail.playlist.creator.createTime).format(
-                'YYYY-DD-DD'
-              )
-            }}
-            创建</span
-          >
+        <div class="text">
+          歌手：
+          <router-link :to="`/artist?id=${albumDetail.album.artist.id}`">{{
+            albumDetail.album.artist.name
+          }}</router-link>
         </div>
+        <div class="text">
+          发行时间：{{
+            dayjs(albumDetail.album.publishTime).format('YYYY-MM-DD')
+          }}
+        </div>
+        <div class="text">发行公司： {{ albumDetail.album.company }}</div>
         <div class="f__btn">
           <a
             href="javascript:;"
             class="play"
-            @click="$store.dispatch('getsongsDetails', songsDetail.playlist.id)"
+            @click="$store.dispatch('getAlbumDetails', albumDetail.album.id)"
           >
             <em>
               <i></i>
@@ -56,19 +35,22 @@
             href="javascript:;"
             class="next"
             @click="
-              $store.dispatch('addSongs', songsDetail.playlist.id)
+              $store.dispatch('addAlbum', albumDetail.album.id)
               $message.success('添加成功')
             "
           ></a>
           <a
             href="javascript:;"
-            :class="[
-              'collection',
-              songsDetail.playlist.subscribed ? 'already' : ''
-            ]"
-            @click="collection(songsDetail.playlist.subscribed)"
+            :class="'collection'"
+            @click="
+              $store.commit('setCFDVisible', {
+                display: true,
+                component: 'Collection',
+                songId: albumDetail.songsId
+              })
+            "
           >
-            <em> ({{ songsDetail.playlist.subscribedCount }}) </em>
+            <em> 收藏 </em>
           </a>
           <a
             href="javascript:;"
@@ -77,13 +59,13 @@
               $store.commit('setCFDVisible', {
                 display: true,
                 component: 'Forward',
-                songId: songsDetail.playlist.id,
-                shareDetails: songsDetail.playlist,
-                type: 'playlist'
+                songId: albumDetail.album.id,
+                shareDetails: albumDetail.album,
+                type: 'album'
               })
             "
           >
-            <em> ({{ songsDetail.playlist.shareCount }}) </em>
+            <em> ({{ albumDetail.album.info.shareCount }}) </em>
           </a>
           <a
             href="javascript:;"
@@ -98,66 +80,42 @@
             <em> 下载 </em>
           </a>
           <a href="javascript:;" class="comment" @click="anchorPoint">
-            <em> ({{ songsDetail.playlist.commentCount }}) </em>
+            <em> ({{ commentCount }}) </em>
           </a>
         </div>
-        <div class="label">
-          <span>标签：</span>
-          <div class="centent">
-            <router-link
-              :to="`/discover/playlist/?cat=${item}&order=hot`"
-              class="tag"
-              v-for="(item, index) in songsDetail.playlist.tags"
+      </div>
+      <div class="head__introduce">
+        <h3>专辑介绍：</h3>
+        <p
+          v-for="(item, index) in albumDetail.album.description.slice(0, 3)"
+          :key="index"
+        >
+          {{ item }}
+        </p>
+        <el-collapse-transition>
+          <div class="open" v-show="isOpen">
+            <p
+              v-for="(item, index) in albumDetail.album.description.slice(3)"
               :key="index"
-            >
-              <i> {{ item }}</i>
-            </router-link>
+              v-html="item"
+            ></p>
           </div>
-        </div>
-        <div class="introduce">
-          <p
-            class="putAway"
-            v-show="!isOpen && songsDetail.playlist.description.length > 100"
-            v-html="
-              '<b>介绍：</b>' +
-              songsDetail.playlist.description
-                .replace(/\n/g, '<br />')
-                .substr(0, 100) +
-              '...'
-            "
-          ></p>
-          <p
-            class="open"
-            v-show="isOpen || songsDetail.playlist.description.length < 100"
-            v-html="
-              '<b>介绍：</b>' +
-              songsDetail.playlist.description.replace(/\n/g, '<br />')
-            "
-          ></p>
-          <div class="isOpen clearfix">
-            <a
-              href="javascript:;"
-              v-if="songsDetail.playlist.description.length > 100"
-              @click="isOpen = !isOpen"
-              >{{ isOpen ? '收起' : '展开' }}</a
-            >
-          </div>
-        </div>
+        </el-collapse-transition>
+        <a href="javascript:;" @click="isOpen = !isOpen"
+          >{{ isOpen ? '收起' : '展开'
+          }}<i :class="isOpen ? 'el-icon-arrow-up' : 'el-icon-arrow-down'"></i
+        ></a>
       </div>
     </div>
-    <div class="playlistContent__body" v-if="songsDetail">
+    <div class="albumContent__body" v-if="albumDetail">
       <div class="body__title">
         <h3>歌曲列表</h3>
-        <span class="sub">{{ songsDetail.playlist.trackCount }}首歌</span>
-        <span class="playCount"
-          >播放：<em>{{ songsDetail.playlist.playCount }}</em
-          >次</span
-        >
+        <span class="sub">{{ albumDetail.album.size }}首歌</span>
       </div>
       <!-- 表格区域 -->
       <el-table
         stripe
-        :data="songsDetail.playlist.tracks"
+        :data="albumDetail.songs"
         border
         size="mini"
         style="width: 100%"
@@ -270,68 +228,35 @@
           </template>
         </el-table-column>
       </el-table>
-      <!-- 客户端下载 -->
-      <div
-        class="playlistContent__download"
-        v-if="
-          songsDetail.playlist.tracks &&
-          songsDetail.playlist.tracks.length === 20
-        "
-      >
-        <p>查看更多内容，请下载客户端</p>
-        <router-link to="/download">立即下载</router-link>
-      </div>
       <!-- 评论区域 -->
       <div class="playlistContent__comment" ref="commentRef">
         <!-- 头部标题区域 -->
         <div class="comment__head">
           <h3>评论</h3>
-          <span class="comment__count"
-            >共{{ songsDetail.playlist.commentCount }}评论</span
-          >
+          <span class="comment__count">共{{ commentCount }}评论</span>
         </div>
         <!-- 评论 -->
-        <Comment :id="songsDetail.playlist.id || 0" type="2"></Comment>
+        <Comment
+          :id="albumDetail.album.id || 0"
+          type="3"
+          @commentCount="commentCount = $event"
+        ></Comment>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapState } from 'vuex'
 import Comment from '@/components/comment/Comment'
-import Bus from '@/plugin/eventBus'
 export default {
-  name: 'playlistContent',
+  name: 'albumContent',
   data() {
     return {
+      commentCount: 0,
       isOpen: false
     }
   },
   methods: {
-    ...mapActions('collection', {
-      shoucangPlaylist: 'shoucangPlaylist'
-    }),
-    ...mapActions('playlist', {
-      getPlaylist: 'getPlaylist'
-    }),
-    // 收藏歌单
-    async collection(val) {
-      if (!this.isLogin) {
-        Bus.$emit('Visible', true)
-        return
-      }
-      // 判断歌单是否已收藏
-      if (val) return
-      const { data: result } = await this.shoucangPlaylist({
-        t: 1,
-        id: this.songsDetail.playlist.id
-      }).catch((err) => {
-        return err.response
-      })
-      if (result.code !== 200) return this.$message.error('收藏失败')
-      this.$message.success('收藏成功')
-      this.getPlaylist({ id: this.id, ist: true })
-    },
     // 锚点跳转到评论区
     anchorPoint() {
       const maxScroll = this.$refs.commentRef.offsetTop
@@ -347,17 +272,12 @@ export default {
     }
   },
   computed: {
-    id() {
-      return this.$route.query.id
-    },
-    ...mapState('playlist', {
-      songsDetail: 'songsDetail'
+    ...mapState('album', {
+      // 专辑详情数据
+      albumDetail: 'albumDetail'
     }),
     ...mapState('play', {
       currentPlay: 'currentPlay'
-    }),
-    ...mapState('user', {
-      isLogin: 'isLogin'
     })
   },
   components: {
@@ -366,30 +286,38 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.playlistContent__container {
-  .playlistContent__head {
+.albumContent__container {
+  min-height: 350px;
+  .albumContent__head {
     display: flex;
+    flex-wrap: wrap;
     .head__left {
+      position: relative;
+      width: 209px;
+      height: 177px;
       .el-image {
-        width: 200px;
-        height: 200px;
-        position: relative;
-        overflow: visible;
-      }
-      .el-image::before {
-        content: '';
         position: absolute;
-        width: 208px;
-        height: 208px;
-        top: -4px;
-        left: -4px;
-        background: url('../../assets/uploads/coverall.png') no-repeat 0 -1285px;
+        top: 0;
+        left: 0;
+        width: 177px;
+        height: 177px;
       }
+    }
+    .head__left::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      background: url('../../assets/uploads/coverall.png') no-repeat 0 -986px;
     }
     .head__right {
       flex: 1;
-      padding-left: 30px;
+      padding-left: 20px;
       .name {
+        margin: 0 0 12px;
         h2 {
           line-height: 24px;
           font-size: 20px;
@@ -398,29 +326,22 @@ export default {
             display: inline-block;
             width: 54px;
             height: 24px;
-            background: url('../../assets/uploads/icon.png') no-repeat 0 -243px;
+            background: url('../../assets/uploads/icon.png') no-repeat 0 -186px;
             margin-right: 5px;
             margin-top: -3px;
             vertical-align: middle;
           }
         }
       }
-      .author {
-        margin-top: 10px;
-        .el-image {
-          width: 35px;
-          height: 35px;
-          vertical-align: middle;
-        }
-        .author__name {
-          color: #0c73c2;
-          margin: 6px;
-        }
-        .author__name:hover {
+      .text {
+        margin-top: 4px;
+        line-height: 18px;
+        color: #666;
+        a:hover {
           text-decoration: underline;
         }
-        .createTime {
-          color: #999;
+        a {
+          color: #0c73c2;
         }
       }
       .f__btn {
@@ -533,71 +454,30 @@ export default {
           }
         }
       }
-      .label {
-        margin-top: 30px;
-        > span {
-          vertical-align: top;
-        }
-        .centent {
-          display: inline-block;
-          margin-top: -2px;
-          .tags__btn {
-            color: #0c73c2;
-            font-size: 12px;
-          }
-          .tags__btn:hover {
-            text-decoration: underline;
-          }
-          .tag {
-            display: inline-block;
-            margin-right: 10px;
-            padding: 0 10px 0 0;
-            background: url('../../assets/uploads/button2.png') no-repeat right -27px;
-            line-height: 22px;
-            i {
-              display: inline-block;
-              padding: 0 6px 0 13px;
-              height: 22px;
-              background: url('../../assets/uploads/button2.png') no-repeat 0 0;
-              font-size: 12px;
-              color: #777;
-            }
-          }
-          .tag:hover {
-            background-position: right -1430px;
-            i {
-              background-position: 0 -1400px;
-            }
-          }
-        }
+    }
+    .head__introduce {
+      width: 100%;
+      margin-top: 20px;
+      h3 {
+        font-size: 100%;
       }
-      .introduce {
-        margin-top: 4px;
-        line-height: 18px;
+      p {
         color: #666;
-        p {
-          word-wrap: break-word;
-          word-break: break-word;
-          white-space: normal;
-          /deep/ b {
-            font-weight: normal;
-          }
-        }
-
-        .isOpen {
-          a {
-            float: right;
-            color: #0c73c2;
-          }
-          a:hover {
-            text-decoration: underline;
-          }
-        }
+        text-indent: 2em;
+        line-height: 24px;
+        margin-top: 4px;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      a {
+        color: #0c73c2;
+        float: right;
       }
     }
   }
-  .playlistContent__body {
-    margin-top: 27px;
+  .albumContent__body {
+    margin: 20px 0;
     .body__title {
       height: 33px;
       border-bottom: 2px solid #c20c0c;
@@ -740,28 +620,8 @@ export default {
         }
       }
     }
-    .playlistContent__download {
-      margin-top: 30px;
-      text-align: center;
-
-      p {
-        font-size: 13px;
-        margin-bottom: 20px;
-      }
-      a {
-        display: inline-block;
-        width: 120px;
-        height: 30px;
-        background-image: linear-gradient(90deg, #ff5a4c 0%, #ff1d12 100%);
-        border-radius: 18px;
-        line-height: 30px;
-        font-size: 12px;
-        color: #ffffff;
-        text-align: center;
-      }
-    }
     .playlistContent__comment {
-      margin-top: 20px;
+      margin-top: 40px;
       .comment__head {
         height: 33px;
         border-bottom: 2px solid #c20c0c;

@@ -1,5 +1,5 @@
 <template>
-  <div class="discover__contianer" v-loading.lock="!isShow">
+  <div class="discover__contianer" v-loading="!isShow">
     <div class="discover__box" v-if="isShow">
       <!-- 轮播图 -->
       <Banner :bannerData="bannerList"></Banner>

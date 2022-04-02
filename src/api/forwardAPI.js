@@ -28,3 +28,8 @@ export const privateSongAPI = (privateForm) => {
 export const privateSongsAPI = (privateForm) => {
   return request.get('send/playlist', { params: { user_ids: privateForm.user_id, playlist: privateForm.id, msg: privateForm.msg } })
 }
+
+// 发送私信(专辑)
+export const privateAlbumAPI = (privateForm) => {
+  return request.get('send/album', { params: { user_ids: privateForm.user_id, id: privateForm.id, msg: privateForm.msg } })
+}

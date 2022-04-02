@@ -1,3 +1,5 @@
 export default {
-  discList: null
+  discList: null,
+  // 专辑详情
+  albumDetail: null
 }

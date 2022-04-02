@@ -819,6 +819,10 @@ export default {
       shoucangPlaylist: 'shoucangPlaylist'
     }),
     async shoucang(val) {
+      if (!this.isLogin) {
+        Bus.$emit('Visible', true)
+        return
+      }
       const { data: result } = await this.shoucangPlaylist(val).catch((err) => {
         return err.response
       })
@@ -826,6 +830,10 @@ export default {
       this.$message.success('收藏成功')
     },
     async follow(val) {
+      if (!this.isLogin) {
+        Bus.$emit('Visible', true)
+        return
+      }
       if (val.followed) return
       const { data: result } = await followAPI(val.userId, 1).catch((err) => {
         return err.response

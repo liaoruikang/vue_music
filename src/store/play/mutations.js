@@ -108,5 +108,14 @@ export default {
     })
     // 将歌曲信息存到本地
     window.localStorage.setItem('songList', JSON.stringify(state.songList))
+  },
+  addAlbum(state, songs) {
+    songs.forEach(item => {
+      if (state.songList.findIndex(val => val.id === item.id) === -1) {
+        state.songList.push(item)
+      }
+    })
+    // 将歌曲信息存到本地
+    window.localStorage.setItem('songList', JSON.stringify(state.songList))
   }
 }

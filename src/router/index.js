@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 // 引入discover中的组件
 const Discover = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Discover')
-const Album = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
+const DAlbum = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
 const Dartist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/artist/Artist')
 const HotSinger = () => import(/* webpackChunkName: "artist" */ '@/views/discover/artist/HotSinger')
 const Playlist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Playlist')
@@ -30,6 +30,7 @@ const Amv = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Amv')
 const Adesc = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Adesc')
 
 const Song = () => import(/* webpackChunkName: "song" */ '@/views/song/Song')
+const Album = () => import(/* webpackChunkName: "album" */ '@/views/album/Album')
 
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
@@ -111,7 +112,7 @@ const routes = [
   },
   {
     path: '/discover/album',
-    component: Album,
+    component: DAlbum,
     meta: { oneTitle: '网易云音乐', twoTitle: '新碟上架', threeTitle: '', fourTitle: '' }
   },
   {
@@ -164,6 +165,11 @@ const routes = [
     path: '/song',
     component: Song,
     meta: { oneTitle: '网易云音乐', twoTitle: '单曲', threeTitle: '', fourTitle: '' }
+  },
+  {
+    path: '/album',
+    component: Album,
+    meta: { oneTitle: '网易云音乐', twoTitle: '专辑', threeTitle: '', fourTitle: '' }
   },
   {
     path: '*',

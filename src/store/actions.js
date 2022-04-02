@@ -47,5 +47,9 @@ export default {
     // 获取歌单详情
     const { data: result } = await songsDetailsAPI(id)
     commit('play/addSongs', result.playlist.tracks)
+  },
+  async addAlbum({ commit }, id) {
+    const { data: result } = await albumDetailsAPI(id)
+    commit('play/addAlbum', result.songs)
   }
 }

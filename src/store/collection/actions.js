@@ -1,5 +1,6 @@
 // 导入歌单API
 import { userPlayListAPI, playlistTarcksAPI, createPlaylistAPI, shoucangPlaylistAPI } from '@/api/collectionAPI'
+import { subAlbumAPI } from '@/api/albumAPI'
 export default {
   // 获取用户歌单
   async getUserPlayList({ commit, state }, uid) {
@@ -21,4 +22,5 @@ export default {
   async shoucangPlaylist({ commit }, val) {
     return shoucangPlaylistAPI(val.t, val.id)
   }
+
 }

@@ -13,7 +13,9 @@ export const songDetailsAPI = (ids) => {
 }
 // 获取专辑详情
 export const albumDetailsAPI = (id) => {
-  return request.get('album', { params: { id } })
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('album', { params: { id, timestamp } })
 }
 // 获取电台详情
 export const radioDetailsAPI = (id) => {

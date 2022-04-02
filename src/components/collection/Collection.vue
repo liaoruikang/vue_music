@@ -164,6 +164,9 @@ export default {
     }),
     ...mapState('user', {
       userId: 'userId'
+    }),
+    ...mapState('collection', {
+      type: 'type'
     })
   }
 }
