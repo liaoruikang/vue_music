@@ -73,11 +73,6 @@
                   >
                 </li>
                 <li>
-                  <router-link to="/user/update"
-                    ><i class="el-icon-setting"></i>个人设置</router-link
-                  >
-                </li>
-                <li>
                   <a href="javascript:;" @click="$emit('logout')"
                     ><i class="el-icon-switch-button"></i>退出登录</a
                   >

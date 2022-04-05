@@ -320,8 +320,12 @@ export default {
     // 收藏歌手
     async collection(val) {
       const t = !val ? 1 : 0
-      const { data: result } = await artistSubAPI(this.id, t)
-      if (result.code !== 200) return this.$message.error(result.message)
+      const { data: result } = await artistSubAPI(this.id, t).catch(
+        (err) => err.response
+      )
+      if (result.code !== 200) {
+        return this.$message.warning(result.data.blockText)
+      }
       this.getSingerDetail(this.id)
       const str = t ? '收藏成功' : '取消收藏成功'
       this.$message.success(str)

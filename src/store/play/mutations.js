@@ -1,3 +1,4 @@
+/* eslint-disable valid-typeof */
 export default {
   // 写入歌词
   setLyric(state, lyric) {
@@ -33,6 +34,7 @@ export default {
   },
   // 写入当前歌曲
   setCurrentPlay(state, song) {
+    if (song === undefined) return
     if (!('isPlay' in song)) {
       song.isPlay = 0
     } else if (song.isPlay === 0) {

@@ -17,9 +17,11 @@ export const albumDetailsAPI = (id) => {
   const timestamp = new Date().getTime()
   return request.get('album', { params: { id, timestamp } })
 }
-// 获取电台详情
+// 获取节目详情
 export const radioDetailsAPI = (id) => {
-  return request.get('dj/program/detail', { params: { id } })
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('dj/program/detail', { params: { id, timestamp } })
 }
 // 获取相似音乐
 export const simiSongAPI = (id) => {

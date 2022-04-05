@@ -29,3 +29,36 @@ export const recommendDjListAPI = (type) => {
 export const radioHotAPI = (cateId, limit, offset) => {
   return request.get('dj/radio/hot', { params: { cateId, limit, offset } })
 }
+
+// 获取电台详情
+export const djDetailAPI = (rid) => {
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('dj/detail', { params: { rid, timestamp } })
+}
+
+// 获取节目列表
+export const programDetailAPI = (rid, limit, offset, asc) => {
+  return request.get('dj/program', { params: { rid, limit, offset, asc } })
+}
+
+// 订阅电台
+export const subDjAPI = (rid, t) => {
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('dj/sub', { params: { rid, t, timestamp } })
+}
+
+// 点赞
+export const resourcesLikeAPI = (id, t, type) => {
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  // 1: mv
+
+  // 4: 电台
+
+  // 5: 视频
+
+  // 6: 动态
+  return request.get('resource/like', { params: { id, t, type, timestamp } })
+}

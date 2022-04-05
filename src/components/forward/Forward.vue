@@ -338,6 +338,13 @@ export default {
             component: null,
             songId: null
           })
+        } else {
+          this.$message.error('暂不支持私信')
+          this.$store.commit('setCFDVisible', {
+            display: false,
+            component: null,
+            songId: null
+          })
         }
       }
     }

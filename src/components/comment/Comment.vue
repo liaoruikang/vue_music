@@ -43,6 +43,7 @@
         @current-change="pageChange"
         next-text="下一页"
         prev-text="上一页"
+        hide-on-single-page
       >
       </el-pagination>
     </div>

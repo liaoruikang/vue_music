@@ -8,5 +8,11 @@ export default {
   // 推荐分类列表
   recommendCategory: null,
   // 分类电台列表
-  recommendDjList: []
+  recommendDjList: [],
+  // 电台详情
+  djDetail: null,
+  // 节目列表
+  programList: null,
+  // 节目详情
+  programDetail: null
 }

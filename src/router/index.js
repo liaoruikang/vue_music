@@ -1,36 +1,31 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// 引入discover中的组件
 const Discover = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Discover')
 const DAlbum = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
 const Dartist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/artist/Artist')
 const HotSinger = () => import(/* webpackChunkName: "artist" */ '@/views/discover/artist/HotSinger')
 const Playlist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Playlist')
 const Dplaylist = () => import(/* webpackChunkName: "playlist" */ '@/views/playlist/Playlist')
-const Djradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/djradio/Djradio')
+const Ddjradio = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/djradio/Djradio')
 const Category = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Category')
 const Rank = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Rank')
 const Rec = () => import(/* webpackChunkName: "djradio" */ '@/views/discover/djradio/Rec')
 const Toplist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Toplist')
-// 引入My中的组件
 const My = () => import(/* webpackChunkName: "My" */ '@/views/my/My')
 const SingerEdit = () => import(/* webpackChunkName: "My" */ '@/views/my/SingerEdit')
 const Cover = () => import(/* webpackChunkName: "My" */ '@/views/my/Cover')
-// 引入Download中的组件
 const Download = () => import(/* webpackChunkName: "Download" */ '@/views/download/Download')
-// 引入Home中的组件
 const Home = () => import(/* webpackChunkName: "Home" */ '@/views/user/Home')
-// 引入Update中的组件
-const Update = () => import(/* webpackChunkName: "Update" */ '@/views/user/Update')
 const Found = () => import(/* webpackChunkName: "found" */ '@/views/found/Found')
 const Search = () => import(/* webpackChunkName: "search" */ '@/views/search/Search')
 const Artist = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Artist')
 const Aalbum = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Aalbum')
 const Amv = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Amv')
 const Adesc = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Adesc')
-
 const Song = () => import(/* webpackChunkName: "song" */ '@/views/song/Song')
 const Album = () => import(/* webpackChunkName: "album" */ '@/views/album/Album')
+const Djradio = () => import(/* webpackChunkName: "album" */ '@/views/djradio/Djradio')
+const Program = () => import(/* webpackChunkName: "album" */ '@/views/djradio/Program')
 
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
@@ -88,7 +83,7 @@ const routes = [
   },
   {
     path: '/discover/djradio',
-    component: Djradio,
+    component: Ddjradio,
     meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '', fourTitle: '' },
     children: [{ path: 'category', component: Category, meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '', fourTitle: '' } }]
   },
@@ -119,11 +114,6 @@ const routes = [
     path: '/user/home',
     component: Home,
     meta: { oneTitle: '网易云音乐', twoTitle: '用户', threeTitle: '', fourTitle: '' }
-  },
-  {
-    path: '/user/update',
-    component: Update,
-    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
     path: '/search',
@@ -172,6 +162,16 @@ const routes = [
     meta: { oneTitle: '网易云音乐', twoTitle: '专辑', threeTitle: '', fourTitle: '' }
   },
   {
+    path: '/djradio',
+    component: Djradio,
+    meta: { oneTitle: '网易云音乐', twoTitle: '主播电台', threeTitle: '', fourTitle: '' }
+  },
+  {
+    path: '/program',
+    component: Program,
+    meta: { oneTitle: '网易云音乐', twoTitle: '电台节目', threeTitle: '', fourTitle: '' }
+  },
+  {
     path: '*',
     component: Found,
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
@@ -183,7 +183,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const title = (to.meta.fourTitle === '' ? '' : to.meta.fourTitle + ' - ') + (to.meta.threeTitle === '' ? '' : to.meta.threeTitle + ' - ') + (to.meta.twoTitle === '' ? '' : to.meta.twoTitle + ' - ') + to.meta.oneTitle
+  from.meta.fourTitle = ''
+  from.meta.threeTitle = ''
+  const title = (!to.meta.fourTitle ? '' : to.meta.fourTitle + ' - ') + (!to.meta.threeTitle ? '' : to.meta.threeTitle + ' - ') + (!to.meta.twoTitle ? '' : to.meta.twoTitle + ' - ') + to.meta.oneTitle
   document.querySelector('title').innerHTML = title
   const appEl = document.querySelector('.app__container')
   if (appEl && from.path !== to.path) {

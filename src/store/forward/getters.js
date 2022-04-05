@@ -8,7 +8,10 @@ export default {
       }
     } else if (type === 'song') {
       let ar = ''
-      shareDetails.ar.forEach(item => {
+      shareDetails.artists && shareDetails.artists.forEach(item => {
+        ar = ar + item.name + '/'
+      })
+      shareDetails.ar && shareDetails.ar.forEach(item => {
         ar = ar + item.name + '/'
       })
       ar = ar.substr(0, ar.length - 1)
@@ -24,6 +27,16 @@ export default {
       ar = ar.substr(0, ar.length - 1)
       return {
         content: `专辑：${shareDetails.name} - ${ar}`,
+        type
+      }
+    } else if (type === 'djradio') {
+      return {
+        content: `电台：${shareDetails.name} by ${shareDetails.dj.nickname}`,
+        type
+      }
+    } else if (type === 'djprogram') {
+      return {
+        content: `节目：${shareDetails.name} - ${shareDetails.dj.brand}`,
         type
       }
     } else {

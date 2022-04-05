@@ -439,7 +439,6 @@ export default {
       contentY: 0,
       // 是否显示声音控件
       displayVoice: false,
-
       // audioDOM
       audioEl: null,
       // 当前播放时间
@@ -460,16 +459,15 @@ export default {
       // loop 循环
       // random 随机播放
       // oneLoop 单曲循环
-      playMode: 'loop',
-      // 节流阀
-      throttle: false,
+      playMode: localStorage.getItem('playMode') || 'loop',
       // 歌词防抖定时器
       lyricTimer: null,
       isLyric: false,
       // 歌词
       newLyric: [],
       url: null,
-      lyricsDOM: null
+      lyricsDOM: null,
+      valve: false
     }
   },
   created() {
@@ -812,7 +810,7 @@ export default {
         if (!this.newLyric[index + 1]) return true
         if (
           this.currentTime >= item.time &&
-          this.currentTime <= this.lyric[index + 1].time
+          this.currentTime < this.lyric[index + 1].time
         ) {
           item.className = 'current'
           this.lyricsDOM[index].style.color = '#fff'
@@ -854,13 +852,12 @@ export default {
     },
     // 当歌曲播放完最后一帧要执行的操作 单曲循环 顺序循环 列表
     onEnded(val) {
-      if (this.throttle) return
-      this.throttle = true
+      if (this.valve) return
+      this.valve = true
       // 获取到当前播放歌曲的索引
       const index = this.songList.findIndex(
         (item) => item.id === this.currentPlay.id
       )
-
       if (val === undefined) {
         if (this.playMode === 'loop') {
           // 列表循环
@@ -901,6 +898,9 @@ export default {
           this.$store.commit('play/setCurrentPlay', this.songList[index - 1])
         }
       }
+      setTimeout(() => {
+        this.valve = false
+      }, 1000)
     },
     onError() {
       this.$notify.error({
@@ -1120,7 +1120,6 @@ export default {
         this.audioEl.currentTime = 0
         // 第一次进入页面不会触发自动播放
         if (this.currentPlay && this.currentPlay.isPlay === 1) return
-        this.throttle = false
         this.play()
       }
     },
@@ -1139,6 +1138,9 @@ export default {
         this.$refs.rightBarRef.style.top = 0
         this.$refs.rightContentRef.style.transform = 'translateY(0px)'
       }
+    },
+    playMode(val) {
+      localStorage.setItem('playMode', val)
     }
   },
   computed: {
@@ -1257,7 +1259,7 @@ export default {
     .play__progress {
       float: left;
       position: relative;
-      margin: 12px 0 0 25px;
+      margin: 12px 0 0 20px;
       height: 100%;
       .song__headPortrait {
         position: absolute;

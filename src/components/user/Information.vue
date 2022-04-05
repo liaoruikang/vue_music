@@ -34,7 +34,7 @@
         <a
           :href="`#/artist?id=${userData.artistId}`"
           class="artist"
-          v-show="userId != $route.query.id"
+          v-show="userId != $route.query.id && userData.artistId"
         >
           <i>查看歌手页</i>
         </a>
@@ -155,7 +155,7 @@ export default {
         width: 20px;
         height: 20px;
         vertical-align: middle;
-        background: url('../../assets/uploads/icon.png') no-repeat;
+        background: url('../../assets/uploads/icon.png') no-repeat 0 -9999999px;
         margin-top: -6px;
         margin-left: 8px;
       }

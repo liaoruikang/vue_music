@@ -251,6 +251,7 @@ export default {
         this.$store.commit('user/setUserId', null)
         this.$store.commit('user/setUserData', {})
         this.$store.commit('user/setUserLevel', null)
+        this.$router.push('/')
       }
     },
     blur() {

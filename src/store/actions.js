@@ -51,5 +51,14 @@ export default {
   async addAlbum({ commit }, id) {
     const { data: result } = await albumDetailsAPI(id)
     commit('play/addAlbum', result.songs)
+  },
+  async addProgram({ commit }, id) {
+    const { data: result } = await radioDetailsAPI(id)
+    const { data: res } = await songDetailsAPI(result.program.mainSong.id)
+    res.songs[0].name = result.program.mainSong.name
+    res.songs[0].al.picUrl = result.program.radio.picUrl
+    res.songs[0].ar[0].name = result.program.radio.name
+    res.songs[0].ar[0].id = result.program.radio.id
+    commit('play/setSongList', res.songs)
   }
 }

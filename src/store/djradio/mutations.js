@@ -27,5 +27,22 @@ export default {
   // 写入分类电台列表数据
   setRecommendDjList(state, val) {
     state.recommendDjList = val
+  },
+  setDjDetail(state, val) {
+    state.djDetail = val
+  },
+  setProgramList(state, val) {
+    state.programList = val
+  },
+  // 写入节目详情
+  setProgramDetail(state, val) {
+    state.programDetail = val
+  },
+  removeDjDetailAll(state) {
+    state.djDetail = null
+    state.programList = null
+  },
+  removeProgramAll(state) {
+    state.programDetail = null
   }
 }
