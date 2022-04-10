@@ -133,7 +133,7 @@
       <div class="table" v-if="programDetail.songs.length > 0">
         <div class="table__head">
           <strong>节目包含歌曲列表</strong>
-          <span>（7首歌）</span>
+          <span>{{ `（${programDetail.songs.length}首歌）` }}</span>
           <a href="javascript:;" @click="tableIsOpen = !tableIsOpen"
             >{{ tableIsOpen ? '收起' : '展开'
             }}<i

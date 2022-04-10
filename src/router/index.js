@@ -26,6 +26,7 @@ const Song = () => import(/* webpackChunkName: "song" */ '@/views/song/Song')
 const Album = () => import(/* webpackChunkName: "album" */ '@/views/album/Album')
 const Djradio = () => import(/* webpackChunkName: "album" */ '@/views/djradio/Djradio')
 const Program = () => import(/* webpackChunkName: "album" */ '@/views/djradio/Program')
+const Mv = () => import(/* webpackChunkName: "album" */ '@/views/video/Mv')
 
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
@@ -170,6 +171,11 @@ const routes = [
     path: '/program',
     component: Program,
     meta: { oneTitle: '网易云音乐', twoTitle: '电台节目', threeTitle: '', fourTitle: '' }
+  },
+  {
+    path: '/mv',
+    component: Mv,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {
     path: '*',

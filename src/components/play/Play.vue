@@ -529,40 +529,44 @@ export default {
       this.$router.push(val)
     },
     show() {
-      if (this.ishide) return
-      clearInterval(this.showTimer)
-      this.ishide = true
-      let bottom = parseInt(
-        window
-          .getComputedStyle(this.$refs.playRef)
-          .getPropertyValue('bottom')
-          .split('px')[0]
-      )
-      this.showTimer = setInterval(() => {
-        if (bottom >= 0) {
-          return clearInterval(this.showTimer)
-        }
-        bottom += 2
-        this.$refs.playRef.style.bottom = bottom + 'px'
-      }, 10)
+      this.$nextTick(() => {
+        if (this.ishide) return
+        clearInterval(this.showTimer)
+        this.ishide = true
+        let bottom = parseInt(
+          window
+            .getComputedStyle(this.$refs.playRef)
+            .getPropertyValue('bottom')
+            .split('px')[0]
+        )
+        this.showTimer = setInterval(() => {
+          if (bottom >= 0) {
+            return clearInterval(this.showTimer)
+          }
+          bottom += 2
+          this.$refs.playRef.style.bottom = bottom + 'px'
+        }, 10)
+      })
     },
     hide() {
-      if (!this.ishide) return
-      clearInterval(this.hideTimer)
-      this.ishide = false
-      let bottom = parseInt(
-        window
-          .getComputedStyle(this.$refs.playRef)
-          .getPropertyValue('bottom')
-          .split('px')[0]
-      )
-      this.hideTimer = setInterval(() => {
-        if (bottom <= -46) {
-          return clearInterval(this.hideTimer)
-        }
-        bottom -= 2
-        this.$refs.playRef.style.bottom = bottom + 'px'
-      }, 10)
+      this.$nextTick(() => {
+        if (!this.ishide) return
+        clearInterval(this.hideTimer)
+        this.ishide = false
+        let bottom = parseInt(
+          window
+            .getComputedStyle(this.$refs.playRef)
+            .getPropertyValue('bottom')
+            .split('px')[0]
+        )
+        this.hideTimer = setInterval(() => {
+          if (bottom <= -46) {
+            return clearInterval(this.hideTimer)
+          }
+          bottom -= 2
+          this.$refs.playRef.style.bottom = bottom + 'px'
+        }, 10)
+      })
     },
     lock() {
       // 当状态是未上锁时

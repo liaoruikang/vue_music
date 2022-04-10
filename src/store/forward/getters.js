@@ -39,6 +39,11 @@ export default {
         content: `节目：${shareDetails.name} - ${shareDetails.dj.brand}`,
         type
       }
+    } else if (type === 'mv') {
+      return {
+        content: `MV：${shareDetails.name} - ${shareDetails.artistName}`,
+        type
+      }
     } else {
       return {
         content: null,

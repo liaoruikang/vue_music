@@ -50,7 +50,7 @@
     </el-dialog>
 
     <!-- 播放控件 -->
-    <Play></Play>
+    <Play v-if="!$route.path.match(/\/mv|\/viedo/)"></Play>
     <!-- 回到顶部控件 -->
     <el-backtop target=".app__container" :bottom="100" :visibility-height="300">
       <div
