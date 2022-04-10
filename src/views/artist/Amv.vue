@@ -64,7 +64,6 @@ export default {
     }),
     pageChange(val) {
       this.queryInfo.offset = (val - 1) * this.queryInfo.limit
-      console.log(this.queryInfo.offset)
       this.getArtistMv({ ...this.queryInfo, id: this.id })
     }
   }

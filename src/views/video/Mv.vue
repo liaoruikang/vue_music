@@ -239,6 +239,12 @@ export default {
           this.getRelevantVideo(val)
         }
       }
+    },
+    'mvDetail.data.name': {
+      handler(val) {
+        // 更新标题
+        this.updateTitle(this.$route.meta, val, 1)
+      }
     }
   },
   components: {
