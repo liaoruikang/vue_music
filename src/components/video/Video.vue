@@ -83,6 +83,7 @@
               :percentage="(cacheTime / endTime) * 100 || 0"
               color="rgba(255, 255, 255, 0.3)"
               :show-text="false"
+              v-if="isNaN((cacheTime / endTime) * 100 || 0)"
             ></el-progress>
             <div
               class="tooltip"
@@ -131,7 +132,7 @@
             v-if="definition"
           >
             <span>{{ definition[currentDefinition].name }}</span>
-            <div class="definition__option" v-show="isDefinition">
+            <div class="definition__option" v-show="isDefinition.length > 1">
               <div
                 class="option__item"
                 v-for="(item, index) in definition"
@@ -323,10 +324,12 @@ export default {
     canplaythrough() {
       this.isError = false
       this.isPlay = true
+      this.isEnd = false
     },
     // 播放视频
     play() {
       this.videoEl.play().catch((err) => err)
+      this.videoEl.removeEventListener('canplay', this.play)
     },
     // 暂停视频
     pause() {
@@ -413,15 +416,17 @@ export default {
     },
     // 重新播放
     againPlay() {
+      clearInterval(this.canvasCircular.timer)
+      this.isNext = false
       this.currentTime = 0
       this.videoProgress = (this.currentTime / this.endTime) * 100
-      this.isEnd = false
       this.$emit('load', {
         val: this.definition[this.currentDefinition],
         index: this.currentDefinition
       })
       this.videoEl.addEventListener('canplay', this.play)
     },
+
     // 音量改变
     volumeInput(val) {
       this.videoEl.volume = val / 100
@@ -519,6 +524,8 @@ export default {
     },
     next() {
       clearInterval(this.canvasCircular.timer)
+      this.canvasCircular.currentTime = 0
+      this.canvasCircular.percent = 0
       this.$emit('next', this.nextId)
     },
     // 分享
@@ -554,6 +561,9 @@ export default {
       immediate: true,
       handler(val) {
         if (val) {
+          this.$nextTick(() => {
+            this.videoEl.addEventListener('canplay', this.play)
+          })
           this.$emit('definition', {
             val: this.definition[this.currentDefinition],
             index: this.currentDefinition
@@ -586,7 +596,7 @@ export default {
     'canvasCircular.currentTime': {
       handler(val) {
         if (val >= 5) {
-          this.$emit('next', this.nextId)
+          this.next()
         }
       }
     }

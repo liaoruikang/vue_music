@@ -40,6 +40,18 @@
                       <em @click="deleteTag(index)">x</em>
                     </i>
                   </a>
+                  <a
+                    class="tags__btn"
+                    href="javascript:;"
+                    @click="
+                      $store.commit('setCFDVisible', {
+                        display: true,
+                        component: 'Tags',
+                        tags: editForm.tags
+                      })
+                    "
+                    >选择标签</a
+                  >
                 </div>
                 <p class="tisp">选择适合的标签，最多选3个</p>
               </el-form-item>

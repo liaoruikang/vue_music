@@ -10,7 +10,7 @@
         </span>
       </p>
       <div class="box" v-if="list">
-        <div class="item" v-for="(val, index) in list.order" :key="index">
+        <div class="item" v-for="(val, index) in list.order" :key="val.id">
           <h3><i></i>{{ val.name }}</h3>
           <ul ref="listRef" :class="(index + 1) % 2 === 0 ? 'even' : null">
             <li v-for="item in list[val.cat]" :key="item.id" ref="lisRef">
@@ -103,13 +103,17 @@ export default {
             const arr = []
             obj[key].forEach((item) => {
               if (item === 'songs') {
-                arr.push({ name: '单曲', cat: item })
+                const id = Math.random() * 10
+                arr.push({ name: '单曲', cat: item, id })
               } else if (item === 'artists') {
-                arr.push({ name: '歌手', cat: item })
+                const id = Math.random() * 10
+                arr.push({ name: '歌手', cat: item, id })
               } else if (item === 'albums') {
-                arr.push({ name: '专辑', cat: item })
+                const id = Math.random() * 10
+                arr.push({ name: '专辑', cat: item, id })
               } else if (item === 'playlists') {
-                arr.push({ name: '歌单', cat: item })
+                const id = Math.random() * 10
+                arr.push({ name: '歌单', cat: item, id })
               }
             })
             obj[key] = arr
@@ -172,6 +176,7 @@ export default {
           }
         }
         this.list = obj
+        console.log(this.list)
       }
     }
   },

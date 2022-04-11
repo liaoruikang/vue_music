@@ -320,6 +320,9 @@ export default {
     ...mapState('play', {
       currentPlay: 'currentPlay'
     }),
+    ...mapState('user', {
+      isLogin: 'isLogin'
+    }),
     userId() {
       return this.$store.state.user.userId
     },

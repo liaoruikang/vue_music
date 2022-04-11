@@ -46,3 +46,8 @@ export const hotSingerAPI = (limit, offset) => {
   if (offset === undefined) { offset = 0 }
   return request.get('/top/artists', { params: { limit, offset } })
 }
+
+// 获取每日推荐歌曲
+export const tasteAPI = () => {
+  return request.get('recommend/songs')
+}

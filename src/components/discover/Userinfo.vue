@@ -22,7 +22,7 @@
             <span
               :style="{
                 backgroundImage: `url(${
-                  vipData && vipData.redVipDynamicIconUrl + '?param=43y16'
+                  vipData && vipData.redVipLevelIcon + '?param=43y16'
                 })`
               }"
             ></span>
@@ -33,18 +33,20 @@
           <div
             class="signIn"
             :style="{
-              backgroundPosition: isSignIn ? '0 -305px' : '0 -469px'
+              backgroundPosition: userData.pcSign ? '0 -305px' : '0 -469px'
             }"
           >
             <a
               href="javascript:;"
               :style="{
-                cursor: isSignIn ? 'default' : 'pointer',
-                backgroundPosition: isSignIn ? `right -346px` : 'right -510px',
-                color: isSignIn ? '#bebebe' : '#ffffff'
+                cursor: userData.pcSign ? 'default' : 'pointer',
+                backgroundPosition: userData.pcSign
+                  ? `right -346px`
+                  : 'right -510px',
+                color: userData.pcSign ? '#bebebe' : '#ffffff'
               }"
-              @click="signin"
-              >{{ isSignIn ? '已签到' : '签到' }}</a
+              @click="signin(userData.pcSign)"
+              >{{ userData.pcSign ? '已签到' : '签到' }}</a
             >
           </div>
         </div>
@@ -68,29 +70,27 @@
 </template>
 <script>
 import Bus from '@/plugin/eventBus'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import { signInAPI } from '@/api/discoverAPI'
 export default {
   name: 'userinfo',
-  data() {
-    return {
-      isSignIn: false
-    }
-  },
   methods: {
     login(val) {
       Bus.$emit('Visible', val)
     },
     // 签到
-    async signin() {
-      if (!this.isSignIn) {
-        const { data: result } = await signInAPI().catch((err) => {
-          return err.response
-        })
-        if (result.code !== 200) this.$message.error(result.msg)
-        this.isSignIn = true
-      }
-    }
+    async signin(val) {
+      if (val) return
+      const { data: result } = await signInAPI().catch((err) => {
+        return err.response
+      })
+      if (result.code !== 200) this.$message.error(result.msg)
+      this.$message.success('签到成功')
+      this.getUserData(this.userId)
+    },
+    ...mapActions('user', {
+      getUserData: 'getUserData'
+    })
   },
   computed: {
     ...mapState('user', {

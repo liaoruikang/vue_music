@@ -3,6 +3,8 @@ export default {
   // 获取用户信息
   async getUserData({ commit }, id) {
     const { data: result } = await userInfoAPI(id)
+    result.profile.pcSign = result.pcSign
+    result.profile.mobileSign = result.mobileSign
     commit('setUserData', result.profile)
   },
   // 获取用户等级信息

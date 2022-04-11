@@ -91,7 +91,7 @@
       <div class="title">
         <h3>节目列表</h3>
         <span class="count">{{
-          `共${programList && programList.count}期`
+          `共${(programList && programList.count) || 0}期`
         }}</span>
         <div class="sort">
           <a
@@ -108,7 +108,7 @@
           ></a>
         </div>
       </div>
-      <div class="table">
+      <div class="table" v-loading="!programList">
         <div class="table__box" v-if="programList">
           <div
             :class="['table__item', (index + 1) % 2 ? '' : 'even']"

@@ -14,6 +14,7 @@ import list from './discover/list'
 import newdisc from './discover/newdisc'
 import play from './play'
 import insinger from './discover/insinger'
+import taste from './discover/taste'
 import collection from './collection'
 import forward from './forward'
 import toplist from './toplist'
@@ -52,6 +53,7 @@ export default new Vuex.Store({
     my,
     search,
     song,
-    video
+    video,
+    taste
   }
 })

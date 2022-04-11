@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 const Discover = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Discover')
+const Taste = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Taste')
 const DAlbum = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/Album')
 const Dartist = () => import(/* webpackChunkName: "Discover" */ '@/views/discover/artist/Artist')
 const HotSinger = () => import(/* webpackChunkName: "artist" */ '@/views/discover/artist/HotSinger')
@@ -24,9 +26,10 @@ const Amv = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Amv')
 const Adesc = () => import(/* webpackChunkName: "artist" */ '@/views/artist/Adesc')
 const Song = () => import(/* webpackChunkName: "song" */ '@/views/song/Song')
 const Album = () => import(/* webpackChunkName: "album" */ '@/views/album/Album')
-const Djradio = () => import(/* webpackChunkName: "album" */ '@/views/djradio/Djradio')
-const Program = () => import(/* webpackChunkName: "album" */ '@/views/djradio/Program')
-const Mv = () => import(/* webpackChunkName: "album" */ '@/views/video/Mv')
+const Djradio = () => import(/* webpackChunkName: "djradio" */ '@/views/djradio/Djradio')
+const Program = () => import(/* webpackChunkName: "djradio" */ '@/views/djradio/Program')
+const Mv = () => import(/* webpackChunkName: "video" */ '@/views/video/Mv')
+const Video = () => import(/* webpackChunkName: "video" */ '@/views/video/Video')
 
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push
@@ -175,6 +178,16 @@ const routes = [
   {
     path: '/mv',
     component: Mv,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+  },
+  {
+    path: '/video',
+    component: Video,
+    meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
+  },
+  {
+    path: '/discover/recommend/taste',
+    component: Taste,
     meta: { oneTitle: '网易云音乐', twoTitle: '', threeTitle: '', fourTitle: '' }
   },
   {

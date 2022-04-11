@@ -1,7 +1,9 @@
 import request from '@/plugin/request'
 // 获取用户信息
 export const userInfoAPI = (uid) => {
-  return request.get('user/detail', { params: { uid } })
+  // 添加一个时间戳URL参数 防止API缓存
+  const timestamp = new Date().getTime()
+  return request.get('user/detail', { params: { uid, timestamp } })
 }
 
 // 获取用户等级信息
