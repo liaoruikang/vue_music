@@ -46,7 +46,7 @@ simple-video （自己封装的视频播放插件，暂无仓库）
 
 ```
 npm install # 安装依赖
-npm install # 启动项目
+npm run serve # 启动项目
 ```
 
 浏览器访问[localhost:8080](http://localhost:8080)就启动成功了

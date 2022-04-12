@@ -30,6 +30,7 @@
       width="530px"
       :show-close="false"
       :modal="false"
+      class="login__dialog"
       @click.native.stop
     >
       <keep-alive include="Login">
@@ -43,7 +44,7 @@
       :visible.sync="$store.state.CFDVisible"
       :show-close="false"
       :modal="false"
-      custom-class="cfd__dialog"
+      class="cfd__dialog"
       @click.native.stop
     >
       <component :is="displayWho"></component>
@@ -300,8 +301,14 @@ export default {
   right: 50% !important;
   margin-right: -550px;
 }
-/deep/ .cfd__dialog {
-  width: auto !important;
+/deep/ .login__dialog {
+  z-index: 2001 !important;
+}
+.cfd__dialog {
+  /deep/ .el-dialog {
+    width: auto !important;
+  }
+  z-index: 2000 !important;
 }
 .router {
   min-height: 700px;

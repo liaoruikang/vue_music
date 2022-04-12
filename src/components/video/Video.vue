@@ -127,12 +127,12 @@
           <!-- 画质 -->
           <div
             class="definition"
-            @mouseover="isDefinition = true"
+            @mouseover="isDefinition = definition.length > 1 ? true : false"
             @mouseout="isDefinition = false"
             v-if="definition"
           >
             <span>{{ definition[currentDefinition].name }}</span>
-            <div class="definition__option" v-show="isDefinition.length > 1">
+            <div class="definition__option" v-show="isDefinition">
               <div
                 class="option__item"
                 v-for="(item, index) in definition"
