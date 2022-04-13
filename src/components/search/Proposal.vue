@@ -176,7 +176,6 @@ export default {
           }
         }
         this.list = obj
-        console.log(this.list)
       }
     }
   },

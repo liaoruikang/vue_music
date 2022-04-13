@@ -7,7 +7,7 @@
       <div class="listContent__header clearfix">
         <div class="img">
           <img
-            v-show="songsDetails.coverImgUrl"
+            v-if="songsDetails.coverImgUrl"
             :src="songsDetails.coverImgUrl + '?param=150y150'"
             width="150"
             height="150"

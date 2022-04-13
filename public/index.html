@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <html lang="">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
+    <title>
+      <%= htmlWebpackPlugin.options.isProd ? '网易云音乐' : '网易云音乐 - Beta'
+      %>
+    </title>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong
+        >We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work
+        properly without JavaScript enabled. Please enable it to
+        continue.</strong
+      >
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <% if(htmlWebpackPlugin.options.isProd){ %>
+    <link
+      rel="stylesheet"
+      href="https://cdn.staticfile.org/element-ui/2.15.6/theme-chalk/index.min.css"
+    />
+    <script src="https://cdn.staticfile.org/vue/2.6.11/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/vuex/3.6.2/vuex.min.js"></script>
+    <script src="https://cdn.staticfile.org/vue-router/3.2.0/vue-router.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.25.0/axios.min.js"></script>
+    <script src="https://cdn.staticfile.org/element-ui/2.15.6/index.min.js"></script>
+    <% } %>
   </body>
 </html>

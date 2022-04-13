@@ -1,22 +1,33 @@
 module.exports = {
-  publicPath: process.env.NODE_ENV === 'production'
-    ? ''
-    : '/',
+  publicPath: './',
   chainWebpack: (config) => {
-    if (process.env.NODE_ENV === 'production') {
+    // 生产模式
+    config.when(process.env.NODE_ENV === 'production', config => {
+      config.entry('app').clear().add('./src/main-prod.js')
       config
         .plugin('html')
         .tap((args) => {
-          args[0].title = '网易云音乐'
+          args[0].isProd = true
           return args
         })
-    } else {
+      config.set('externals', {
+        vue: 'Vue',
+        vuex: 'Vuex',
+        axios: 'axios',
+        'element-ui': 'ElementUI',
+        'vue-router': 'VueRouter'
+      })
+    })
+
+    // 开发模式
+    config.when(process.env.NODE_ENV === 'development', config => {
+      config.entry('app').clear().add('./src/main-dev.js')
       config
         .plugin('html')
         .tap((args) => {
-          args[0].title = '网易云音乐 - Beta'
+          args[0].isProd = false
           return args
         })
-    }
+    })
   }
 }

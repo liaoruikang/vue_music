@@ -10,7 +10,10 @@
           class="user__link"
           :to="`/user/home${userId == null ? '' : `?id=${userId}`}`"
         >
-          <img :src="userData.avatarUrl + '?param=80y80'" />
+          <img
+            v-if="userData.avatarUrl"
+            :src="userData.avatarUrl + '?param=80y80'"
+          />
         </router-link>
         <div class="info">
           <h4>

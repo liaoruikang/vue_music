@@ -659,7 +659,8 @@ export default {
         { name: '声音主播', type: 1009 },
         { name: '用户', type: 1002 }
       ],
-      lyricList: null
+      lyricList: null,
+      isProposal: false
     }
   },
   components: {
@@ -739,18 +740,12 @@ export default {
     }
   },
   watch: {
-    keywords(val) {
+    isProposal(val) {
       if (val && val !== this.searchForm.keywords) {
-        // 节流阀
-        clearTimeout(this.throttleTimer)
-        this.throttleTimer = setTimeout(() => {
-          this.getSearchProposalList({
-            keywords: this.keywords,
-            type: this.type
-          })
-        }, 300)
-      } else {
-        this.removeSearchProposalList()
+        this.getSearchProposalList({
+          keywords: this.keywords,
+          type: this.type
+        })
       }
     },
     query: {
@@ -795,8 +790,20 @@ export default {
       setIsOpen: 'setIsOpen'
     }),
     onDown(e) {
+      if (e.keyCode !== 40 && e.keyCode !== 38) {
+        // 节流阀
+        this.isProposal = false
+        clearTimeout(this.throttleTimer)
+        this.removeSearchProposalList()
+        this.throttleTimer = setTimeout(() => {
+          if (e.keyCode === 13) return (this.isProposal = false)
+          this.isProposal = true
+        }, 200)
+      }
       Bus.$emit('keydown', { e, keywords: this.keywords })
-      if (e.keyCode === 13) this.keywords = ''
+      if (e.keyCode === 13 && this.$route.query.keywords !== this.keywords) {
+        this.keywords = ''
+      }
     },
     search() {
       if (this.keywords.trim().length === 0) return

@@ -65,7 +65,10 @@
               >登录</a
             >
             <div class="headImg" v-show="isLogin">
-              <img :src="userImg + '?param=30y30'" alt="" />
+              <el-image
+                v-if="userImg"
+                :src="userImg + '?param=30y30'"
+              ></el-image>
               <ul class="login__nav" v-show="isMove === true">
                 <li>
                   <router-link :to="`/user/home?id=${userId}`"
@@ -204,7 +207,9 @@ export default {
     },
     onDown(e) {
       Bus.$emit('keydown', { e, keywords: this.searchForm.keywords })
-      if (e.keyCode === 13) this.searchForm.keywords = ''
+      if (e.keyCode === 13) {
+        this.searchForm.keywords = ''
+      }
     }
   },
   computed: {
@@ -354,7 +359,7 @@ header {
         }
         .headImg {
           position: relative;
-          img {
+          .el-image {
             margin-top: 20px;
             width: 30px;
             height: 30px;
@@ -426,6 +431,9 @@ header {
           background: url('../../assets/uploads/topbar.png') no-repeat;
           background-position: 0 -101px;
           padding-left: 30px;
+          font-size: 12px;
+          height: 32px;
+          line-height: 32px;
         }
         /deep/ .proposal__container {
           position: absolute;
